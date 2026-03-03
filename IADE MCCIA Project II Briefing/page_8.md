@@ -1,0 +1,6 @@
+| 3rd milestone: Final product (MCCIA) | Presentation: 2025/06/05 | Delivery: 2025/05/29, 23:59:59 GMT |
+| :--- | :--- | :--- |
+| **Presentation Slides** | | **- o Production dossier/report (contains chapters about all the "big 4" units), including the same as the 2nd milestone, and:** |
+| - Reflection on the planning effort and work distribution. | |- - Emerging Technologies: Discuss how the work can contribute to fashion innovation in modern technologies. |
+| - Applied Machine Learning. The completed machine learning model must be submitted with a detailed performance evaluation. A comparison with the earlier prototype must highlight improvements in accuracy, inference speed, or usability. Any optimizations applied for real-time efficiency must be documented. A final analysis of challenges faced during All integration into the AR/VR experience must also be included. |
+| **Project Prototype** | Emerging Technologies: Optimize and refine interactive technologies, improving accuracy, responsiveness, and performance. | **- o All the source code.** |
