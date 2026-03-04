@@ -1,6 +1,0 @@
-```markdown
-## HOW?
-
-editorials
-
-```

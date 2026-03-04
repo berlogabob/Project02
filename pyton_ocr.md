@@ -1,2 +1,0 @@
-create python script that uinng ollama (local) with model GLM-OCR that would read all pdf files in folder (same folder where the script is located). and convert it into text markdown format and save it to a new file with the same name as the pdf file but with a .md extension. one page per file. use "ollama_ocr.py" as referense for hou to use this model. 
-files must be saved in folder with the same name as the pdf files.
