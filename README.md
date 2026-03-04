@@ -43,31 +43,6 @@ gantt
     Final Product (MCCIA)              :milestone,M3, 2026-05-29, 0d
 ```
 
----
-
-## Alternative Gantt Chart View
-
-```mermaid
-gantt
-    title Project II - Simplified Timeline
-    dateFormat  YYYY-MM-DD
-    axisFormat  %d/%m
-
-    section Phase 1
-    Briefing & Formation                :done, p1, Feb 2-9
-
-    section Phase 2 
-    Technical Implementation            :active, p2, after p1
-    Prototype Development               :crit, p3, after p2
-
-    section Phase 3
-    User Testing & Refinement           :p4, after p3
-
-    section Phase 4
-    Final Polish & Exhibition Setup     :crit, p5, after p4
-```
-
----
 
 ## Timeline Summary
 
