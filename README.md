@@ -39,7 +39,7 @@ gantt
 
     section Milestones
     Documentation (MCCA)                :milestone,M1, 2026-02-16, 0d
-    Prototype (MCCA)                   :milestone,M2, 2025-04-13, 0d
+    Prototype (MCCA)                   :milestone,M2, 2026-04-13, 0d
     Final Product (MCCIA)              :milestone,M3, 2026-05-29, 0d
 ```
 
