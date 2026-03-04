@@ -1,9 +1,0 @@
-```markdown
-SO...
-DON'T
-BE AFRAID
-AND JUST
-HAVE FUN
-WITH IT!
-THANK YOU FOR YOUR TIME
-```
