@@ -17,12 +17,16 @@ from datetime import datetime
 from pathlib import Path
 
 
-def run_gh_command(args: list) -> dict:
+def run_gh_command(args: list, include_comments: bool = False) -> dict:
     """Run a GitHub CLI command and return JSON result"""
-    cmd = ["gh"] + args + ["--json"] + [
-        "number", "title", "state", "labels", "assignees", 
-        "closedAt", "createdAt", "milestone"
+    fields = [
+        "number", "title", "state", "labels", "assignees",
+        "closedAt", "createdAt", "milestone", "body"
     ]
+    if include_comments:
+        fields.append("comments")
+    
+    cmd = ["gh"] + args + ["--json"] + fields
     result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     return json.loads(result.stdout)
 
@@ -38,7 +42,7 @@ def get_completed_issues(milestone: str = None, limit: int = 50) -> list:
         "--state", "closed",
         "--limit", str(limit),
         "--search", " ".join(filters)
-    ])
+    ], include_comments=True)
     return issues
 
 
@@ -53,7 +57,7 @@ def get_in_progress_issues(milestone: str = None, limit: int = 50) -> list:
         "--state", "open",
         "--limit", str(limit),
         "--search", " ".join(filters)
-    ])
+    ], include_comments=True)
     return issues
 
 
@@ -86,6 +90,32 @@ def format_issue_title(issue: dict) -> str:
     return f"[#{number} - {title}]"
 
 
+def format_comments(issue: dict) -> list:
+    """Format issue comments for Typst report"""
+    comments = issue.get("comments", [])
+    if not comments:
+        return []
+    
+    formatted = []
+    for comment in comments[:5]:  # Limit to 5 most recent comments
+        author = comment.get("author", {}).get("login", "Unknown")
+        body = comment.get("body", "")
+        created = comment.get("createdAt", "")[:10]  # Just date part
+        
+        # Skip if comment is just issue body (no actual comments)
+        if len(comments) <= 1 and author == issue.get("assignees", [{}])[0].get("login"):
+            continue
+            
+        # Format: " @author (date): comment text"
+        body_clean = body.replace("[", "(").replace("]", ")").replace("\n", " ")
+        if len(body_clean) > 150:
+            body_clean = body_clean[:147] + "..."
+        
+        formatted.append(f"  [\\text(size: 8pt, fill: gray)[@{author} ({created}): {body_clean}]]")
+    
+    return formatted
+
+
 def generate_typst_report(
     week_num: int,
     completed: list,
@@ -106,19 +136,32 @@ def generate_typst_report(
     # Get milestone progress
     milestone_data = get_milestone_progress(milestone) if milestone else {"percentage": 0}
     
-    # Format completed issues
+    # Format completed issues with comments
     completed_rows = []
     for issue in completed[:10]:  # Limit to 10
         title = format_issue_title(issue)
-        completed_rows.append(title)
-    
-    # Format in-progress issues
+        comments = format_comments(issue)
+        if comments:
+            # Add title + comments
+            completed_rows.append(title)
+            completed_rows.extend(comments)
+        else:
+            completed_rows.append(title)
+
+    # Format in-progress issues with comments
     in_progress_rows = []
     for issue in in_progress[:10]:  # Limit to 10
         title = format_issue_title(issue)
+        comments = format_comments(issue)
         labels = [l["name"] for l in issue.get("labels", [])]
         status = "blocked" if "priority: critical" in labels else "in-progress"
-        in_progress_rows.append(f"({title}, [{status}])")
+        
+        if comments:
+            # Add issue with status + comments
+            in_progress_rows.append(f"({title}, [{status}])")
+            in_progress_rows.extend([f"  {c}" for c in comments])
+        else:
+            in_progress_rows.append(f"({title}, [{status}])")
     
     # Assignee summary
     assignee_counts = {}
@@ -131,6 +174,7 @@ def generate_typst_report(
     typst_content = f'''// Weekly Report - Week {week_num}
 // Auto-generated: {today}
 // Project: The Oracle That Wears Us
+// Team: @naydino (Nadine), @berlogabob (Andrey), @electricianv001 (Dmitri)
 
 #import "weekly-report-template.typ": report
 
@@ -188,13 +232,13 @@ _No critical blockers this week. Team is progressing smoothly._
 
 #let milestone_progress = {milestone_data.get("percentage", 0)}
 
-#let nadine_issues = {assignee_counts.get("nadine-allan", assignee_counts.get("Nadine Allan", 0))}
+#let nadine_issues = {assignee_counts.get("naydino", assignee_counts.get("Nadine Allan", 0))}
 #let nadine_focus = [System Architecture & Integration]
 
-#let andrey_issues = {assignee_counts.get("andrey-dyakov", assignee_counts.get("Andrey Dyakov", 0))}
+#let andrey_issues = {assignee_counts.get("berlogabob", assignee_counts.get("Andrey Dyakov", 0))}
 #let andrey_focus = [Plotter & Materialization]
 
-#let dmitri_issues = {assignee_counts.get("dmitri-kazantsev", assignee_counts.get("Dmitri Kazantsev", 0))}
+#let dmitri_issues = {assignee_counts.get("electricianv001", assignee_counts.get("Dmitri Kazantsev", 0))}
 #let dmitri_focus = [Generative Concepts & Fabrication]
 
 #let risks = [
