@@ -77,13 +77,13 @@
 #line(length: 100%, stroke: 1pt + chapter_themes.at("1").accent)
 #v(10pt)
 
-#issue_card(#48, [Test and compare speech to text models inside of TD], "", [test...], [None], [])
+#issue_card(48, [Test and compare speech to text models inside of TD], "", [test...], [None], [])
 
-#issue_card(#45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:  - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connected)...], [1st milestone: Documentation], [type: research, type: testing])
+#issue_card(45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:  - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connected)...], [1st milestone: Documentation], [type: research, type: testing])
 
-#issue_card(#3, [Define characteristics of AI Oracle], "", [], [None], [])
+#issue_card(3, [Define characteristics of AI Oracle], "", [], [None], [])
 
-#issue_card(#1, [How does the plotter connect to the PC?], "", [], [1st milestone: Documentation], [])
+#issue_card(1, [How does the plotter connect to the PC?], "", [], [1st milestone: Documentation], [])
 
 
 #v(2em)
