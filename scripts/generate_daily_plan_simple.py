@@ -66,14 +66,10 @@ def escape_typst(text: str) -> str:
     text = re.sub(r"<[^>]+>", "", text)
     # Remove URLs
     text = re.sub(r"https?://\S+", "", text)
-    # Escape Typst special chars - IMPORTANT: @ must be escaped first!
-    return (
-        text.replace("@", "@@")
-        .replace("[", "(")
-        .replace("]", ")")
-        .replace("\n", " ")
-        .replace("#", "")
-    )
+    # Replace @ with space to avoid Typst label issues
+    text = text.replace("@", " ")
+    # Escape other Typst special chars
+    return text.replace("[", "(").replace("]", ")").replace("\n", " ").replace("#", "")
 
 
 def generate_all_plans(output_dir: str) -> list:
