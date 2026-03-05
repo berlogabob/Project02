@@ -884,3 +884,4 @@ FOOTER
           path: reports/daily-plans/*.typ
           if-no-files-found: warn
           retention-days: 14
+# Refresh workflow cache
