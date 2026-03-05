@@ -1,8 +1,8 @@
 // Daily Plan for Nadine Allan
-// Generated: 2026-03-05 07:58
+// Generated: 2026-03-05 08:01
 // Project: The Oracle That Wears Us
 
-#import "reports/daily-plan-template.typ"
+#import "../daily-plan-template.typ"
 
 #show: report.with(
   member_name: "Nadine Allan",
