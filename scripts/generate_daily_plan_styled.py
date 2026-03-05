@@ -14,30 +14,44 @@ from pathlib import Path
 TEAM_MEMBERS = {
     "naydino": "Nadine Allan",
     "berlogabob": "Andrey Dyakov",
-    "electricianv001": "Dmitri Kazantsev"
+    "electricianv001": "Dmitri Kazantsev",
 }
 
 REPO = "berlogabob/Project02"
 
+
 def run_gh_command(args: list) -> list:
     """Run a GitHub CLI command and return JSON result"""
-    cmd = ["gh"] + args + [
-        "--json", "number,title,state,labels,assignees,milestone,body,comments,createdAt"
-    ]
+    cmd = (
+        ["gh"]
+        + args
+        + [
+            "--json",
+            "number,title,state,labels,assignees,milestone,body,comments,createdAt",
+        ]
+    )
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         return []
     return json.loads(result.stdout)
 
+
 def get_assigned_issues(username: str) -> list:
     """Get open issues assigned to a specific user"""
     cmd = [
-        "gh", "issue", "list",
-        "--state", "open",
-        "--assignee", username,
-        "--repo", REPO,
-        "--limit", "50",
-        "--json", "number,title,state,labels,assignees,milestone,body,comments,createdAt"
+        "gh",
+        "issue",
+        "list",
+        "--state",
+        "open",
+        "--assignee",
+        username,
+        "--repo",
+        REPO,
+        "--limit",
+        "50",
+        "--json",
+        "number,title,state,labels,assignees,milestone,body,comments,createdAt",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
@@ -50,6 +64,7 @@ def get_assigned_issues(username: str) -> list:
     except Exception as e:
         print(f"Warning: Could not parse JSON: {e}")
         return []
+
 
 def format_priority(issue: dict) -> str:
     """Extract priority from labels"""
@@ -65,74 +80,81 @@ def format_priority(issue: dict) -> str:
             return "low"
     return "medium"
 
+
 def escape_typst(text: str) -> str:
     """Escape special Typst characters"""
     if not text:
         return ""
     return text.replace("[", "(").replace("]", ")").replace("\n", " ")
 
+
 def generate_styled_typst(
-    member_name: str,
-    member_username: str,
-    issues: list,
-    output_path: str
+    member_name: str, member_username: str, issues: list, output_path: str
 ) -> str:
     """Generate styled Typst file matching Project02-Plan.typ"""
-    
+
     today = datetime.now()
     date_str = f"{today.day:02d}/{today.month:02d}"
     year_month_day = today.strftime("%Y%m%d")
-    
+
     # Prepare issues
     prepared_issues = []
     for issue in issues:
-        prepared_issues.append({
-            "number": issue["number"],
-            "title": escape_typst(issue["title"]),
-            "priority": format_priority(issue),
-            "body": escape_typst(issue.get("body", ""))[:200],
-            "milestone": issue.get("milestone"),
-            "labels": issue.get("labels", []),
-            "comments": issue.get("comments", [])[:3]  # Last 3 comments
-        })
-    
+        prepared_issues.append(
+            {
+                "number": issue["number"],
+                "title": escape_typst(issue["title"]),
+                "priority": format_priority(issue),
+                "body": escape_typst(issue.get("body", ""))[:200],
+                "milestone": issue.get("milestone"),
+                "labels": issue.get("labels", []),
+                "comments": issue.get("comments", [])[:3],  # Last 3 comments
+            }
+        )
+
     # Sort by priority
     priority_order = {"critical": 0, "high": 1, "medium": 2, "low": 3}
     prepared_issues.sort(key=lambda x: priority_order.get(x["priority"], 2))
-    
+
     # Count stats
     total = len(prepared_issues)
-    high_priority = len([i for i in prepared_issues if i["priority"] in ["critical", "high"]])
-    
+    high_priority = len(
+        [i for i in prepared_issues if i["priority"] in ["critical", "high"]]
+    )
+
     # Generate issues content
     issues_content = ""
     for i, issue in enumerate(prepared_issues):
-        priority_badge = f"[#{issue['priority'].upper()}]" if issue['priority'] in ['critical', 'high'] else ""
-        issues_content += f'''
+        priority_badge = (
+            f"[#{issue['priority'].upper()}]"
+            if issue["priority"] in ["critical", "high"]
+            else ""
+        )
+        issues_content += f"""
 === #{issue["number"]} - {issue["title"]} {priority_badge}
-'''
+"""
         if issue["milestone"]:
-            issues_content += f'*Milestone:* {issue["milestone"]["title"]}\n'
-        
+            issues_content += f"*Milestone:* {issue['milestone']['title']}\n"
+
         # Labels
         if issue["labels"]:
             label_names = [l["name"] for l in issue["labels"]]
-            issues_content += f'*Labels:* {", ".join(label_names)}\n'
-        
+            issues_content += f"*Labels:* {', '.join(label_names)}\n"
+
         if issue["body"]:
-            issues_content += f'\n{issue["body"]}\n'
-        
+            issues_content += f"\n{issue['body']}\n"
+
         # Comments
         if issue["comments"]:
-            issues_content += '\n*Recent Comments:*\n'
+            issues_content += "\n*Recent Comments:*\n"
             for comment in issue["comments"]:
                 author = comment.get("author", {}).get("login", "Unknown")
                 body = escape_typst(comment.get("body", ""))[:100]
                 date = comment.get("createdAt", "")[:10]
-                issues_content += f'- @{author} ({date}): {body}\n'
-        
-        issues_content += '\n---\n'
-    
+                issues_content += f"- @{author} ({date}): {body}\n"
+
+        issues_content += "\n---\n"
+
     # Full Typst content with Project02-Plan.typ styling
     typst_content = f'''// Daily Plan for {member_name}
 // Generated: {today.strftime("%Y-%m-%d %H:%M")}
@@ -319,8 +341,8 @@ def generate_styled_typst(
       columns: (1fr, 1fr),
       gutter: 15pt,
       [
-        *Team Member:* \ {member_name} \ #text(size: 8pt)[@{member_username}] \ \
-        *Date:* \ {today.display(short: true)}
+        *Team Member:* \ {member_name} \\ #text(size: 8pt)[@{member_username}] \\ \\
+        *Date:* \\ {today.strftime("%d %B %Y")}
       ],
       [
         *Project:* \ The Oracle That Wears Us \ \
@@ -463,91 +485,98 @@ def generate_styled_typst(
 
 #page_footer("2", "2")
 '''
-    
+
     # Write to file
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     with open(output, "w") as f:
         f.write(typst_content)
-    
+
     print(f"✅ Generated: {output}")
     return typst_content
+
 
 def generate_all_plans(output_dir: str) -> list:
     """Generate daily plans for all team members"""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
-    
+
     generated = []
     today = datetime.now()
     date_prefix = today.strftime("%Y%m%d")
-    
+
     for username, name in TEAM_MEMBERS.items():
         print(f"\n📋 Generating plan for {name} (@{username})...")
-        
+
         issues = get_assigned_issues(username)
-        
+
         # Use new filename format: YYYYMMDD-daily-plan-username.typ
         output_file = output_path / f"{date_prefix}-daily-plan-{username}.typ"
         generate_styled_typst(name, username, issues, str(output_file))
-        
+
         # Compile to PDF
         pdf_file = output_path / f"{date_prefix}-daily-plan-{username}.pdf"
         print(f"   📄 Compiling to PDF...")
         result = subprocess.run(
             ["typst", "compile", str(output_file), str(pdf_file)],
             capture_output=True,
-            text=True
+            text=True,
         )
         if result.returncode != 0:
             print(f"   ⚠️  Typst compilation failed:")
             print(f"   {result.stderr[:200]}")
         else:
             print(f"   ✅ Compiled: {pdf_file}")
-        
-        generated.append({
-            "username": username,
-            "name": name,
-            "typ_file": str(output_file),
-            "pdf_file": str(pdf_file),
-            "issue_count": len(issues)
-        })
-    
+
+        generated.append(
+            {
+                "username": username,
+                "name": name,
+                "typ_file": str(output_file),
+                "pdf_file": str(pdf_file),
+                "issue_count": len(issues),
+            }
+        )
+
     return generated
+
 
 def main():
     parser = argparse.ArgumentParser(description="Generate daily plan PDFs")
     parser.add_argument("--all-members", action="store_true", help="Generate for all")
-    parser.add_argument("--output-dir", default="reports/daily-plans", help="Output directory")
-    
+    parser.add_argument(
+        "--output-dir", default="reports/daily-plans", help="Output directory"
+    )
+
     args = parser.parse_args()
-    
+
     # Check if typst is installed
     try:
         subprocess.run(["typst", "--version"], capture_output=True, check=True)
     except:
         print("❌ Typst not found. Install with: brew install typst")
         sys.exit(1)
-    
+
     print("=" * 60)
     print("📅 Daily Plan Generator")
     print("   The Oracle That Wears Us")
     print("=" * 60)
     print()
-    
+
     if args.all_members:
         generated = generate_all_plans(args.output_dir)
-        
+
         print("\n" + "=" * 60)
         print("✅ All Daily Plans Generated!")
         print("=" * 60)
-        
+
         for plan in generated:
             print(f"\n{plan['name']} (@{plan['username']}):")
             print(f"   📄 PDF: {plan['pdf_file']}")
             print(f"   📝 Issues: {plan['issue_count']}")
     else:
         parser.print_help()
+
 
 if __name__ == "__main__":
     main()
