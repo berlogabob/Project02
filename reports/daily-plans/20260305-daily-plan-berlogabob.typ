@@ -1,5 +1,5 @@
 // Daily Plan for Andrey Dyakov
-// Generated: 2026-03-05 09:45
+// Generated: 2026-03-05 09:48
 
 #set page(paper: "a4", margin: (x: 50pt, y: 60pt))
 #set text(font: "Noto Sans", size: 10pt, fill: rgb("#333333"), lang: "en")
@@ -61,7 +61,7 @@ We need to decide once and for all what we will use for the real-time microphone
 Test to answer the question "How can we take a microphone input and transform it"
 
 *Comments:*
-- @berlogabob: @naydino  please add some data as comment for this issue. something we can measure to use for compar
+- @berlogabob: @@naydino  please add some data as comment for this issue. something we can measure to use for compa
 
 === #1 - How does the plotter connect to the PC?
 *Milestone:* 1st milestone: Documentation
