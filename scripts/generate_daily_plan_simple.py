@@ -66,6 +66,8 @@ def escape_typst(text: str) -> str:
     text = re.sub(r"<[^>]+>", "", text)
     # Remove URLs
     text = re.sub(r"https?://\S+", "", text)
+    # Escape @ to prevent Typst label errors
+    text = text.replace("@", "at ")
     # Escape Typst special chars
     return text.replace("[", "(").replace("]", ")").replace("\n", " ").replace("#", "")
 
