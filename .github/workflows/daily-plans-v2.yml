@@ -65,6 +65,8 @@ jobs:
       - name: Generate plans for all members
         if: ${{ github.event.inputs.member == '' }}
         run: |
+          # Copy template to daily-plans folder for Typst to find it
+          cp reports/daily-plan-template.typ reports/daily-plans/daily-plan-template.typ
           python3 scripts/generate_daily_plan.py --all-members --output-dir reports/daily-plans
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,10 +83,13 @@ jobs:
       - name: Compile PDFs
         run: |
           cd reports/daily-plans
+          # Copy template here for compilation
+          cp ../daily-plan-template.typ . 2>/dev/null || true
           for typ_file in *.typ; do
             pdf_file="${typ_file%.typ}.pdf"
             echo "Compiling $typ_file -> $pdf_file"
-            typst compile "$typ_file" "$pdf_file" || echo "Warning: Failed to compile $typ_file"
+            # Use --root to allow compilation from subdirectory
+            typst compile --root="$PWD/.." "$typ_file" "$pdf_file" || echo "Warning: Failed to compile $typ_file"
           done
           ls -la *.pdf || echo "No PDFs generated"
 
