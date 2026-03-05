@@ -101,12 +101,7 @@ jobs:
           script: |
             const date = '${{ steps.date.outputs.date }}';
             
-            // Create daily plan summary issue
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `📅 Daily Plan - ${date}`,
-              body: `## Daily Plans Generated - ${date}
+            const body = `## Daily Plans Generated - ${date}
 
 ### Team Member Plans
 
@@ -127,14 +122,20 @@ jobs:
 
 ### Generated Files
 
-- 📁 PDFs: \`reports/daily-plans/\`
-- 📝 Source: \`reports/daily-plans/*.typ\`
+- PDFs: \`reports/daily-plans/\`
+- Source: \`reports/daily-plans/*.typ\`
 
 ---
 *Auto-generated every day at 00:00 UTC (02:00 Lisbon)*
 
-**Today's Focus:** Make progress on your assigned issues and update the team! 💪
-`,
+**Today's Focus:** Make progress on your assigned issues and update the team!`;
+            
+            // Create daily plan summary issue
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📅 Daily Plan - ${date}`,
+              body: body,
               labels: ['daily-plan', 'type: documentation']
             });
       
