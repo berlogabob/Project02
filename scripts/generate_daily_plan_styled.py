@@ -268,14 +268,14 @@ def generate_styled_typst(
         columns: (1fr, auto),
         gutter: 10pt,
         [
-          #text(size: 12pt, weight: "bold", [#{issue_num} - {title}])
+          #text(size: 12pt, weight: "bold", [#{{issue_num}} - {{title}}])
           #if milestone != "" [
             #v(4pt)
-            #text(size: 8pt, fill: gray, [Milestone: {milestone}])
+            #text(size: 8pt, fill: gray, [Milestone: {{milestone}}])
           ]
           #if labels != "" [
             #v(4pt)
-            #text(size: 8pt, fill: gray, [{labels}])
+            #text(size: 8pt, fill: gray, [{{labels}}])
           ]
         ],
         align(top + right, [
@@ -286,7 +286,7 @@ def generate_styled_typst(
       )
       #if body != "" [
         #v(8pt)
-        #text(size: 9pt, fill: gray, {body})
+        #text(size: 9pt, fill: gray, {{body}})
       ]
     ]
   )
