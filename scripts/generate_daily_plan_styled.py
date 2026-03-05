@@ -301,7 +301,7 @@ def generate_styled_typst(
       inset: 12pt,
       radius: 4pt,
       align(center, [
-        #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent, [{total_tasks}])
+        #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent, [{{total_tasks}}])
         #text(size: 8pt, [Total Tasks])
       ])
     ),
@@ -310,7 +310,7 @@ def generate_styled_typst(
       inset: 12pt,
       radius: 4pt,
       align(center, [
-        #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent, [{high_priority_count}])
+        #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent, [{{high_priority_count}}])
         #text(size: 8pt, [High Priority])
       ])
     ),
@@ -319,7 +319,7 @@ def generate_styled_typst(
       inset: 12pt,
       radius: 4pt,
       align(center, [
-        #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent, [{today.strftime("%d/%m")}])
+        #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent, [{date_str}])
         #text(size: 8pt, [Date])
       ])
     )
@@ -369,7 +369,7 @@ def generate_styled_typst(
     ])
   )
 ] else [
-  #stats_row({total}, {high_priority})
+  #stats_row({{total}}, {{high_priority}})
   
   #v(2em)
   
