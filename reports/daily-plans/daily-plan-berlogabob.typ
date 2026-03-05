@@ -1,8 +1,8 @@
 // Daily Plan for Andrey Dyakov
-// Generated: 2026-03-05 07:31
+// Generated: 2026-03-05 07:35
 // Project: The Oracle That Wears Us
 
-#import "daily-plan-template.typ"
+#import "reports/daily-plan-template.typ"
 
 #show: report.with(
   member_name: "Andrey Dyakov",
