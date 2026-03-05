@@ -47,6 +47,9 @@ jobs:
           echo "date_full=$(date +'%B %d, %Y')" >> "$GITHUB_OUTPUT"
           echo "iso_date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Authenticate GitHub CLI
         run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
@@ -61,6 +64,7 @@ jobs:
           DATE_PREFIX: ${{ steps.date.outputs.date }}
           DATE_READABLE: ${{ steps.date.outputs.date_readable }}
           DATE_FULL: ${{ steps.date.outputs.date_full }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bash scripts/generate-daily-plan.sh "$USERNAME" "$FULL_NAME" "$DATE_PREFIX" "$DATE_READABLE" "$DATE_FULL"
 
@@ -72,6 +76,7 @@ jobs:
           DATE_PREFIX: ${{ steps.date.outputs.date }}
           DATE_READABLE: ${{ steps.date.outputs.date_readable }}
           DATE_FULL: ${{ steps.date.outputs.date_full }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bash scripts/generate-daily-plan.sh "$USERNAME" "$FULL_NAME" "$DATE_PREFIX" "$DATE_READABLE" "$DATE_FULL"
 
@@ -83,6 +88,7 @@ jobs:
           DATE_PREFIX: ${{ steps.date.outputs.date }}
           DATE_READABLE: ${{ steps.date.outputs.date_readable }}
           DATE_FULL: ${{ steps.date.outputs.date_full }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bash scripts/generate-daily-plan.sh "$USERNAME" "$FULL_NAME" "$DATE_PREFIX" "$DATE_READABLE" "$DATE_FULL"
 
