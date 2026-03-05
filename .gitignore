@@ -1,2 +1,5 @@
 # Ignore system-generated files
 .DS_Store
+
+.qwen/
+gha-creds-*.json

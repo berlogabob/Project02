@@ -15,23 +15,20 @@ TEMPLATE_FILE="templates/daily-plan-template.typ"
 
 echo "Generating daily plan for ${FULL_NAME} (@${USERNAME})"
 
-# Fetch open issues
-ISSUES=$(gh issue list --state open --assignee "${USERNAME}" --limit 50 \
-  --json number,title,labels,milestone,body --jq '.[]' 2>/dev/null || echo "")
+# Fetch open issues as JSON array
+ISSUES_JSON=$(gh issue list --state open --assignee "${USERNAME}" --limit 50 \
+  --json number,title,labels,milestone,body 2>/dev/null || echo "[]")
+
+# Ensure we have valid JSON
+if [ -z "${ISSUES_JSON}" ] || [ "${ISSUES_JSON}" = "null" ]; then
+  ISSUES_JSON="[]"
+fi
 
 # Count issues
-if [ -z "${ISSUES}" ]; then
-  ISSUE_COUNT=0
-else
-  ISSUE_COUNT=$(echo "${ISSUES}" | jq -s 'length')
-fi
+ISSUE_COUNT=$(echo "${ISSUES_JSON}" | jq 'length')
 
 # Count high priority
-if [ -z "${ISSUES}" ]; then
-  HIGH_PRIORITY=0
-else
-  HIGH_PRIORITY=$(echo "${ISSUES}" | jq -s '[.[] | select(.labels[].name | test("critical|high"))] | length' 2>/dev/null || echo "0")
-fi
+HIGH_PRIORITY=$(echo "${ISSUES_JSON}" | jq '[.[] | select(.labels[].name | test("critical|high"))] | length')
 
 # Create Typst file header
 cat > "${OUTPUT_FILE}" << EOF
@@ -130,7 +127,7 @@ else
 EOF
 
   # Process priority issues (critical/high)
-  echo "${ISSUES}" | jq -s '.[] | select(.labels[].name | test("critical|high"))' 2>/dev/null | while IFS= read -r issue; do
+  echo "${ISSUES_JSON}" | jq -c '.[] | select(.labels[].name | test("critical|high"))' 2>/dev/null | while IFS= read -r issue; do
     if [ -n "${issue}" ] && [ "${issue}" != "null" ]; then
       NUM=$(echo "${issue}" | jq -r '.number')
       TITLE=$(echo "${issue}" | jq -r '.title' | sed 's/\[/(/g; s/\]/)/g' | head -c 200)
@@ -157,7 +154,7 @@ EOF
 EOF
 
   # Process remaining issues
-  echo "${ISSUES}" | jq -s '.[] | select(.labels[].name | test("critical|high") | not)' 2>/dev/null | while IFS= read -r issue; do
+  echo "${ISSUES_JSON}" | jq -c '.[] | select(.labels[].name | test("critical|high") | not)' 2>/dev/null | while IFS= read -r issue; do
     if [ -n "${issue}" ] && [ "${issue}" != "null" ]; then
       NUM=$(echo "${issue}" | jq -r '.number')
       TITLE=$(echo "${issue}" | jq -r '.title' | sed 's/\[/(/g; s/\]/)/g' | head -c 200)
