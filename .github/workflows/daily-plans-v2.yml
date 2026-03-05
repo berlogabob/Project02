@@ -65,7 +65,7 @@ jobs:
       - name: Generate plans for all members
         if: ${{ github.event.inputs.member == '' }}
         run: |
-          python3 scripts/generate_daily_plan_styled.py --all-members --output-dir reports/daily-plans
+          python3 scripts/generate_daily_plan_simple.py --all-members --output-dir reports/daily-plans
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
