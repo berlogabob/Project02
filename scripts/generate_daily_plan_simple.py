@@ -38,6 +38,7 @@ def run_gh_command(args: list) -> list:
 
 def get_assigned_issues(username: str) -> list:
     """Get open issues assigned to a specific user"""
+    # Use gh search with proper JSON output
     cmd = [
         "gh",
         "issue",
@@ -49,16 +50,21 @@ def get_assigned_issues(username: str) -> list:
         "--repo",
         REPO,
         "--limit",
-        "20",
+        "50",
+        "--json",
+        "number,title,state,labels,assignees,milestone,body,comments,createdAt",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"Warning: {result.stderr[:100]}")
         return []
     try:
-        return json.loads(result.stdout)
-    except:
-        print(f"Warning: Could not parse JSON")
+        data = json.loads(result.stdout)
+        print(f"   Found {len(data)} open issues")
+        return data
+    except Exception as e:
+        print(f"Warning: Could not parse JSON: {e}")
+        print(f"Output: {result.stdout[:200]}")
         return []
 
 
