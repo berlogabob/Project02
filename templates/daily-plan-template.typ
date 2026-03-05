@@ -7,7 +7,7 @@
 )
 
 #set text(
-  font: "Noto Sans",
+  font: ("Noto Sans", "DejaVu Sans", "Arial"),
   size: 10pt,
   fill: rgb("#333333"),
   lang: "en"
