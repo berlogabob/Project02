@@ -81,7 +81,7 @@ def add_issue(lines, issue):
     labels = ", ".join([l["name"] for l in issue.get("labels", [])])
     body = clean_text(issue.get("body", ""))[:300] + "..." if issue.get("body") else ""
     lines.append(
-        f'#issue_card(#{num}, [{title}], "{priority}", [{body}], [{milestone}], [{labels}])'
+        f'#issue_card({num}, [{title}], "{priority}", [{body}], [{milestone}], [{labels}])'
     )
     lines.append("")
 
