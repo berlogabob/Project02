@@ -198,12 +198,12 @@ def generate_typst_plan(
     priority_order = {"critical": 0, "high": 1, "medium": 2, "low": 3}
     prepared_issues.sort(key=lambda x: priority_order.get(x["priority"], 2))
 
-    # Use absolute path to template
+    # Use relative path from output directory
     typst_content = f'''// Daily Plan for {member_name}
 // Generated: {today.strftime("%Y-%m-%d %H:%M")}
 // Project: The Oracle That Wears Us
 
-#import "reports/daily-plan-template.typ"
+#import "../daily-plan-template.typ"
 
 #show: report.with(
   member_name: "{member_name}",
