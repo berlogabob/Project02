@@ -73,18 +73,25 @@ def get_assigned_issues(username: str) -> list:
 def get_sub_issues(parent_number: int) -> list:
     """Get sub-issues (issues that reference this issue)"""
     # Search for issues that mention the parent issue number
-    issues = run_gh_command(
-        [
-            "issue",
-            "list",
-            "--state",
-            "open",
-            "--search",
-            f"repo:{REPO} #{parent_number}",
-            "--limit",
-            "10",
-        ]
-    )
+    cmd = [
+        "gh",
+        "issue",
+        "list",
+        "--state",
+        "open",
+        "--search",
+        f"repo:{REPO} #{parent_number}",
+        "--limit",
+        "10",
+        "--json",
+        "number,title,state,labels,assignees,milestone,body,comments,createdAt",
+    ]
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        return []
+
+    issues = json.loads(result.stdout)
     # Filter out the parent issue itself
     return [i for i in issues if i["number"] != parent_number]
 
