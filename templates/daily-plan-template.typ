@@ -45,7 +45,7 @@
 #let report_header(ch_idx, category: "DAILY PLAN") = {
   let t = chapter_themes.at(ch_idx)
   move(dy: -20pt)[
-    box(
+    ##box(
       width: 100%,
       height: 30pt,
       fill: gradient.linear(t.grad_start, t.grad_end),
