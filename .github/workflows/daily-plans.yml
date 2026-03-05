@@ -3,18 +3,18 @@ name: Generate Daily Plans
 on:
   schedule:
     # Run every day at 00:00 UTC (02:00 Lisbon time)
-    - cron: '0 0 * * *'
-  
+    - cron: "0 0 * * *"
+
   # Allow manual trigger
   workflow_dispatch:
     inputs:
       member:
-        description: 'Specific member (leave empty for all)'
+        description: "Specific member (leave empty for all)"
         required: false
-        default: ''
+        default: ""
         type: choice
         options:
-          - ''
+          - ""
           - naydino
           - berlogabob
           - electricianv001
@@ -26,49 +26,49 @@ permissions:
 jobs:
   generate-daily-plans:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Install Typst
         uses: yusancky/setup-typst@v2
         with:
-          version: 'latest'
-      
+          version: "latest"
+
       - name: Install GitHub CLI
         run: |
           gh --version || sudo apt-get install -y gh
-      
+
       - name: Authenticate GitHub CLI
         run: gh auth setup-git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      
+          python-version: "3.11"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-      
+
       - name: Generate date stamp
         id: date
         run: |
           echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
           echo "datetime=$(date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
-      
+
       - name: Generate plans for all members
         if: ${{ github.event.inputs.member == '' }}
         run: |
           python3 scripts/generate_daily_plan.py --all-members --output-dir reports/daily-plans
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Generate plan for specific member
         if: ${{ github.event.inputs.member != '' }}
         run: |
@@ -77,7 +77,7 @@ jobs:
             --output reports/daily-plan-${{ github.event.inputs.member }}.typ
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Commit and push plans
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -87,20 +87,20 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Upload plans as artifacts
         uses: actions/upload-artifact@v4
         with:
           name: daily-plans-${{ steps.date.outputs.date }}
           path: reports/daily-plans/*.pdf
           retention-days: 7
-      
+
       - name: Create summary issue
         uses: actions/github-script@v7
         with:
           script: |
             const date = '${{ steps.date.outputs.date }}';
-            
+
             const body = [
               '## Daily Plans Generated - ${date}',
               '',
@@ -131,7 +131,7 @@ jobs:
               '',
               "**Today's Focus:** Make progress on your assigned issues and update the team!"
             ].join('\n');
-            
+
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -139,7 +139,7 @@ jobs:
               body: body,
               labels: ['daily-plan', 'type: documentation']
             });
-      
+
       - name: Send personalized notifications
         uses: actions/github-script@v7
         with:
@@ -150,7 +150,7 @@ jobs:
               { username: 'berlogabob', name: 'Andrey' },
               { username: 'electricianv001', name: 'Dmitri' }
             ];
-            
+
             // Comment on each member's recent activity or create mention
             for (const member of members) {
               // Find or create a tracking issue for this member
@@ -164,18 +164,21 @@ jobs:
               
               if (issues.data.length > 0) {
                 // Comment on their first assigned issue
+                const commentBody = [
+                  '## 📅 Daily Plan Ready - ${date}',
+                  '',
+                  '@${member.username} Your daily plan has been generated with **${issues.data.length} assigned issue(s)**.',
+                  '',
+                  '📄 [Download your plan](../../releases/download/daily-plans-${date}/daily-plan-${member.username}.pdf)',
+                  '',
+                  "**Today's focus:** Review your plan and make progress on these tasks!"
+                ].join('\n');
+                
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issues.data[0].number,
-                  body: `## 📅 Daily Plan Ready - ${date}
-
-@${member.username} Your daily plan has been generated with **${issues.data.length} assigned issue(s)**.
-
-📄 [Download your plan](../../releases/download/daily-plans-${date}/daily-plan-${member.username}.pdf)
-
-**Today's focus:** Review your plan and make progress on these tasks!
-                  `
+                  body: commentBody
                 });
                 break; // Only comment on one issue per member
               }
