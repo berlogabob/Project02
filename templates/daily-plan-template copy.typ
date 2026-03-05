@@ -1,6 +1,18 @@
 // templates/daily-plan-template.typ
 // Reusable template for daily plans - edit styles here
 
+#set page(
+  paper: "a4",
+  margin: (x: 50pt, y: 60pt),
+)
+
+#set text(
+  font: ("Noto Sans", "DejaVu Sans", "Arial"),
+  size: 10pt,
+  fill: rgb("#333333"),
+  lang: "en"
+)
+
 #let chapter_themes = (
   "1": (
     grad_start: rgb("#2F80ED"),
@@ -30,36 +42,6 @@
 
 #let muted_bg = rgb("#f4f4f4")
 
-#set page(
-  paper: "a4",
-  margin: (x: 50pt, y: 60pt),
-  // AUTOMATIC PAGE NUMBERING STARTING FROM PAGE 1
-  footer: context {
-    let page_num = counter(page).at(here()).first()
-    // Map page number to theme (caps at 4 to prevent errors if document is long)
-    let theme_idx = str(calc.min(page_num, 4))
-    let t = chapter_themes.at(theme_idx)
-    
-    place(
-      right,
-      dx: 30pt,
-      dy: 10pt,
-      square(
-        size: 35pt,
-        fill: t.page_bg,
-        align(center + horizon, text(white, weight: "bold", size: 14pt)[#page_num])
-      )
-    )
-  }
-)
-
-#set text(
-  font: ("Noto Sans", "DejaVu Sans", "Arial"),
-  size: 10pt,
-  fill: rgb("#333333"),
-  lang: "en"
-)
-
 #let report_header(ch_idx, category: "DAILY PLAN") = [
   #let t = chapter_themes.at(ch_idx)
   #move(dy: -20pt)[
@@ -82,6 +64,20 @@
   v(20pt)
 }
 
+#let page_footer(ch_idx) = {
+  let t = chapter_themes.at(ch_idx)
+  place(
+    bottom + right,
+    dx: 30pt,
+    dy: 30pt,
+    square(
+      size: 35pt,
+      fill: t.page_bg,
+      align(center + horizon, text(white, weight: "bold", size: 14pt)[#ch_idx])
+    )
+  )
+}
+
 #let task_table(rows) = {
   table(
     columns: (1fr, 1fr),
@@ -93,8 +89,7 @@
   )
 }
 
-#let issue_card(num, title, priority, body, milestone, labels, ch_idx: "1") = {
-  let t = chapter_themes.at(ch_idx)
+#let issue_card(num, title, priority, body, milestone, labels) = {
   let bg = if priority == "critical" { rgb("#ffebee") }
            else if priority == "high"    { rgb("#fff3e0") }
            else if priority == "medium"  { rgb("#e8f5e9") }
@@ -104,20 +99,22 @@
                else if priority == "high"    { rgb("#f57c00") }
                else                          { gray.lighten(60%) }
 
-  block(
-    width: 100%,
-    inset: 12pt,
-    radius: 6pt,
-    fill: bg,
-    stroke: 1pt + border,
-    [
-      #text(weight: "bold", fill: t.accent)[Issue #num: #title] \
-      #if priority != "" [#text(fill: red, weight: "semibold")[#upper(priority)]] \
-      #h(1fr) #text(size: 9pt, fill: gray)[#milestone] \
-      #v(0.4em)
-      #text(size: 9.5pt)[#body]
-      #v(0.3em)
-      #text(size: 8.5pt, fill: gray)[Labels: #labels]
-    ]
-  )
+  [
+    #block(
+      width: 100%,
+      inset: 12pt,
+      radius: 6pt,
+      fill: bg,
+      stroke: 1pt + border,
+      [
+        #text(weight: "bold", fill: chapter_themes.at("1").accent)[Issue #num: #title] \
+        #if priority != "" [#text(fill: red, weight: "semibold")[#upper(priority)]] \
+        #h(1fr) #text(size: 9pt, fill: gray)[#milestone] \
+        #v(0.4em)
+        #text(size: 9.5pt)[#body]
+        #v(0.3em)
+        #text(size: 8.5pt, fill: gray)[Labels: #labels]
+      ]
+    )
+  ]
 }
