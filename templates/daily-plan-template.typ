@@ -4,7 +4,6 @@
 #set page(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
-  numbering: "1",
 )
 
 #set text(
@@ -67,10 +66,15 @@
 
 #let page_footer(ch_idx) = {
   let t = chapter_themes.at(ch_idx)
-  square(
-    size: 35pt,
-    fill: t.page_bg,
-    align(center + horizon, text(white, weight: "bold", size: 14pt)[#context counter(page).display()])
+  place(
+    bottom + right,
+    dx: 30pt,
+    dy: 30pt,
+    square(
+      size: 35pt,
+      fill: t.page_bg,
+      align(center + horizon, text(white, weight: "bold", size: 14pt)[#ch_idx])
+    )
   )
 }
 
