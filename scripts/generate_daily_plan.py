@@ -47,21 +47,27 @@ def run_gh_command(args: list) -> dict:
 
 def get_assigned_issues(username: str) -> list:
     """Get open issues assigned to a specific user"""
-    issues = run_gh_command(
-        [
-            "issue",
-            "list",
-            "--state",
-            "open",
-            "--assignee",
-            username,
-            "--repo",
-            REPO,
-            "--limit",
-            "20",
-        ]
-    )
-    return issues
+    # Use search instead of --assignee flag for better compatibility
+    cmd = [
+        "gh",
+        "issue",
+        "list",
+        "--state",
+        "open",
+        "--search",
+        f"assignee:{username} repo:{REPO}",
+        "--limit",
+        "20",
+        "--json",
+        "number,title,state,labels,assignees,milestone,body,comments,createdAt",
+    ]
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"Warning: Could not fetch issues for {username}: {result.stderr}")
+        return []
+
+    return json.loads(result.stdout)
 
 
 def get_sub_issues(parent_number: int) -> list:
