@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Daily Plan Generator - Simple Version with Issues List
+Daily Plan Generator - Truly Working Version
+Writes Typst code directly without f-string conflicts
 """
 
 import argparse
@@ -20,7 +21,6 @@ REPO = "berlogabob/Project02"
 
 
 def get_assigned_issues(username: str) -> list:
-    """Get open issues assigned to a specific user"""
     cmd = [
         "gh",
         "issue",
@@ -38,19 +38,16 @@ def get_assigned_issues(username: str) -> list:
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
-        print(f"Warning: {result.stderr[:100]}")
         return []
     try:
         data = json.loads(result.stdout)
         print(f"   Found {len(data)} open issues")
         return data
-    except Exception as e:
-        print(f"Warning: Could not parse JSON: {e}")
+    except:
         return []
 
 
 def format_priority(issue: dict) -> str:
-    """Extract priority from labels"""
     for label in issue.get("labels", []):
         name = label.get("name", "")
         if "critical" in name:
@@ -61,239 +58,234 @@ def format_priority(issue: dict) -> str:
 
 
 def escape_typst(text: str) -> str:
-    """Escape special Typst characters"""
     if not text:
         return ""
     return text.replace("[", "(").replace("]", ")").replace("\n", " ")
 
 
-def generate_simple_typst(
-    member_name: str, member_username: str, issues: list, output_path: str
-) -> str:
-    """Generate simple Typst file with issues list"""
-
-    today = datetime.now()
-    date_str = today.strftime("%d/%m")
-
-    # Prepare issues
-    prepared_issues = []
-    for issue in issues:
-        prepared_issues.append(
-            {
-                "number": issue["number"],
-                "title": escape_typst(issue["title"]),
-                "priority": format_priority(issue),
-                "body": escape_typst(issue.get("body", ""))[:150],
-                "milestone": issue.get("milestone", {}).get("title", "")
-                if issue.get("milestone")
-                else "",
-                "labels": ", ".join([l["name"] for l in issue.get("labels", [])]),
-                "comments": issue.get("comments", [])[:2],
-            }
-        )
-
-    # Sort by priority
-    priority_order = {"critical": 0, "high": 1, "medium": 2}
-    prepared_issues.sort(key=lambda x: priority_order.get(x["priority"], 2))
-
-    # Count stats
-    total = len(prepared_issues)
-    high_priority = len(
-        [i for i in prepared_issues if i["priority"] in ["critical", "high"]]
-    )
-
-    # Generate issues content as plain text (will be inserted into template)
-    issues_text = ""
-    for i, issue in enumerate(prepared_issues):
-        priority_badge = (
-            f" [{issue['priority'].upper()}]"
-            if issue["priority"] in ["critical", "high"]
-            else ""
-        )
-        issues_text += f"=== #{issue['number']} - {issue['title']}{priority_badge}\n"
-        if issue["milestone"]:
-            issues_text += f"*Milestone:* {issue['milestone']}\n"
-        if issue["labels"]:
-            issues_text += f"*Labels:* {issue['labels']}\n"
-        if issue["body"]:
-            issues_text += f"\n{issue['body']}\n"
-        if issue["comments"]:
-            issues_text += "\n*Comments:*\n"
-            for comment in issue["comments"]:
-                author = comment.get("author", {}).get("login", "Unknown")
-                body = escape_typst(comment.get("body", ""))[:100]
-                issues_text += f"- @{author}: {body}\n"
-        issues_text += "\n---\n\n"
-
-    # Simple Typst template
-    typst_content = f'''// Daily Plan for {member_name}
-// Generated: {today.strftime("%Y-%m-%d %H:%M")}
-
-#set page(paper: "a4", margin: (x: 50pt, y: 60pt))
-#set text(font: "Noto Sans", size: 10pt, fill: rgb("#333333"), lang: "en")
-
-// Colors from Project02-Plan.typ
-#let accent_blue = rgb("#2F80ED")
-#let accent_red = rgb("#eb3349")
-#let accent_green = rgb("#11998e")
-#let accent_yellow = rgb("#F2994A")
-#let muted_bg = rgb("#f4f4f4")
-
-// Header
-#align(center)[
-  #text(size: 24pt, weight: "bold", fill: accent_blue, "📅 Daily Plan")
-  #v(10pt)
-  #text(size: 18pt, "{date_str}")
-  #v(15pt)
-  #text(size: 14pt, "{member_name}")
-  #text(size: 10pt, fill: gray, " (@{member_username})")
-]
-
-#v(20pt)
-#line(length: 100%, stroke: 1pt + accent_blue)
-#v(20pt)
-
-// Stats
-#grid(
-  columns: (1fr, 1fr, 1fr),
-  gutter: 15pt,
-  #box(
-    fill: accent_blue.lighten(90%),
-    inset: 12pt,
-    radius: 4pt,
-    align(center, [
-      #text(size: 20pt, weight: "bold", fill: accent_blue, "{total}")
-      #v(4pt)
-      #text(size: 8pt, "Tasks")
-    ])
-  ),
-  #box(
-    fill: accent_red.lighten(90%),
-    inset: 12pt,
-    radius: 4pt,
-    align(center, [
-      #text(size: 20pt, weight: "bold", fill: accent_red, "{high_priority}")
-      #v(4pt)
-      #text(size: 8pt, "High Priority")
-    ])
-  ),
-  #box(
-    fill: accent_green.lighten(90%),
-    inset: 12pt,
-    radius: 4pt,
-    align(center, [
-      #text(size: 20pt, weight: "bold", fill: accent_green, "{today.strftime("%d/%m")}")
-      #v(4pt)
-      #text(size: 8pt, "Date")
-    ])
-  )
-)
-
-#v(30pt)
-#line(length: 100%, stroke: 1pt + gray.lighten(70%))
-#v(20pt)
-
-== Your Tasks
-
-#if {total} == 0 [
-  #box(
-    width: 100%,
-    inset: 20pt,
-    fill: accent_green.lighten(90%),
-    radius: 4pt,
-    align(center, [
-      #text(size: 12pt, "🎉 No tasks for today!")
-      #v(8pt)
-      #text(size: 9pt, fill: gray, "Use this time to explore or help teammates")
-    ])
-  )
-] else [
-'''
-
-    # Add issues as markdown (will be rendered by Typst)
-    typst_content += issues_text
-
-    typst_content += """
-#v(30pt)
-#line(length: 100%, stroke: 1pt + gray.lighten(70%))
-#v(20pt)
-
-== Planning Notes
-
-=== Today's Goals
-#box(
-  width: 100%,
-  height: 100pt,
-  inset: 15pt,
-  fill: muted_bg,
-  radius: 4pt,
-  [
-    #text(size: 9pt, fill: gray, "Write your goals here...")
-  ]
-)
-
-=== Time Blocks
-#table(
-  columns: (auto, 1fr),
-  inset: 8pt,
-  stroke: 0.5pt + gray.lighten(50%),
-  fill: (x, y) => if calc.even(y) { muted_bg.lighten(50%) },
-  [*Time*], [*Plan*],
-  [09:00-10:00], [],
-  [10:00-11:00], [],
-  [11:00-12:00], [],
-  [12:00-13:00], [Lunch],
-  [13:00-14:00], [],
-  [14:00-15:00], [],
-  [15:00-16:00], [],
-  [16:00-17:00], [],
-)
-
-=== End of Day Checklist
-#box(
-  width: 100%,
-  inset: 15pt,
-  fill: muted_bg,
-  radius: 4pt,
-  [
-    #text(size: 9pt, [
-      □ Update issue status
-      □ Add progress comments
-      □ Push code changes
-      □ Create PR if ready
-      □ Plan tomorrow
-    ])
-  ]
-)
-"""
-
-    # Write to file
-    output = Path(output_path)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with open(output, "w") as f:
-        f.write(typst_content)
-
-    print(f"✅ Generated: {output}")
-    return typst_content
-
-
 def generate_all_plans(output_dir: str) -> list:
-    """Generate daily plans for all team members"""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
     generated = []
     today = datetime.now()
     date_prefix = today.strftime("%Y%m%d")
+    date_str = today.strftime("%d/%m")
 
     for username, name in TEAM_MEMBERS.items():
         print(f"\n📋 Generating plan for {name} (@{username})...")
 
         issues = get_assigned_issues(username)
 
-        # Use new filename format: YYYYMMDD-daily-plan-username.typ
+        # Prepare issues data
+        prepared_issues = []
+        for issue in issues:
+            prepared_issues.append(
+                {
+                    "number": issue["number"],
+                    "title": escape_typst(issue["title"]),
+                    "priority": format_priority(issue),
+                    "body": escape_typst(issue.get("body", ""))[:150],
+                    "milestone": issue.get("milestone", {}).get("title", "")
+                    if issue.get("milestone")
+                    else "",
+                    "labels": ", ".join([l["name"] for l in issue.get("labels", [])]),
+                    "comments": issue.get("comments", [])[:2],
+                }
+            )
+
+        # Sort by priority
+        priority_order = {"critical": 0, "high": 1, "medium": 2}
+        prepared_issues.sort(key=lambda x: priority_order.get(x["priority"], 2))
+
+        total = len(prepared_issues)
+        high_priority = len(
+            [i for i in prepared_issues if i["priority"] in ["critical", "high"]]
+        )
+
+        # Build Typst file line by line
+        lines = []
+        lines.append(f"// Daily Plan for {name}")
+        lines.append(f"// Generated: {today.strftime('%Y-%m-%d %H:%M')}")
+        lines.append("")
+        lines.append('#set page(paper: "a4", margin: (x: 50pt, y: 60pt))')
+        lines.append(
+            '#set text(font: "Noto Sans", size: 10pt, fill: rgb("#333333"), lang: "en")'
+        )
+        lines.append("")
+        lines.append('#let accent_blue = rgb("#2F80ED")')
+        lines.append('#let accent_red = rgb("#eb3349")')
+        lines.append('#let accent_green = rgb("#11998e")')
+        lines.append('#let muted_bg = rgb("#f4f4f4")')
+        lines.append("")
+
+        # Header
+        lines.append("#align(center)[")
+        lines.append(
+            '  #text(size: 24pt, weight: "bold", fill: accent_blue, "📅 Daily Plan")'
+        )
+        lines.append("  #v(10pt)")
+        lines.append(f'  #text(size: 18pt, "{date_str}")')
+        lines.append("  #v(15pt)")
+        lines.append(f'  #text(size: 14pt, "{name}")')
+        lines.append(f'  #text(size: 10pt, fill: gray, " (@{username})")')
+        lines.append("]")
+        lines.append("")
+        lines.append("#v(20pt)")
+        lines.append("#line(length: 100%, stroke: 1pt + accent_blue)")
+        lines.append("#v(20pt)")
+        lines.append("")
+
+        # Stats
+        lines.append("#grid(")
+        lines.append("  columns: (1fr, 1fr, 1fr),")
+        lines.append("  gutter: 15pt,")
+        lines.append("  #box(")
+        lines.append("    fill: accent_blue.lighten(90%),")
+        lines.append("    inset: 12pt,")
+        lines.append("    radius: 4pt,")
+        lines.append("    align(center, [")
+        lines.append(
+            f'      #text(size: 20pt, weight: "bold", fill: accent_blue, "{total}")'
+        )
+        lines.append("      #v(4pt)")
+        lines.append('      #text(size: 8pt, "Tasks")')
+        lines.append("    ])")
+        lines.append("  ),")
+        lines.append("  #box(")
+        lines.append("    fill: accent_red.lighten(90%),")
+        lines.append("    inset: 12pt,")
+        lines.append("    radius: 4pt,")
+        lines.append("    align(center, [")
+        lines.append(
+            f'      #text(size: 20pt, weight: "bold", fill: accent_red, "{high_priority}")'
+        )
+        lines.append("      #v(4pt)")
+        lines.append('      #text(size: 8pt, "High Priority")')
+        lines.append("    ])")
+        lines.append("  ),")
+        lines.append("  #box(")
+        lines.append("    fill: accent_green.lighten(90%),")
+        lines.append("    inset: 12pt,")
+        lines.append("    radius: 4pt,")
+        lines.append("    align(center, [")
+        lines.append(
+            f'      #text(size: 20pt, weight: "bold", fill: accent_green, "{date_str}")'
+        )
+        lines.append("      #v(4pt)")
+        lines.append('      #text(size: 8pt, "Date")')
+        lines.append("    ])")
+        lines.append("  )")
+        lines.append(")")
+        lines.append("")
+        lines.append("#v(30pt)")
+        lines.append("#line(length: 100%, stroke: 1pt + gray.lighten(70%))")
+        lines.append("#v(20pt)")
+        lines.append("")
+        lines.append("== Your Tasks")
+        lines.append("")
+
+        # Issues
+        if total == 0:
+            lines.append("#box(")
+            lines.append("  width: 100%,")
+            lines.append("  inset: 20pt,")
+            lines.append("  fill: accent_green.lighten(90%),")
+            lines.append("  radius: 4pt,")
+            lines.append("  align(center, [")
+            lines.append('    #text(size: 12pt, "🎉 No tasks for today!")')
+            lines.append("    #v(8pt)")
+            lines.append(
+                '    #text(size: 9pt, fill: gray, "Use this time to explore or help teammates")'
+            )
+            lines.append("  ])")
+            lines.append(")")
+        else:
+            for issue in prepared_issues:
+                priority_badge = (
+                    f" [{issue['priority'].upper()}]"
+                    if issue["priority"] in ["critical", "high"]
+                    else ""
+                )
+                lines.append(
+                    f"=== #{issue['number']} - {issue['title']}{priority_badge}"
+                )
+                if issue["milestone"]:
+                    lines.append(f"*Milestone:* {issue['milestone']}")
+                if issue["labels"]:
+                    lines.append(f"*Labels:* {issue['labels']}")
+                if issue["body"]:
+                    lines.append("")
+                    lines.append(issue["body"])
+                if issue["comments"]:
+                    lines.append("")
+                    lines.append("*Comments:*")
+                    for comment in issue["comments"]:
+                        author = comment.get("author", {}).get("login", "Unknown")
+                        body = escape_typst(comment.get("body", ""))[:100]
+                        lines.append(f"- @{author}: {body}")
+                lines.append("")
+                lines.append("---")
+                lines.append("")
+
+        lines.append("#v(30pt)")
+        lines.append("#line(length: 100%, stroke: 1pt + gray.lighten(70%))")
+        lines.append("#v(20pt)")
+        lines.append("")
+        lines.append("== Planning Notes")
+        lines.append("")
+        lines.append("=== Today's Goals")
+        lines.append("#box(")
+        lines.append("  width: 100%,")
+        lines.append("  height: 100pt,")
+        lines.append("  inset: 15pt,")
+        lines.append("  fill: muted_bg,")
+        lines.append("  radius: 4pt,")
+        lines.append("  [")
+        lines.append('    #text(size: 9pt, fill: gray, "Write your goals here...")')
+        lines.append("  ]")
+        lines.append(")")
+        lines.append("")
+        lines.append("=== Time Blocks")
+        lines.append("#table(")
+        lines.append("  columns: (auto, 1fr),")
+        lines.append("  inset: 8pt,")
+        lines.append("  stroke: 0.5pt + gray.lighten(50%),")
+        lines.append("  fill: (x, y) => if calc.even(y) { muted_bg.lighten(50%) },")
+        lines.append("  [*Time*], [*Plan*],")
+        lines.append("  [09:00-10:00], [],")
+        lines.append("  [10:00-11:00], [],")
+        lines.append("  [11:00-12:00], [],")
+        lines.append("  [12:00-13:00], [Lunch],")
+        lines.append("  [13:00-14:00], [],")
+        lines.append("  [14:00-15:00], [],")
+        lines.append("  [15:00-16:00], [],")
+        lines.append("  [16:00-17:00], [],")
+        lines.append(")")
+        lines.append("")
+        lines.append("=== End of Day Checklist")
+        lines.append("#box(")
+        lines.append("  width: 100%,")
+        lines.append("  inset: 15pt,")
+        lines.append("  fill: muted_bg,")
+        lines.append("  radius: 4pt,")
+        lines.append("  [")
+        lines.append("    #text(size: 9pt, [")
+        lines.append("      □ Update issue status")
+        lines.append("      □ Add progress comments")
+        lines.append("      □ Push code changes")
+        lines.append("      □ Create PR if ready")
+        lines.append("      □ Plan tomorrow")
+        lines.append("    ])")
+        lines.append("  ]")
+        lines.append(")")
+
+        # Write file
         output_file = output_path / f"{date_prefix}-daily-plan-{username}.typ"
-        generate_simple_typst(name, username, issues, str(output_file))
+        with open(output_file, "w") as f:
+            f.write("\n".join(lines))
+
+        print(f"✅ Generated: {output_file}")
 
         # Compile to PDF
         pdf_file = output_path / f"{date_prefix}-daily-plan-{username}.pdf"
@@ -331,7 +323,6 @@ def main():
 
     args = parser.parse_args()
 
-    # Check if typst is installed
     try:
         subprocess.run(["typst", "--version"], capture_output=True, check=True)
     except:
