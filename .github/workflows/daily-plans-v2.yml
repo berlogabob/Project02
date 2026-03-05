@@ -65,7 +65,7 @@ jobs:
       - name: Generate plans for all members
         if: ${{ github.event.inputs.member == '' }}
         run: |
-          python3 scripts/generate_daily_plan_simple.py --all-members --output-dir reports/daily-plans
+          python3 scripts/generate_daily_plan_styled.py --all-members --output-dir reports/daily-plans
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -81,12 +81,12 @@ jobs:
       - name: Compile PDFs
         run: |
           cd reports/daily-plans
-          for typ_file in *.typ; do
+          for typ_file in *-daily-plan-*.typ; do
             pdf_file="${typ_file%.typ}.pdf"
             echo "Compiling $typ_file -> $pdf_file"
             typst compile "$typ_file" "$pdf_file" && echo "✅ $pdf_file" || echo "⚠️  Failed: $typ_file"
           done
-          ls -la *.pdf 2>/dev/null || echo "No PDFs found"
+          ls -la *-daily-plan-*.pdf 2>/dev/null || echo "No PDFs found"
 
       - name: Commit and push plans
         run: |
