@@ -1,5 +1,5 @@
 // Daily Plan for Dmitri Kazantsev
-// Generated: 2026-03-05 09:52
+// Generated: 2026-03-05 09:55
 
 #set page(paper: "a4", margin: (x: 50pt, y: 60pt))
 #set text(font: "Noto Sans", size: 10pt, fill: rgb("#333333"), lang: "en")
@@ -41,7 +41,7 @@ We need to decide once and for all what we will use for the real-time microphone
 Performance & Evaluation Data  Time to setup: ~5–10 minutes (including adding components and linking references).  Time to response (microphone reacti
 
 *Comments:*
-- @berlogabob: @electricianv001  please add some data as comment for this issue. something we can measure to use fo
+- @berlogabob: at electricianv001  please add some data as comment for this issue. something we can measure to use 
 
 === #6 - TD Test: "Can TD call a free speech-to-text system and return text back into TD as DAT/CHOP?"
 
