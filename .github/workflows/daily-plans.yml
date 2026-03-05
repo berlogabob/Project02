@@ -101,40 +101,41 @@ jobs:
           script: |
             const date = '${{ steps.date.outputs.date }}';
             
-            const body = `## Daily Plans Generated - ${date}
-
-### Team Member Plans
-
-| Member | Plan PDF | Issues |
-|--------|----------|--------|
-| @naydino | [Download](../../releases/download/daily-plans-${date}/daily-plan-naydino.pdf) | See PDF |
-| @berlogabob | [Download](../../releases/download/daily-plans-${date}/daily-plan-berlogabob.pdf) | See PDF |
-| @electricianv001 | [Download](../../releases/download/daily-plans-${date}/daily-plan-electricianv001.pdf) | See PDF |
-
-### How to Use Your Daily Plan
-
-1. **Download** your personalized PDF
-2. **Review** your assigned tasks
-3. **Check** sub-issues and recent comments
-4. **Plan** your time blocks
-5. **Update** issues as you work
-6. **Comment** your progress
-
-### Generated Files
-
-- PDFs: \`reports/daily-plans/\`
-- Source: \`reports/daily-plans/*.typ\`
-
----
-*Auto-generated every day at 00:00 UTC (02:00 Lisbon)*
-
-**Today's Focus:** Make progress on your assigned issues and update the team!`;
+            const body = [
+              '## Daily Plans Generated - ${date}',
+              '',
+              '### Team Member Plans',
+              '',
+              '| Member | Plan PDF | Issues |',
+              '|--------|----------|--------|',
+              '| @naydino | [Download](../../releases/download/daily-plans-${date}/daily-plan-naydino.pdf) | See PDF |',
+              '| @berlogabob | [Download](../../releases/download/daily-plans-${date}/daily-plan-berlogabob.pdf) | See PDF |',
+              '| @electricianv001 | [Download](../../releases/download/daily-plans-${date}/daily-plan-electricianv001.pdf) | See PDF |',
+              '',
+              '### How to Use Your Daily Plan',
+              '',
+              '1. **Download** your personalized PDF',
+              '2. **Review** your assigned tasks',
+              '3. **Check** sub-issues and recent comments',
+              '4. **Plan** your time blocks',
+              '5. **Update** issues as you work',
+              '6. **Comment** your progress',
+              '',
+              '### Generated Files',
+              '',
+              '- PDFs: `reports/daily-plans/`',
+              '- Source: `reports/daily-plans/*.typ`',
+              '',
+              '---',
+              '*Auto-generated every day at 00:00 UTC (02:00 Lisbon)*',
+              '',
+              "**Today's Focus:** Make progress on your assigned issues and update the team!"
+            ].join('\n');
             
-            // Create daily plan summary issue
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `📅 Daily Plan - ${date}`,
+              title: '📅 Daily Plan - ${date}',
               body: body,
               labels: ['daily-plan', 'type: documentation']
             });
