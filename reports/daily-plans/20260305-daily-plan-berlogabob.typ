@@ -1,76 +1,181 @@
-// Daily Plan - Andrey Dyakov - 20260305
-#set page(paper: "a4", margin: 50pt)
-#set text(size: 10pt)
-#let blue = rgb("#2F80ED")
+// Daily Plan - Matches Project02-Plan.typ Style
+#import "daily-plan-template.typ"
 
-#align(center)[#text(size: 20pt, fill: blue, weight: "bold")[📅 Daily Plan]]
-#align(center)[#text(size: 16pt)[05/03]]
-#align(center)[#text(size: 14pt)[Andrey Dyakov]]
+// Generated: 20260305
 
-#line(length: 100%)
+#report_header("1")
 
-#text(size: 12pt, weight: "bold")[Tasks: {len(issues)}]
+#section_title("1", "05/03", "Daily Plan")
 
-== Your Tasks
+#table(
+  columns: (1fr),
+  inset: 12pt,
+  stroke: none,
+  fill: muted_bg,
+  [
+    #grid(
+      columns: (1fr, 1fr),
+      gutter: 15pt,
+      [
+        *Team Member:* \ Andrey Dyakov \ #text(size: 8pt)[@berlogabob] \ \
+        *Date:* \ March 05, 2026
+      ],
+      [
+        *Project:* \ The Oracle That Wears Us \ \
+        *Milestone:* \ 1st milestone: Documentation
+      ]
+    )
+  ]
+)
 
-=== #45 - Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice
-*Milestone:* 1st milestone: Documentation
-*Labels:* type: research, type: testing
+#v(2em)
 
-We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:  - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connect
+== Your Tasks for Today
 
-=== #13 - TTS - Text to Speech KittenTTS
-*Milestone:* 1st milestone: Documentation
+#grid(
+  columns: (1fr, 1fr, 1fr),
+  gutter: 15pt,
+  #box(
+    fill: chapter_themes.at("1").accent.lighten(90%),
+    inset: 12pt,
+    radius: 4pt,
+    align(center, [
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[7]
+      #text(size: 8pt)[Total Tasks]
+    ])
+  ),
+  #box(
+    fill: chapter_themes.at("2").accent.lighten(90%),
+    inset: 12pt,
+    radius: 4pt,
+    align(center, [
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[0]
+      #text(size: 8pt)[High Priority]
+    ])
+  ),
+  #box(
+    fill: chapter_themes.at("3").accent.lighten(90%),
+    inset: 12pt,
+    radius: 4pt,
+    align(center, [
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[05/03]
+      #text(size: 8pt)[Date]
+    ])
+  )
+)
 
-(KittenTTS)( test this model
+#v(2em)
 
-=== #12 - STT- Speech to Text LLM
-*Milestone:* 1st milestone: Documentation
-*Labels:* type: research, type: testing
-
-(moonshine-a)( ) test this model. write feedback 
-
-=== #11 - plan tasks for next week
-*Milestone:* 1st milestone: Documentation
-
-=== #6 - TD Test: "Can TD call a free speech-to-text system and return text back into TD as DAT/CHOP?"
-
-*Comments:*
-- naydino: - successfully installed a free text to speech transcription model through my computer's terminal
-- naydino:  - This test shows that we can load in a free speech to text model on a computer's hardware and then
-
-=== #5 - TD Test: "Can TD reliably ingest mic audio and turn it into usable control/data?"
-*Milestone:* 1st milestone: Documentation
-*Labels:* type: research, type: testing
-
-Test to answer the question "How can we take a microphone input and transform it"
-
-*Comments:*
-- berlogabob: at naydino  please add some data as comment for this issue. something we can measure to use for comp
-
-=== #1 - How does the plotter connect to the PC?
-*Milestone:* 1st milestone: Documentation
+== Priority Tasks
+#line(length: 100%, stroke: 1pt + chapter_themes.at("2").accent)
+#v(10pt)
 
 
-#line(length: 100%)
+#v(2em)
 
-== Planning
+== All Tasks
+#line(length: 100%, stroke: 1pt + chapter_themes.at("1").accent)
+#v(10pt)
 
-=== Goals
-- [ ] 
+#issue_card(#45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:  - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connect], [1st milestone: Documentation], [type: research, type: testing])
 
-=== Time Blocks
-| 09:00-10:00 | |
-| 10:00-11:00 | |
-| 11:00-12:00 | |
-| 12:00-13:00 | Lunch |
-| 13:00-14:00 | |
-| 14:00-15:00 | |
-| 15:00-16:00 | |
-| 16:00-17:00 | |
+#issue_card(#13, [TTS - Text to Speech KittenTTS], "", [(KittenTTS)( test this model], [1st milestone: Documentation], [])
 
-=== Checklist
-- [ ] Update issues
-- [ ] Add comments
-- [ ] Push code
-- [ ] Plan tomorrow
+#issue_card(#12, [STT- Speech to Text LLM], "", [(moonshine-a)( ) test this model. write feedback ], [1st milestone: Documentation], [type: research, type: testing])
+
+#issue_card(#11, [plan tasks for next week], "", [], [1st milestone: Documentation], [])
+
+#issue_card(#6, [TD Test: "Can TD call a free speech-to-text system and return text back into TD as DAT/CHOP?"], "", [], [], [])
+
+#issue_card(#5, [TD Test: "Can TD reliably ingest mic audio and turn it into usable control/data?"], "", [Test to answer the question "How can we take a microphone input and transform it"], [1st milestone: Documentation], [type: research, type: testing])
+
+#issue_card(#1, [How does the plotter connect to the PC?], "", [], [1st milestone: Documentation], [])
+
+
+#v(2em)
+
+#box(
+  width: 100%,
+  inset: 15pt,
+  fill: muted_bg,
+  radius: 4pt,
+  [
+    #text(size: 9pt)[
+      1. *Review* each task and its comments \
+      2. *Check* recent updates \
+      3. *Estimate* time needed \
+      4. *Plan* your approach \
+      5. *Comment* your progress
+    ]
+  ]
+)
+
+#page_footer("1", "1")
+#pagebreak()
+
+// PAGE 2: PLANNING
+#report_header("2")
+#section_title("2", "2.0", "Planning Notes")
+
+== Today's Goals
+#box(
+  width: 100%,
+  height: 150pt,
+  inset: 15pt,
+  fill: muted_bg.lighten(50%),
+  radius: 4pt,
+  stroke: 1pt + gray.lighten(60%),
+  [
+    #text(size: 9pt, fill: gray, style: "italic")[Write your main goals for today here...]
+  ]
+)
+
+== Time Blocks
+#table(
+  columns: (auto, 1fr),
+  inset: 8pt,
+  stroke: 0.5pt + gray.lighten(50%),
+  fill: (x, y) => if calc.even(y) { muted_bg.lighten(50%) },
+  [*Time*], [*Plan*],
+  [09:00-10:00], [],
+  [10:00-11:00], [],
+  [11:00-12:00], [],
+  [12:00-13:00], [Lunch Break],
+  [13:00-14:00], [],
+  [14:00-15:00], [],
+  [15:00-16:00], [],
+  [16:00-17:00], [],
+)
+
+== Blockers & Questions
+#box(
+  width: 100%,
+  height: 100pt,
+  inset: 15pt,
+  fill: chapter_themes.at("2").accent.lighten(95%),
+  radius: 4pt,
+  stroke: 1pt + chapter_themes.at("2").accent.lighten(70%),
+  [
+    #text(size: 9pt, fill: gray, style: "italic")[List any blockers or questions for the team...]
+  ]
+)
+
+== End of Day Checklist
+#box(
+  width: 100%,
+  inset: 15pt,
+  fill: muted_bg,
+  radius: 4pt,
+  [
+    #text(size: 9pt)[
+      □ *Update* issue status (In Progress → Review/Done) \
+      □ *Add* progress comments to issues \
+      □ *Push* code changes to GitHub \
+      □ *Create* PR if work is ready for review \
+      □ *Prepare* demo/screenshots for tomorrow \
+      □ *Plan* tomorrow's tasks
+    ]
+  ]
+)
+
+#page_footer("2", "2")
