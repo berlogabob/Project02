@@ -64,7 +64,7 @@
   v(20pt)
 }
 
-#let page_footer(ch_idx, num) = {
+#let page_footer(ch_idx) = {
   let t = chapter_themes.at(ch_idx)
   place(
     bottom + right,
@@ -73,7 +73,7 @@
     square(
       size: 35pt,
       fill: t.page_bg,
-      align(center + horizon, text(white, weight: "bold", size: 14pt)[#num])
+      align(center + horizon, text(white, weight: "bold", size: 14pt)[#context counter(page).display()])
     )
   )
 }
