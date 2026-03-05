@@ -1,12 +1,63 @@
 // Daily Plan for Dmitri Kazantsev
-// Generated: 2026-03-05 08:24
+// Generated: 2026-03-05 08:35
 // Project: The Oracle That Wears Us
 
-#import "daily-plan-template.typ"
+#set page(paper: "a4", margin: (x: 50pt, y: 60pt))
+#set text(font: "Noto Sans", size: 10pt, fill: rgb("#333333"), lang: "en")
 
-#show: report.with(
-  member_name: "Dmitri Kazantsev",
-  member_username: "@electricianv001",
-  date: datetime.today(),
-  issues: [{'number': 45, 'title': 'Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice', 'body': 'We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:  - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner conn...', 'priority': 'medium', 'labels': [{'name': 'type: research', 'color': '0075CA'}, {'name': 'type: testing', 'color': '0075CA'}], 'milestone': {'number': 1, 'title': '1st milestone: Documentation', 'description': 'o Presentation:\nPresentation: 2026/02/16\nDelivery: Delivery: 2026/02/16-59:59 GMT\nDeliverables:\no Presentation slides\no Production dossier/report (identifies the participation of the \'big 4\' units), including:\n- Weekly activity plan, contextualized by each unit.\n- Research about related projects.\n- Emerging Technologies: Select the most appropriate hardware and frameworks for the project and define a clear integration strategy, outlining how these technologies will enhance interactivity and immersion within their digital fashion experience.\n- Applied Machine Learning: AI-driven functionalities must be identified, and a justification for the choice of machine learning models must be provided. Relevant datasets and pre-trained models should be researched, and the selected AI techniques, such as pose estimation, generative AI, or recommendation systems, must be described in terms of their contribution to user interaction. The feasibility of these solutions must be evaluated, and potential implementation challenges should be documented.\no Project Prototype\n`Project Prototype` (This line appears below "Production dossier/report" section, likely listing the activities for that milestone)', 'dueOn': '2026-03-16T00:00:00Z'}, 'comments': [], 'sub_issues': []}, {'number': 20, 'title': 'Unity: Microphone input test completed', 'body': 'Performance & Evaluation Data  Time to setup: ~5–10 minutes (including adding components and linking references).  Time to response (microphone reaction delay): ~1 frame (almost real-time, visually...', 'priority': 'medium', 'labels': [{'name': 'type: research', 'color': '0075CA'}, {'name': 'type: testing', 'color': '0075CA'}], 'milestone': {'number': 1, 'title': '1st milestone: Documentation', 'description': 'o Presentation:\nPresentation: 2026/02/16\nDelivery: Delivery: 2026/02/16-59:59 GMT\nDeliverables:\no Presentation slides\no Production dossier/report (identifies the participation of the \'big 4\' units), including:\n- Weekly activity plan, contextualized by each unit.\n- Research about related projects.\n- Emerging Technologies: Select the most appropriate hardware and frameworks for the project and define a clear integration strategy, outlining how these technologies will enhance interactivity and immersion within their digital fashion experience.\n- Applied Machine Learning: AI-driven functionalities must be identified, and a justification for the choice of machine learning models must be provided. Relevant datasets and pre-trained models should be researched, and the selected AI techniques, such as pose estimation, generative AI, or recommendation systems, must be described in terms of their contribution to user interaction. The feasibility of these solutions must be evaluated, and potential implementation challenges should be documented.\no Project Prototype\n`Project Prototype` (This line appears below "Production dossier/report" section, likely listing the activities for that milestone)', 'dueOn': '2026-03-16T00:00:00Z'}, 'comments': [{'author': 'berlogabob', 'date': '2026-03-04', 'body': '@electricianv001  please add some data as comment for this issue. something we can measure to use...'}], 'sub_issues': [{'number': 41, 'title': '#20 - Audio Assets Integration'}]}]
-)
+// Header
+#align(center)[
+  #text(size: 24pt, weight: "bold", "📅 Daily Plan")
+  #v(10pt)
+  #text(size: 18pt, "05/03")
+  #v(10pt)
+  #text(size: 14pt, "Dmitri Kazantsev (electricianv001)")
+]
+
+#v(20pt)
+#line(length: 100%)
+#v(20pt)
+
+== Summary
+*Total Tasks:* 0
+*High Priority:* 0
+*Milestone:* -
+
+#v(20pt)
+#line(length: 100%)
+#v(20pt)
+
+== Your Tasks
+
+
+
+#v(20pt)
+#line(length: 100%)
+#v(20pt)
+
+== Planning Notes
+
+=== Today's Goals
+- [ ] 
+
+=== Time Blocks
+| Time | Plan |
+|------|------|
+| 09:00-10:00 | |
+| 10:00-11:00 | |
+| 11:00-12:00 | |
+| 12:00-13:00 | Lunch |
+| 13:00-14:00 | |
+| 14:00-15:00 | |
+| 15:00-16:00 | |
+| 16:00-17:00 | |
+
+=== Blockers
+- 
+
+=== End of Day Checklist
+- [ ] Update issue status
+- [ ] Add progress comments
+- [ ] Push code changes
+- [ ] Create PR if ready
+- [ ] Plan tomorrow
