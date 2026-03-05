@@ -246,12 +246,17 @@ def generate_all_plans(output_dir: str) -> list:
         # Compile to PDF
         pdf_file = output_path / f"daily-plan-{username}.pdf"
         print(f"   📄 Compiling to PDF...")
-        subprocess.run(
+        result = subprocess.run(
             ["typst", "compile", str(output_file), str(pdf_file)],
-            check=True,
             capture_output=True,
+            text=True,
         )
-        print(f"   ✅ Compiled: {pdf_file}")
+        if result.returncode != 0:
+            print(f"   ⚠️  Typst compilation failed:")
+            print(f"   {result.stderr}")
+            # Continue anyway - TYP file is still useful
+        else:
+            print(f"   ✅ Compiled: {pdf_file}")
 
         generated.append(
             {
