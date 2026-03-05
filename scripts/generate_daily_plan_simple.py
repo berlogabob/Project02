@@ -44,15 +44,22 @@ def get_assigned_issues(username: str) -> list:
         "list",
         "--state",
         "open",
-        "--search",
-        f"assignee:{username} repo:{REPO}",
+        "--assignee",
+        username,
+        "--repo",
+        REPO,
         "--limit",
         "20",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
+        print(f"Warning: {result.stderr[:100]}")
         return []
-    return json.loads(result.stdout)
+    try:
+        return json.loads(result.stdout)
+    except:
+        print(f"Warning: Could not parse JSON")
+        return []
 
 
 def format_priority(issue: dict) -> str:
