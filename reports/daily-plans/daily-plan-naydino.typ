@@ -1,5 +1,5 @@
 // Daily Plan for Nadine Allan
-// Generated: 2026-03-05 08:43
+// Generated: 2026-03-05 08:54
 // Project: The Oracle That Wears Us
 
 #set page(paper: "a4", margin: (x: 50pt, y: 60pt))
@@ -19,9 +19,9 @@
 #v(20pt)
 
 == Summary
-*Total Tasks:* 0
+*Total Tasks:* 6
 *High Priority:* 0
-*Milestone:* -
+*Milestone:* 1st milestone: Documentation
 
 #v(20pt)
 #line(length: 100%)
@@ -29,6 +29,43 @@
 
 == Your Tasks
 
+
+== #45 - Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice
+*Priority:* MEDIUM
+*Milestone:* 1st milestone: Documentation
+
+We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:  - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connect
+
+---
+
+== #7 - TD Test: "Can TD push that text out (on-screen now; Unity later if needed)?"
+*Priority:* MEDIUM
+
+---
+
+== #6 - TD Test: "Can TD call a free speech-to-text system and return text back into TD as DAT/CHOP?"
+*Priority:* MEDIUM
+
+---
+
+== #5 - TD Test: "Can TD reliably ingest mic audio and turn it into usable control/data?"
+*Priority:* MEDIUM
+*Milestone:* 1st milestone: Documentation
+
+Test to answer the question "How can we take a microphone input and transform it"
+
+---
+
+== #3 - Define characteristics of AI Oracle
+*Priority:* MEDIUM
+
+---
+
+== #1 - How does the plotter connect to the PC?
+*Priority:* MEDIUM
+*Milestone:* 1st milestone: Documentation
+
+---
 
 
 #v(20pt)
