@@ -1,17 +1,14 @@
 // Daily Plan for Dmitri Kazantsev
-// Generated: 2026-03-05 09:35
+// Generated: 2026-03-05 09:39
 
 #set page(paper: "a4", margin: (x: 50pt, y: 60pt))
 #set text(font: "Noto Sans", size: 10pt, fill: rgb("#333333"), lang: "en")
 
-// Colors from Project02-Plan.typ
 #let accent_blue = rgb("#2F80ED")
 #let accent_red = rgb("#eb3349")
 #let accent_green = rgb("#11998e")
-#let accent_yellow = rgb("#F2994A")
 #let muted_bg = rgb("#f4f4f4")
 
-// Header
 #align(center)[
   #text(size: 24pt, weight: "bold", fill: accent_blue, "📅 Daily Plan")
   #v(10pt)
@@ -25,7 +22,6 @@
 #line(length: 100%, stroke: 1pt + accent_blue)
 #v(20pt)
 
-// Stats
 #grid(
   columns: (1fr, 1fr, 1fr),
   gutter: 15pt,
@@ -67,19 +63,6 @@
 
 == Your Tasks
 
-#if 4 == 0 [
-  #box(
-    width: 100%,
-    inset: 20pt,
-    fill: accent_green.lighten(90%),
-    radius: 4pt,
-    align(center, [
-      #text(size: 12pt, "🎉 No tasks for today!")
-      #v(8pt)
-      #text(size: 9pt, fill: gray, "Use this time to explore or help teammates")
-    ])
-  )
-] else [
 === #45 - Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice
 *Milestone:* 1st milestone: Documentation
 *Labels:* type: research, type: testing
@@ -103,13 +86,13 @@ Performance & Evaluation Data  Time to setup: ~5–10 minutes (including adding 
 
 *Comments:*
 - @naydino: - successfully installed a free text to speech transcription model through my computer's terminal
+- @naydino: <img width="1427" height="521" alt="Image" src="https://github.com/user-attachments/assets/6bdec671-
 
 ---
 
 === #4 - Define characteristics of AI Oracle
 
 ---
-
 
 #v(30pt)
 #line(length: 100%, stroke: 1pt + gray.lighten(70%))
