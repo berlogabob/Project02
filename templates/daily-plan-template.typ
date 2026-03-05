@@ -1,31 +1,10 @@
 // templates/daily-plan-template.typ
-// Reusable template for daily plans - edit styles here
 
 #let chapter_themes = (
-  "1": (
-    grad_start: rgb("#2F80ED"),
-    grad_end: rgb("#9B51E0"),
-    accent: rgb("#33A1C9"),
-    page_bg: rgb("#A5C7F3")
-  ),
-  "2": (
-    grad_start: rgb("#eb3349"),
-    grad_end: rgb("#f45c43"),
-    accent: rgb("#e74c3c"),
-    page_bg: rgb("#ff9a9e")
-  ),
-  "3": (
-    grad_start: rgb("#11998e"),
-    grad_end: rgb("#38ef7d"),
-    accent: rgb("#1b5e20"),
-    page_bg: rgb("#c8e6c9")
-  ),
-  "4": (
-    grad_start: rgb("#F2994A"),
-    grad_end: rgb("#F2C94C"),
-    accent: rgb("#d35400"),
-    page_bg: rgb("#fdebd0")
-  )
+  "1": (grad_start: rgb("#2F80ED"), grad_end: rgb("#9B51E0"), accent: rgb("#33A1C9"), page_bg: rgb("#A5C7F3")),
+  "2": (grad_start: rgb("#eb3349"), grad_end: rgb("#f45c43"), accent: rgb("#e74c3c"), page_bg: rgb("#ff9a9e")),
+  "3": (grad_start: rgb("#11998e"), grad_end: rgb("#38ef7d"), accent: rgb("#1b5e20"), page_bg: rgb("#c8e6c9")),
+  "4": (grad_start: rgb("#F2994A"), grad_end: rgb("#F2C94C"), accent: rgb("#d35400"), page_bg: rgb("#fdebd0"))
 )
 
 #let muted_bg = rgb("#f4f4f4")
@@ -33,12 +12,12 @@
 #set page(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
-  // AUTOMATIC PAGE NUMBERING STARTING FROM PAGE 1
+  // This block handles numbering automatically on every page
   footer: context {
     let page_num = counter(page).at(here()).first()
-    // Map page number to theme (caps at 4 to prevent errors if document is long)
-    let theme_idx = str(calc.min(page_num, 4))
-    let t = chapter_themes.at(theme_idx)
+    // Clamp to theme 1-4, or default to "1" if something goes wrong
+    let theme_key = str(calc.min(calc.max(page_num, 1), 4))
+    let t = chapter_themes.at(theme_key)
     
     place(
       right,
@@ -60,9 +39,9 @@
   lang: "en"
 )
 
-#let report_header(ch_idx, category: "DAILY PLAN") = [
-  #let t = chapter_themes.at(ch_idx)
-  #move(dy: -20pt)[
+#let report_header(ch_idx, category: "DAILY PLAN") = {
+  let t = chapter_themes.at(ch_idx)
+  move(dy: -20pt)[
     #block(
       width: 100%,
       height: 30pt,
@@ -71,7 +50,7 @@
       align(right + horizon, text(white, weight: "bold", tracking: 1.5pt, size: 8pt)[#upper(category)])
     )
   ]
-]
+}
 
 #let section_title(ch_idx, num, title) = {
   let t = chapter_themes.at(ch_idx)
