@@ -4,22 +4,7 @@
 #set page(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
-  footer: [
-    #context {
-      let ch_idx = counter(page).display()
-      let t = chapter_themes.at("1")
-      place(
-        bottom + right,
-        dx: 30pt,
-        dy: 30pt,
-        square(
-          size: 35pt,
-          fill: t.page_bg,
-          align(center + horizon, text(white, weight: "bold", size: 14pt)[#counter(page).display()])
-        )
-      )
-    }
-  ]
+  numbering: "1",
 )
 
 #set text(
