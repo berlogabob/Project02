@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Daily Plan Generator - Truly Working Version
-Writes Typst code directly without f-string conflicts
+Daily Plan Generator - Minimal Working Version
 """
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from datetime import datetime
@@ -60,7 +60,14 @@ def format_priority(issue: dict) -> str:
 def escape_typst(text: str) -> str:
     if not text:
         return ""
-    return text.replace("[", "(").replace("]", ")").replace("\n", " ")
+    # Remove markdown images
+    text = re.sub(r"!\[.*?\]\(.*?\)", "", text)
+    # Remove HTML tags
+    text = re.sub(r"<[^>]+>", "", text)
+    # Remove URLs
+    text = re.sub(r"https?://\S+", "", text)
+    # Escape Typst special chars
+    return text.replace("[", "(").replace("]", ")").replace("\n", " ").replace("#", "")
 
 
 def generate_all_plans(output_dir: str) -> list:
@@ -77,7 +84,7 @@ def generate_all_plans(output_dir: str) -> list:
 
         issues = get_assigned_issues(username)
 
-        # Prepare issues data
+        # Prepare issues
         prepared_issues = []
         for issue in issues:
             prepared_issues.append(
@@ -94,7 +101,7 @@ def generate_all_plans(output_dir: str) -> list:
                 }
             )
 
-        # Sort by priority
+        # Sort
         priority_order = {"critical": 0, "high": 1, "medium": 2}
         prepared_issues.sort(key=lambda x: priority_order.get(x["priority"], 2))
 
@@ -103,7 +110,7 @@ def generate_all_plans(output_dir: str) -> list:
             [i for i in prepared_issues if i["priority"] in ["critical", "high"]]
         )
 
-        # Build Typst file line by line
+        # Generate Typst - SIMPLE VERSION
         lines = []
         lines.append(f"// Daily Plan for {name}")
         lines.append(f"// Generated: {today.strftime('%Y-%m-%d %H:%M')}")
@@ -113,103 +120,51 @@ def generate_all_plans(output_dir: str) -> list:
             '#set text(font: "Noto Sans", size: 10pt, fill: rgb("#333333"), lang: "en")'
         )
         lines.append("")
-        lines.append('#let accent_blue = rgb("#2F80ED")')
-        lines.append('#let accent_red = rgb("#eb3349")')
-        lines.append('#let accent_green = rgb("#11998e")')
-        lines.append('#let muted_bg = rgb("#f4f4f4")')
+        lines.append('#let blue = rgb("#2F80ED")')
+        lines.append('#let red = rgb("#eb3349")')
+        lines.append('#let green = rgb("#11998e")')
         lines.append("")
 
-        # Header
+        # Title
         lines.append("#align(center)[")
         lines.append(
-            '  #text(size: 24pt, weight: "bold", fill: accent_blue, "📅 Daily Plan")'
+            f'  #text(size: 24pt, weight: "bold", fill: blue, "📅 Daily Plan")'
         )
-        lines.append("  #v(10pt)")
+        lines.append(f"  #v(10pt)")
         lines.append(f'  #text(size: 18pt, "{date_str}")')
-        lines.append("  #v(15pt)")
-        lines.append(f'  #text(size: 14pt, "{name}")')
-        lines.append(f'  #text(size: 10pt, fill: gray, " (@{username})")')
+        lines.append(f"  #v(10pt)")
+        lines.append(f'  #text(size: 14pt, "{name} (@{username})")')
         lines.append("]")
         lines.append("")
         lines.append("#v(20pt)")
-        lines.append("#line(length: 100%, stroke: 1pt + accent_blue)")
+        lines.append("#line(length: 100%)")
         lines.append("#v(20pt)")
         lines.append("")
 
         # Stats
-        lines.append("#grid(")
-        lines.append("  columns: (1fr, 1fr, 1fr),")
-        lines.append("  gutter: 15pt,")
-        lines.append("  #box(")
-        lines.append("    fill: accent_blue.lighten(90%),")
-        lines.append("    inset: 12pt,")
-        lines.append("    radius: 4pt,")
-        lines.append("    align(center, [")
         lines.append(
-            f'      #text(size: 20pt, weight: "bold", fill: accent_blue, "{total}")'
+            f'#text(size: 12pt, weight: "bold", "Tasks: {total} | High Priority: {high_priority} | Date: {date_str}")'
         )
-        lines.append("      #v(4pt)")
-        lines.append('      #text(size: 8pt, "Tasks")')
-        lines.append("    ])")
-        lines.append("  ),")
-        lines.append("  #box(")
-        lines.append("    fill: accent_red.lighten(90%),")
-        lines.append("    inset: 12pt,")
-        lines.append("    radius: 4pt,")
-        lines.append("    align(center, [")
-        lines.append(
-            f'      #text(size: 20pt, weight: "bold", fill: accent_red, "{high_priority}")'
-        )
-        lines.append("      #v(4pt)")
-        lines.append('      #text(size: 8pt, "High Priority")')
-        lines.append("    ])")
-        lines.append("  ),")
-        lines.append("  #box(")
-        lines.append("    fill: accent_green.lighten(90%),")
-        lines.append("    inset: 12pt,")
-        lines.append("    radius: 4pt,")
-        lines.append("    align(center, [")
-        lines.append(
-            f'      #text(size: 20pt, weight: "bold", fill: accent_green, "{date_str}")'
-        )
-        lines.append("      #v(4pt)")
-        lines.append('      #text(size: 8pt, "Date")')
-        lines.append("    ])")
-        lines.append("  )")
-        lines.append(")")
         lines.append("")
-        lines.append("#v(30pt)")
-        lines.append("#line(length: 100%, stroke: 1pt + gray.lighten(70%))")
         lines.append("#v(20pt)")
-        lines.append("")
-        lines.append("== Your Tasks")
+        lines.append("#line(length: 100%)")
+        lines.append("#v(20pt)")
         lines.append("")
 
         # Issues
+        lines.append("== Your Tasks")
+        lines.append("")
+
         if total == 0:
-            lines.append("#box(")
-            lines.append("  width: 100%,")
-            lines.append("  inset: 20pt,")
-            lines.append("  fill: accent_green.lighten(90%),")
-            lines.append("  radius: 4pt,")
-            lines.append("  align(center, [")
-            lines.append('    #text(size: 12pt, "🎉 No tasks for today!")')
-            lines.append("    #v(8pt)")
-            lines.append(
-                '    #text(size: 9pt, fill: gray, "Use this time to explore or help teammates")'
-            )
-            lines.append("  ])")
-            lines.append(")")
+            lines.append('#text(size: 12pt, fill: green, "🎉 No tasks for today!")')
         else:
             for issue in prepared_issues:
-                priority_badge = (
+                badge = (
                     f" [{issue['priority'].upper()}]"
                     if issue["priority"] in ["critical", "high"]
                     else ""
                 )
-                lines.append(
-                    f"=== #{issue['number']} - {issue['title']}{priority_badge}"
-                )
+                lines.append(f"=== #{issue['number']} - {issue['title']}{badge}")
                 if issue["milestone"]:
                     lines.append(f"*Milestone:* {issue['milestone']}")
                 if issue["labels"]:
@@ -225,60 +180,35 @@ def generate_all_plans(output_dir: str) -> list:
                         body = escape_typst(comment.get("body", ""))[:100]
                         lines.append(f"- @{author}: {body}")
                 lines.append("")
-                lines.append("---")
-                lines.append("")
 
+        lines.append("")
         lines.append("#v(30pt)")
-        lines.append("#line(length: 100%, stroke: 1pt + gray.lighten(70%))")
+        lines.append("#line(length: 100%)")
         lines.append("#v(20pt)")
         lines.append("")
         lines.append("== Planning Notes")
         lines.append("")
-        lines.append("=== Today's Goals")
-        lines.append("#box(")
-        lines.append("  width: 100%,")
-        lines.append("  height: 100pt,")
-        lines.append("  inset: 15pt,")
-        lines.append("  fill: muted_bg,")
-        lines.append("  radius: 4pt,")
-        lines.append("  [")
-        lines.append('    #text(size: 9pt, fill: gray, "Write your goals here...")')
-        lines.append("  ]")
-        lines.append(")")
+        lines.append("=== Goals")
+        lines.append("- [ ] ")
         lines.append("")
         lines.append("=== Time Blocks")
-        lines.append("#table(")
-        lines.append("  columns: (auto, 1fr),")
-        lines.append("  inset: 8pt,")
-        lines.append("  stroke: 0.5pt + gray.lighten(50%),")
-        lines.append("  fill: (x, y) => if calc.even(y) { muted_bg.lighten(50%) },")
-        lines.append("  [*Time*], [*Plan*],")
-        lines.append("  [09:00-10:00], [],")
-        lines.append("  [10:00-11:00], [],")
-        lines.append("  [11:00-12:00], [],")
-        lines.append("  [12:00-13:00], [Lunch],")
-        lines.append("  [13:00-14:00], [],")
-        lines.append("  [14:00-15:00], [],")
-        lines.append("  [15:00-16:00], [],")
-        lines.append("  [16:00-17:00], [],")
-        lines.append(")")
         lines.append("")
-        lines.append("=== End of Day Checklist")
-        lines.append("#box(")
-        lines.append("  width: 100%,")
-        lines.append("  inset: 15pt,")
-        lines.append("  fill: muted_bg,")
-        lines.append("  radius: 4pt,")
-        lines.append("  [")
-        lines.append("    #text(size: 9pt, [")
-        lines.append("      □ Update issue status")
-        lines.append("      □ Add progress comments")
-        lines.append("      □ Push code changes")
-        lines.append("      □ Create PR if ready")
-        lines.append("      □ Plan tomorrow")
-        lines.append("    ])")
-        lines.append("  ]")
-        lines.append(")")
+        lines.append("| Time | Plan |")
+        lines.append("|------|------|")
+        lines.append("| 09:00-10:00 | |")
+        lines.append("| 10:00-11:00 | |")
+        lines.append("| 11:00-12:00 | |")
+        lines.append("| 12:00-13:00 | Lunch |")
+        lines.append("| 13:00-14:00 | |")
+        lines.append("| 14:00-15:00 | |")
+        lines.append("| 15:00-16:00 | |")
+        lines.append("| 16:00-17:00 | |")
+        lines.append("")
+        lines.append("=== Checklist")
+        lines.append("- [ ] Update issues")
+        lines.append("- [ ] Add comments")
+        lines.append("- [ ] Push code")
+        lines.append("- [ ] Plan tomorrow")
 
         # Write file
         output_file = output_path / f"{date_prefix}-daily-plan-{username}.typ"
@@ -287,7 +217,7 @@ def generate_all_plans(output_dir: str) -> list:
 
         print(f"✅ Generated: {output_file}")
 
-        # Compile to PDF
+        # Compile
         pdf_file = output_path / f"{date_prefix}-daily-plan-{username}.pdf"
         print(f"   📄 Compiling to PDF...")
         result = subprocess.run(
@@ -296,8 +226,7 @@ def generate_all_plans(output_dir: str) -> list:
             text=True,
         )
         if result.returncode != 0:
-            print(f"   ⚠️  Typst compilation failed:")
-            print(f"   {result.stderr[:200]}")
+            print(f"   ⚠️  Failed: {result.stderr[:200]}")
         else:
             print(f"   ✅ Compiled: {pdf_file}")
 
@@ -315,37 +244,29 @@ def generate_all_plans(output_dir: str) -> list:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate daily plan PDFs")
-    parser.add_argument("--all-members", action="store_true", help="Generate for all")
-    parser.add_argument(
-        "--output-dir", default="reports/daily-plans", help="Output directory"
-    )
-
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--all-members", action="store_true")
+    parser.add_argument("--output-dir", default="reports/daily-plans")
     args = parser.parse_args()
 
     try:
         subprocess.run(["typst", "--version"], capture_output=True, check=True)
     except:
-        print("❌ Typst not found. Install with: brew install typst")
+        print("❌ Typst not found")
         sys.exit(1)
 
     print("=" * 60)
     print("📅 Daily Plan Generator")
-    print("   The Oracle That Wears Us")
     print("=" * 60)
     print()
 
     if args.all_members:
         generated = generate_all_plans(args.output_dir)
-
         print("\n" + "=" * 60)
-        print("✅ All Daily Plans Generated!")
+        print("✅ Done!")
         print("=" * 60)
-
         for plan in generated:
-            print(f"\n{plan['name']} (@{plan['username']}):")
-            print(f"   📄 PDF: {plan['pdf_file']}")
-            print(f"   📝 Issues: {plan['issue_count']}")
+            print(f"{plan['name']}: {plan['issue_count']} issues -> {plan['pdf_file']}")
     else:
         parser.print_help()
 
