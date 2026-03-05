@@ -1,5 +1,5 @@
-// Daily Plan - Matches Project02-Plan.typ Style
-#import "templates/daily-plan-template.typ": *
+// Daily Plan - Auto-generated
+#import "../templates/daily-plan-template.typ": *
 
 // Generated: 20260305
 
@@ -77,11 +77,49 @@
 #line(length: 100%, stroke: 1pt + chapter_themes.at("1").accent)
 #v(10pt)
 
-#issue_card(45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:  - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connected)...], [1st milestone: Documentation], [type: research, type: testing])
+#issue_card(45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:
 
-#issue_card(20, [Unity: Microphone input test completed], "", [Performance & Evaluation Data  Time to setup: ~5–10 minutes (including adding components and linking references).  Time to response (microphone reaction delay): ~1 frame (almost real-time, visually instant).  Loading time:  Start Unity → ~10–15 seconds  Open project → ~5–10 seconds  Scene ready → im...], [1st milestone: Documentation], [type: research, type: testing])
+- Unity only
+- TouchDesigner only
+- Hybrid (Unity + TouchDesigner connected)...], [1st milestone: Documentation], [type: research, type: testing])
 
-#issue_card(4, [Define characteristics of AI Oracle], "", [], [None], [])
+#issue_card(45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:
+
+- Unity only
+- TouchDesigner only
+- Hybrid (Unity + TouchDesigner connected)...], [1st milestone: Documentation], [type: research, type: testing])
+
+#issue_card(20, [Unity: Microphone input test completed], "", [Performance & Evaluation Data
+
+Time to setup:
+~5–10 minutes (including adding components and linking references).
+
+Time to response (microphone reaction delay):
+~1 frame (almost real-time, visually instant).
+
+Loading time:
+
+Start Unity → ~10–15 seconds
+
+Open project → ~5–10 seconds
+
+Scene ...], [1st milestone: Documentation], [type: research, type: testing])
+
+#issue_card(20, [Unity: Microphone input test completed], "", [Performance & Evaluation Data
+
+Time to setup:
+~5–10 minutes (including adding components and linking references).
+
+Time to response (microphone reaction delay):
+~1 frame (almost real-time, visually instant).
+
+Loading time:
+
+Start Unity → ~10–15 seconds
+
+Open project → ~5–10 seconds
+
+Scene ...], [1st milestone: Documentation], [type: research, type: testing])
 
 
 #v(2em)
