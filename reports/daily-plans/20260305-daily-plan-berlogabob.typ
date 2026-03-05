@@ -1,11 +1,11 @@
 // Daily Plan - Matches Project02-Plan.typ Style
-#import "daily-plan-template.typ"
+#import "templates/daily-plan-template.typ": *
 
 // Generated: 20260305
 
 #report_header("1")
 
-#section_title("1", "05/03", "Daily Plan")
+#section_title("1", "March 05", "Daily Plan")
 
 #table(
   columns: (1fr),
@@ -22,7 +22,7 @@
       ],
       [
         *Project:* \ The Oracle That Wears Us \ \
-        *Milestone:* \ 1st milestone: Documentation
+        *Milestone:* \ Varies by issue (see tasks)
       ]
     )
   ]
@@ -40,7 +40,7 @@
     inset: 12pt,
     radius: 4pt,
     align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[7]
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[5]
       #text(size: 8pt)[Total Tasks]
     ])
   ),
@@ -58,7 +58,7 @@
     inset: 12pt,
     radius: 4pt,
     align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[05/03]
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[March 05]
       #text(size: 8pt)[Date]
     ])
   )
@@ -77,17 +77,13 @@
 #line(length: 100%, stroke: 1pt + chapter_themes.at("1").accent)
 #v(10pt)
 
-#issue_card(#45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:  - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connect], [1st milestone: Documentation], [type: research, type: testing])
+#issue_card(#45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:  - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connected)...], [1st milestone: Documentation], [type: research, type: testing])
 
-#issue_card(#13, [TTS - Text to Speech KittenTTS], "", [(KittenTTS)( test this model], [1st milestone: Documentation], [])
+#issue_card(#13, [TTS - Text to Speech KittenTTS], "", [(KittenTTS)( test this model...], [1st milestone: Documentation], [])
 
-#issue_card(#12, [STT- Speech to Text LLM], "", [(moonshine-a)( ) test this model. write feedback ], [1st milestone: Documentation], [type: research, type: testing])
+#issue_card(#12, [STT- Speech to Text LLM], "", [(moonshine-a)( ) test this model. write feedback...], [1st milestone: Documentation], [type: research, type: testing])
 
 #issue_card(#11, [plan tasks for next week], "", [], [1st milestone: Documentation], [])
-
-#issue_card(#6, [TD Test: "Can TD call a free speech-to-text system and return text back into TD as DAT/CHOP?"], "", [], [], [])
-
-#issue_card(#5, [TD Test: "Can TD reliably ingest mic audio and turn it into usable control/data?"], "", [Test to answer the question "How can we take a microphone input and transform it"], [1st milestone: Documentation], [type: research, type: testing])
 
 #issue_card(#1, [How does the plotter connect to the PC?], "", [], [1st milestone: Documentation], [])
 
