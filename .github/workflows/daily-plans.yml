@@ -1,0 +1,134 @@
+name: Daily Plans Generator
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      member:
+        description: "Specific team member (leave empty for all)"
+        required: false
+        default: ""
+        type: choice
+        options:
+          - ""
+          - naydino
+          - berlogabob
+          - electricianv001
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  generate-daily-plans:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Typst
+        uses: typst-community/setup-typst@v3
+        with:
+          typst-version: "latest"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate date stamps
+        id: date
+        run: |
+          echo "date=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
+          echo "date_readable=$(date +'%B %d')" >> "$GITHUB_OUTPUT"
+          echo "date_full=$(date +'%B %d, %Y')" >> "$GITHUB_OUTPUT"
+          echo "iso_date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Create output directory
+        run: mkdir -p reports/daily-plans
+
+      - name: Generate plan for Nadine
+        if: github.event.inputs.member == '' || github.event.inputs.member == 'naydino'
+        env:
+          USERNAME: naydino
+          FULL_NAME: Nadine Allan
+          DATE_PREFIX: ${{ steps.date.outputs.date }}
+          DATE_READABLE: ${{ steps.date.outputs.date_readable }}
+          DATE_FULL: ${{ steps.date.outputs.date_full }}
+        run: |
+          bash scripts/generate-daily-plan.sh "$USERNAME" "$FULL_NAME" "$DATE_PREFIX" "$DATE_READABLE" "$DATE_FULL"
+
+      - name: Generate plan for Andrey
+        if: github.event.inputs.member == '' || github.event.inputs.member == 'berlogabob'
+        env:
+          USERNAME: berlogabob
+          FULL_NAME: Andrey Dyakov
+          DATE_PREFIX: ${{ steps.date.outputs.date }}
+          DATE_READABLE: ${{ steps.date.outputs.date_readable }}
+          DATE_FULL: ${{ steps.date.outputs.date_full }}
+        run: |
+          bash scripts/generate-daily-plan.sh "$USERNAME" "$FULL_NAME" "$DATE_PREFIX" "$DATE_READABLE" "$DATE_FULL"
+
+      - name: Generate plan for Dmitri
+        if: github.event.inputs.member == '' || github.event.inputs.member == 'electricianv001'
+        env:
+          USERNAME: electricianv001
+          FULL_NAME: Dmitri Kazantsev
+          DATE_PREFIX: ${{ steps.date.outputs.date }}
+          DATE_READABLE: ${{ steps.date.outputs.date_readable }}
+          DATE_FULL: ${{ steps.date.outputs.date_full }}
+        run: |
+          bash scripts/generate-daily-plan.sh "$USERNAME" "$FULL_NAME" "$DATE_PREFIX" "$DATE_READABLE" "$DATE_FULL"
+
+      - name: Compile Typst files to PDF
+        run: |
+          cd reports/daily-plans
+          for file in *.typ; do
+            if [ -f "$file" ]; then
+              pdf="${file%.typ}.pdf"
+              echo "Compiling $file → $pdf"
+              typst compile "$file" "$pdf" && echo "✅ $pdf" || echo "⚠️ Failed: $file"
+            fi
+          done
+
+      - name: List generated files
+        run: |
+          echo "=== Generated .typ files ==="
+          ls -la reports/daily-plans/*.typ 2>/dev/null || echo "No .typ files found"
+          echo ""
+          echo "=== Generated .pdf files ==="
+          ls -la reports/daily-plans/*.pdf 2>/dev/null || echo "No .pdf files found"
+
+      - name: Commit generated daily plans
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A reports/daily-plans/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "📅 Auto-generated daily plans (${{ steps.date.outputs.iso_date }})"
+            git push
+          fi
+
+      - name: Upload PDFs as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-plans-pdf-${{ steps.date.outputs.iso_date }}
+          path: reports/daily-plans/*.pdf
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload Typst sources as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-plans-typ-${{ steps.date.outputs.iso_date }}
+          path: reports/daily-plans/*.typ
+          if-no-files-found: warn
+          retention-days: 14
