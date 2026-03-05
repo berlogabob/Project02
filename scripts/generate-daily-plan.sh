@@ -33,7 +33,7 @@ HIGH_PRIORITY=$(echo "${ISSUES_JSON}" | jq '[.[] | select(.labels[].name | test(
 # Create Typst file header
 cat > "${OUTPUT_FILE}" << EOF
 // Daily Plan - Auto-generated
-#import "../templates/daily-plan-template.typ": *
+#import "../../templates/daily-plan-template.typ": *
 
 // Generated: ${DATE_PREFIX}
 
@@ -51,7 +51,7 @@ cat > "${OUTPUT_FILE}" << EOF
       columns: (1fr, 1fr),
       gutter: 15pt,
       [
-        *Team Member:* \\ ${FULL_NAME} \\ #text(size: 8pt)[@${USERNAME}] \\ \\
+        *Team Member:* \\ ${FULL_NAME} \\ #text(size: 8pt)[\@${USERNAME}] \\ \\
         *Date:* \\ ${DATE_FULL}
       ],
       [
@@ -84,38 +84,21 @@ if [ "${ISSUE_COUNT}" -eq 0 ]; then
 )
 EOF
 else
-  # Write summary boxes
+  # Write summary boxes - using table() for Typst 0.14+
   cat >> "${OUTPUT_FILE}" << EOF
-#grid(
+#table(
   columns: (1fr, 1fr, 1fr),
   gutter: 15pt,
-  #box(
-    fill: chapter_themes.at("1").accent.lighten(90%),
-    inset: 12pt,
-    radius: 4pt,
-    align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[${ISSUE_COUNT}]
-      #text(size: 8pt)[Total Tasks]
-    ])
+  inset: 12pt,
+  stroke: none,
+  fill: (
+    chapter_themes.at("1").accent.lighten(90%),
+    chapter_themes.at("2").accent.lighten(90%),
+    chapter_themes.at("3").accent.lighten(90%)
   ),
-  #box(
-    fill: chapter_themes.at("2").accent.lighten(90%),
-    inset: 12pt,
-    radius: 4pt,
-    align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[${HIGH_PRIORITY}]
-      #text(size: 8pt)[High Priority]
-    ])
-  ),
-  #box(
-    fill: chapter_themes.at("3").accent.lighten(90%),
-    inset: 12pt,
-    radius: 4pt,
-    align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[${DATE_READABLE}]
-      #text(size: 8pt)[Date]
-    ])
-  )
+  [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[${ISSUE_COUNT}] #text(size: 8pt)[Total Tasks]])]],
+  [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[${HIGH_PRIORITY}] #text(size: 8pt)[High Priority]])]],
+  [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[${DATE_READABLE}] #text(size: 8pt)[Date]])]]
 )
 
 #v(2em)
@@ -131,7 +114,7 @@ EOF
     if [ -n "${issue}" ] && [ "${issue}" != "null" ]; then
       NUM=$(echo "${issue}" | jq -r '.number')
       TITLE=$(echo "${issue}" | jq -r '.title' | sed 's/\[/(/g; s/\]/)/g' | head -c 200)
-      BODY=$(echo "${issue}" | jq -r '.body // ""' | sed 's/!\[[^]]*\]([^)]*)/[IMAGE_PLACEHOLDER]/g; s/\[/(/g; s/\]/)/g' | head -c 300)
+      BODY=$(echo "${issue}" | jq -r '.body // ""' | sed 's/!\[[^]]*\]([^)]*)/[IMAGE_PLACEHOLDER]/g; s/\[/(/g; s/\]/)/g' | tr '\n' ' ' | sed 's/  */ /g' | head -c 300)
       PRIORITY="critical"
       MS=$(echo "${issue}" | jq -r '.milestone.title // "None"')
       LABELS=$(echo "${issue}" | jq -r '[.labels[].name] | join(", ")')
@@ -158,7 +141,7 @@ EOF
     if [ -n "${issue}" ] && [ "${issue}" != "null" ]; then
       NUM=$(echo "${issue}" | jq -r '.number')
       TITLE=$(echo "${issue}" | jq -r '.title' | sed 's/\[/(/g; s/\]/)/g' | head -c 200)
-      BODY=$(echo "${issue}" | jq -r '.body // ""' | sed 's/!\[[^]]*\]([^)]*)/[IMAGE_PLACEHOLDER]/g; s/\[/(/g; s/\]/)/g' | head -c 300)
+      BODY=$(echo "${issue}" | jq -r '.body // ""' | sed 's/!\[[^]]*\]([^)]*)/[IMAGE_PLACEHOLDER]/g; s/\[/(/g; s/\]/)/g' | tr '\n' ' ' | sed 's/  */ /g' | head -c 300)
       PRIORITY=$(echo "${issue}" | jq -r '.labels[].name' | grep -E "medium|low" | head -1 || echo "")
       MS=$(echo "${issue}" | jq -r '.milestone.title // "None"')
       LABELS=$(echo "${issue}" | jq -r '[.labels[].name] | join(", ")')

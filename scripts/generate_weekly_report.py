@@ -87,7 +87,7 @@ def generate_typst_report(
 // Auto-generated: {today.strftime("%Y-%m-%d")}
 // Project: The Oracle That Wears Us
 
-#import "reports/daily-plan-template.typ"
+#import "../../templates/daily-plan-template.typ"
 
 // --- CONFIGURATION ---
 #set page(paper: "a4", margin: (x: 50pt, y: 60pt))

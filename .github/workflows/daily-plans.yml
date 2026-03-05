@@ -94,12 +94,11 @@ jobs:
 
       - name: Compile Typst files to PDF
         run: |
-          cd reports/daily-plans
-          for file in *.typ; do
+          for file in reports/daily-plans/*.typ; do
             if [ -f "$file" ]; then
               pdf="${file%.typ}.pdf"
               echo "Compiling $file → $pdf"
-              typst compile "$file" "$pdf" && echo "✅ $pdf" || echo "⚠️ Failed: $file"
+              typst compile --root . "$file" "$pdf" && echo "✅ $pdf" || echo "⚠️ Failed: $file"
             fi
           done
 

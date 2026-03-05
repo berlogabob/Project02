@@ -79,7 +79,7 @@ jobs:
       
       - name: Compile to PDF
         run: |
-          typst compile reports/week-${{ steps.week.outputs.week }}-report.typ reports/week-${{ steps.week.outputs.week }}-report.pdf
+          typst compile --root . reports/week-${{ steps.week.outputs.week }}-report.typ reports/week-${{ steps.week.outputs.week }}-report.pdf
       
       - name: Commit and push report
         run: |

@@ -42,10 +42,10 @@
 
 #let muted_bg = rgb("#f4f4f4")
 
-#let report_header(ch_idx, category: "DAILY PLAN") = {
-  let t = chapter_themes.at(ch_idx)
-  move(dy: -20pt)[
-    ##box(
+#let report_header(ch_idx, category: "DAILY PLAN") = [
+  #let t = chapter_themes.at(ch_idx)
+  #move(dy: -20pt)[
+    #block(
       width: 100%,
       height: 30pt,
       fill: gradient.linear(t.grad_start, t.grad_end),
@@ -53,7 +53,7 @@
       align(right + horizon, text(white, weight: "bold", tracking: 1.5pt, size: 8pt)[#upper(category)])
     )
   ]
-}
+]
 
 #let section_title(ch_idx, num, title) = {
   let t = chapter_themes.at(ch_idx)
@@ -99,20 +99,22 @@
                else if priority == "high"    { rgb("#f57c00") }
                else                          { gray.lighten(60%) }
 
-  ##box(
-    width: 100%,
-    inset: 12pt,
-    radius: 6pt,
-    fill: bg,
-    stroke: 1pt + border,
-    [
-      #text(weight: "bold", fill: chapter_themes.at("1").accent)[Issue ##num: #title] \
-      #if priority != "" [#text(fill: red, weight: "semibold")[#upper(priority)]] \
-      #h(1fr) #text(size: 9pt, fill: gray)[#milestone] \
-      #v(0.4em)
-      #text(size: 9.5pt)[#body]
-      #v(0.3em)
-      #text(size: 8.5pt, fill: gray)[Labels: #labels]
-    ]
-  )
+  [
+    #block(
+      width: 100%,
+      inset: 12pt,
+      radius: 6pt,
+      fill: bg,
+      stroke: 1pt + border,
+      [
+        #text(weight: "bold", fill: chapter_themes.at("1").accent)[Issue #num: #title] \
+        #if priority != "" [#text(fill: red, weight: "semibold")[#upper(priority)]] \
+        #h(1fr) #text(size: 9pt, fill: gray)[#milestone] \
+        #v(0.4em)
+        #text(size: 9.5pt)[#body]
+        #v(0.3em)
+        #text(size: 8.5pt, fill: gray)[Labels: #labels]
+      ]
+    )
+  ]
 }

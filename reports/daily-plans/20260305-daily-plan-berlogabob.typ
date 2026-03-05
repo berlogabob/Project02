@@ -1,5 +1,5 @@
 // Daily Plan - Auto-generated
-#import "../templates/daily-plan-template.typ": *
+#import "../../templates/daily-plan-template.typ": *
 
 // Generated: 20260305
 
@@ -17,7 +17,7 @@
       columns: (1fr, 1fr),
       gutter: 15pt,
       [
-        *Team Member:* \ Andrey Dyakov \ #text(size: 8pt)[@berlogabob] \ \
+        *Team Member:* \ Andrey Dyakov \ #text(size: 8pt)[\@berlogabob] \ \
         *Date:* \ March 05, 2026
       ],
       [
@@ -32,36 +32,19 @@
 
 == Your Tasks for Today
 
-#grid(
+#table(
   columns: (1fr, 1fr, 1fr),
   gutter: 15pt,
-  #box(
-    fill: chapter_themes.at("1").accent.lighten(90%),
-    inset: 12pt,
-    radius: 4pt,
-    align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[5]
-      #text(size: 8pt)[Total Tasks]
-    ])
+  inset: 12pt,
+  stroke: none,
+  fill: (
+    chapter_themes.at("1").accent.lighten(90%),
+    chapter_themes.at("2").accent.lighten(90%),
+    chapter_themes.at("3").accent.lighten(90%)
   ),
-  #box(
-    fill: chapter_themes.at("2").accent.lighten(90%),
-    inset: 12pt,
-    radius: 4pt,
-    align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[0]
-      #text(size: 8pt)[High Priority]
-    ])
-  ),
-  #box(
-    fill: chapter_themes.at("3").accent.lighten(90%),
-    inset: 12pt,
-    radius: 4pt,
-    align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[March 05]
-      #text(size: 8pt)[Date]
-    ])
-  )
+  [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[5] #text(size: 8pt)[Total Tasks]])]],
+  [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[0] #text(size: 8pt)[High Priority]])]],
+  [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[March 05] #text(size: 8pt)[Date]])]]
 )
 
 #v(2em)
@@ -77,25 +60,13 @@
 #line(length: 100%, stroke: 1pt + chapter_themes.at("1").accent)
 #v(10pt)
 
-#issue_card(45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:
+#issue_card(45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02: - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connected) ...], [1st milestone: Documentation], [type: research, type: testing])
 
-- Unity only
-- TouchDesigner only
-- Hybrid (Unity + TouchDesigner connected)...], [1st milestone: Documentation], [type: research, type: testing])
+#issue_card(45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02: - Unity only - TouchDesigner only - Hybrid (Unity + TouchDesigner connected) ...], [1st milestone: Documentation], [type: research, type: testing])
 
-#issue_card(45, [Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice], "", [We need to decide once and for all what we will use for the real-time microphone input + visualization pipeline in Project02:
+#issue_card(12, [STT- Speech to Text LLM], "", [(moonshine-a)(https://github.com/moonshine-ai/moonshine ) test this model. write feedback ...], [1st milestone: Documentation], [type: research, type: testing])
 
-- Unity only
-- TouchDesigner only
-- Hybrid (Unity + TouchDesigner connected)...], [1st milestone: Documentation], [type: research, type: testing])
-
-#issue_card(12, [STT- Speech to Text LLM], "", [(moonshine-a)(https://github.com/moonshine-ai/moonshine
-)
-test this model. write feedback ...], [1st milestone: Documentation], [type: research, type: testing])
-
-#issue_card(12, [STT- Speech to Text LLM], "", [(moonshine-a)(https://github.com/moonshine-ai/moonshine
-)
-test this model. write feedback ...], [1st milestone: Documentation], [type: research, type: testing])
+#issue_card(12, [STT- Speech to Text LLM], "", [(moonshine-a)(https://github.com/moonshine-ai/moonshine ) test this model. write feedback ...], [1st milestone: Documentation], [type: research, type: testing])
 
 
 #v(2em)
