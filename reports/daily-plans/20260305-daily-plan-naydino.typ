@@ -83,7 +83,6 @@
   ]
 )
 
-#page_footer("1")
 #pagebreak()
 
 // PAGE 2: PLANNING
@@ -151,4 +150,3 @@
   ]
 )
 
-#page_footer("2")
