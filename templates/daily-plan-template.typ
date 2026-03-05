@@ -99,7 +99,7 @@
                else if priority == "high"    { rgb("#f57c00") }
                else                          { gray.lighten(60%) }
 
-  box(
+  ##box(
     width: 100%,
     inset: 12pt,
     radius: 6pt,
