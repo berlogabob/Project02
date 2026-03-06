@@ -183,6 +183,7 @@ def generate_typst_report(
   ]
 ])
 
+#page_footer("1", "1")
 #pagebreak()
 
 // PAGE 2: COMPLETED WORK
@@ -199,6 +200,7 @@ def generate_typst_report(
   #text(size: 9pt, fill: gray)[All completed issues have been reviewed and merged.]
 ])
 
+#page_footer("2", "2")
 #pagebreak()
 
 // PAGE 3: IN PROGRESS
@@ -217,6 +219,7 @@ def generate_typst_report(
   #text(size: 9pt, fill: gray)[No major blockers this week.]
 ])
 
+#page_footer("3", "3")
 #pagebreak()
 
 // PAGE 4: NEXT WEEK PLAN
@@ -261,6 +264,8 @@ def generate_typst_report(
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("4").accent.lighten(90%), radius: 4pt, [
   #text(size: 9pt, fill: gray)[No major risks identified.]
 ])
+
+#page_footer("4", "4")
 '''
 
     if output_path:

@@ -10,25 +10,9 @@
 
 #let muted_bg = rgb("#f4f4f4")
 
-// PAGE NUMBERING IN BOTTOM RIGHT CORNER - ON EVERY PAGE
 #set page(
   paper: "a4",
-  margin: (x: 50pt, y: 60pt),
-  footer: context {
-    let page_num = counter(page).at(here()).first()
-    let theme_idx = str(calc.min(page_num, 4))
-    let t = chapter_themes.at(theme_idx)
-    place(
-      bottom + right,
-      dx: 30pt,
-      dy: 30pt,
-      square(
-        size: 35pt,
-        fill: t.page_bg,
-        align(center + horizon, text(white, weight: "bold", size: 14pt)[#page_num])
-      )
-    )
-  }
+  margin: (x: 50pt, y: 60pt)
 )
 
 #set text(
@@ -38,7 +22,7 @@
   lang: "en"
 )
 
-#let report_header(ch_idx, category: "PROJECT") = {
+#let report_header(ch_idx, category: "DAILY PLAN") = {
   let t = chapter_themes.at(ch_idx)
   move(dy: -20pt)[
     #block(
@@ -100,10 +84,17 @@
   )
 }
 
-#let page_footer(ch_idx) = {
+// MANUAL PAGE FOOTER - call on each page: #page_footer("1", "1")
+#let page_footer(ch_idx, num) = {
   let t = chapter_themes.at(ch_idx)
-  v(1fr)
-  line(length: 100%, stroke: 0.5pt + gray.lighten(50%))
-  v(5pt)
-  text(size: 8pt, fill: gray)[Generated automatically • The Oracle That Wears Us • MCCIA Project II]
+  place(
+    bottom + right,
+    dx: 30pt,
+    dy: 30pt,
+    square(
+      size: 35pt,
+      fill: t.page_bg,
+      align(center + horizon, text(white, weight: "bold", size: 14pt)[#num])
+    )
+  )
 }
