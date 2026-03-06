@@ -100,3 +100,11 @@
     ]
   )
 }
+
+#let page_footer(ch_idx) = {
+  let t = chapter_themes.at(ch_idx)
+  v(1fr)
+  line(length: 100%, stroke: 0.5pt + gray.lighten(50%))
+  v(5pt)
+  text(size: 8pt, fill: gray)[Generated automatically • The Oracle That Wears Us • MCCIA Project II]
+}

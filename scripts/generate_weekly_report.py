@@ -72,22 +72,53 @@ def generate_typst_report(
     output_path: str = None,
 ) -> str:
     today = datetime.now()
+    
+    # Calculate counts
+    completed_count = len(completed)
+    in_progress_count = len(in_progress)
+    total_count = completed_count + in_progress_count
 
-    completed_rows = []
-    for issue in completed[:10]:
-        title = clean_text(issue.get("title", ""))
-        completed_rows.append(f"#task_table(([{title}], [Completed]))")
+    # Build completed issues section
+    completed_section = ""
+    if not completed:
+        completed_section = '#text(size: 10pt, fill: gray)[No issues completed this week.]'
+    else:
+        for issue in completed[:10]:
+            num = issue.get('number', '?')
+            title = clean_text(issue.get('title', ''))
+            ms_title = issue.get('milestone', {}).get('title', '') if issue.get('milestone') else ''
+            ms_part = f'#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {ms_title}]' if ms_title else ''
+            completed_section += f'''
+#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#{num} - {title}]
+  {ms_part}
+])
+#v(8pt)
+'''
 
-    in_progress_rows = []
-    for issue in in_progress[:10]:
-        title = clean_text(issue.get("title", ""))
-        in_progress_rows.append(f"#task_table(([{title}], [In Progress]))")
+    # Build in-progress issues section
+    in_progress_section = ""
+    if not in_progress:
+        in_progress_section = '#text(size: 10pt, fill: gray)[No issues in progress.]'
+    else:
+        for issue in in_progress[:10]:
+            num = issue.get('number', '?')
+            title = clean_text(issue.get('title', ''))
+            ms_title = issue.get('milestone', {}).get('title', '') if issue.get('milestone') else ''
+            ms_part = f'#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {ms_title}]' if ms_title else ''
+            in_progress_section += f'''
+#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#{num} - {title}]
+  {ms_part}
+])
+#v(8pt)
+'''
 
     typst_content = f'''// Weekly Report - Week {week_num}
 // Auto-generated: {today.strftime("%Y-%m-%d")}
 // Project: The Oracle That Wears Us
 
-#import "../../templates/daily-plan-template.typ"
+#import "../templates/daily-plan-template.typ"
 
 // --- CONFIGURATION ---
 #set page(paper: "a4", margin: (x: 50pt, y: 60pt))
@@ -130,22 +161,26 @@ def generate_typst_report(
     fill: (x, y) => if y == 0 {{ muted_bg }} else {{ white }}, [*Task*], [*Status*], ..rows)
 }}
 
-#let stats_box(completed_count, in_progress_count, total) = {{
-  #grid(columns: (1fr, 1fr, 1fr), gutter: 15pt,
-    #box(fill: chapter_themes.at("1").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[{completed_count}]
-      #text(size: 8pt)[Completed]])),
-    #box(fill: chapter_themes.at("2").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[{in_progress_count}]
-      #text(size: 8pt)[In Progress]])),
-    #box(fill: chapter_themes.at("3").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[{total}]
-      #text(size: 8pt)[Total]])))
+#let stats_box() = {{
+  grid(columns: (1fr, 1fr, 1fr), gutter: 15pt,
+    box(fill: chapter_themes.at("1").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
+      text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[{completed_count}]
+      text(size: 8pt)[Completed]
+    ])),
+    box(fill: chapter_themes.at("2").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
+      text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[{in_progress_count}]
+      text(size: 8pt)[In Progress]
+    ])),
+    box(fill: chapter_themes.at("3").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
+      text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[{total_count}]
+      text(size: 8pt)[Total]
+    ]))
+  )
 }}
 
 // PAGE 1: COVER & SUMMARY
 #report_header("1")
-#section_title("1", f"Week {week_num}", "Weekly Progress Report")
+#section_title("1", "Week {week_num}", "Weekly Progress Report")
 
 #table(columns: (1fr), inset: 12pt, stroke: none, fill: muted_bg, [
   #grid(columns: (1fr, 1fr), gutter: 15pt, [
@@ -166,12 +201,12 @@ def generate_typst_report(
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
     This week, the team made progress on GitHub issues.
-    Total: {total} issues | Completed: {completed_count} | In Progress: {in_progress_count}
+    Total: {total_count} issues | Completed: {completed_count} | In Progress: {in_progress_count}
   ]
 ])
 
 #v(1em)
-#stats_box({len(completed)}, {len(in_progress)}, {len(completed) + len(in_progress)})
+#stats_box()
 
 #v(2em)
 
@@ -179,7 +214,7 @@ def generate_typst_report(
 
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(90%), radius: 4pt, [
   #text(size: 9pt)[
-    - Completed {len(completed)} issues
+    - Completed {completed_count} issues
     - Progress on {milestone or "current milestone"}
     - Team collaboration through GitHub
   ]
@@ -192,17 +227,7 @@ def generate_typst_report(
 #report_header("2")
 #section_title("2", "2.0", "Completed Issues")
 
-#if len(completed) == 0 [
-  #text(size: 10pt, fill: gray)[No issues completed this week.]
-] else [
-  ..completed[:10].map(issue => [
-    #box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-      #text(size: 11pt, weight: "bold")[#{issue.number} - {clean_text(issue.title)}]
-      #if issue.milestone != none [#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {issue.milestone.title}]]
-    ])
-    #v(8pt)
-  ])
-]
+{completed_section}
 
 #v(2em)
 
@@ -221,17 +246,7 @@ def generate_typst_report(
 
 == Current Sprint
 
-#if len(in_progress) == 0 [
-  #text(size: 10pt, fill: gray)[No issues in progress.]
-] else [
-  ..in_progress[:10].map(issue => [
-    #box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-      #text(size: 11pt, weight: "bold")[#{issue.number} - {clean_text(issue.title)}]
-      #if issue.milestone != none [#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {issue.milestone.title}]]
-    ])
-    #v(8pt)
-  ])
-]
+{in_progress_section}
 
 #v(2em)
 
@@ -264,9 +279,9 @@ def generate_typst_report(
 
 #let milestone_progress = 25
 #box(width: 100%, height: 20pt, fill: gray.lighten(80%), inset: 0pt, radius: 3pt, [
-  #box(width: f"{milestone_progress}%", height: 100%, fill: gradient.linear(chapter_themes.at("1").grad_start, chapter_themes.at("1").grad_end), radius: 3pt)
+  #box(width: milestone_progress * 1%, height: 100%, fill: gradient.linear(chapter_themes.at("1").grad_start, chapter_themes.at("1").grad_end), radius: 3pt)
 ])
-#text(size: 8pt, fill: gray)[{milestone_progress}% complete towards {milestone or "current milestone"}]
+#text(size: 8pt, fill: gray)[#milestone_progress% complete towards {milestone or "current milestone"}]
 
 #v(2em)
 
