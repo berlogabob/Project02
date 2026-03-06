@@ -28,14 +28,16 @@
 #let page_number_badge(num, ch_idx: "1") = {
   let t = chapter_themes.at(ch_idx)
   
-  place(
-    bottom + right,
-    dx: 30pt,
-    dy: 30pt,
-    square(
-      size: 35pt,
-      fill: t.accent,
-      align(center + horizon, text(white, weight: "bold", size: 14pt)[#num])
+  block(
+    width: 100%,
+    height: 100%,
+    align(
+      bottom + right,
+      square(
+        size: 35pt,
+        fill: t.accent,
+        align(center + horizon, text(white, weight: "bold", size: 14pt)[#num])
+      )
     )
   )
 }
