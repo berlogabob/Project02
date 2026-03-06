@@ -1,4 +1,5 @@
 // templates/daily-plan-template.typ
+// Reusable template for daily plans and weekly reports
 
 #let chapter_themes = (
   "1": (grad_start: rgb("#2F80ED"), grad_end: rgb("#9B51E0"), accent: rgb("#33A1C9"), page_bg: rgb("#A5C7F3")),
@@ -9,20 +10,18 @@
 
 #let muted_bg = rgb("#f4f4f4")
 
+// PAGE NUMBERING IN BOTTOM RIGHT CORNER - ON EVERY PAGE
 #set page(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
-  // AUTOMATIC FOOTER LOGIC
   footer: context {
     let page_num = counter(page).at(here()).first()
-    // Select theme 1-4 based on page number (caps at 4)
     let theme_idx = str(calc.min(page_num, 4))
     let t = chapter_themes.at(theme_idx)
-    
     place(
-      right,
+      bottom + right,
       dx: 30pt,
-      dy: 10pt,
+      dy: 30pt,
       square(
         size: 35pt,
         fill: t.page_bg,
@@ -39,7 +38,7 @@
   lang: "en"
 )
 
-#let report_header(ch_idx, category: "DAILY PLAN") = {
+#let report_header(ch_idx, category: "PROJECT") = {
   let t = chapter_themes.at(ch_idx)
   move(dy: -20pt)[
     #block(

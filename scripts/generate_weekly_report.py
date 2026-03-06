@@ -118,48 +118,11 @@ def generate_typst_report(
 // Auto-generated: {today.strftime("%Y-%m-%d")}
 // Project: The Oracle That Wears Us
 
-#import "../templates/daily-plan-template.typ"
+#import "../templates/daily-plan-template.typ": *
 
-// --- CONFIGURATION ---
-#set page(paper: "a4", margin: (x: 50pt, y: 60pt))
-#set text(font: "Noto Sans", size: 10pt, fill: rgb("#333333"), lang: "en")
-
-#let chapter_themes = (
-  "1": (grad_start: rgb("#2F80ED"), grad_end: rgb("#9B51E0"), accent: rgb("#33A1C9"), page_bg: rgb("#A5C7F3")),
-  "2": (grad_start: rgb("#eb3349"), grad_end: rgb("#f45c43"), accent: rgb("#e74c3c"), page_bg: rgb("#ff9a9e")),
-  "3": (grad_start: rgb("#11998e"), grad_end: rgb("#38ef7d"), accent: rgb("#1b5e20"), page_bg: rgb("#c8e6c9")),
-  "4": (grad_start: rgb("#F2994A"), grad_end: rgb("#F2C94C"), accent: rgb("#d35400"), page_bg: rgb("#fdebd0"))
-)
-
-#let muted_bg = rgb("#f4f4f4")
-
-#let report_header(ch_idx, category: "WEEKLY REPORT") = {{
-  let t = chapter_themes.at(ch_idx)
-  move(dy: -20pt)[
-    #box(width: 100%, height: 30pt, fill: gradient.linear(t.grad_start, t.grad_end), inset: (right: 15pt),
-      align(right + horizon, text(white, weight: "bold", tracking: 1.5pt, size: 8pt)[#upper(category)]))
-  ]
-}}
-
-#let section_title(ch_idx, num, title) = {{
-  let t = chapter_themes.at(ch_idx)
-  v(20pt)
-  text(fill: t.accent, size: 22pt, weight: "extrabold")[#num]
-  v(-12pt)
-  text(fill: t.accent, size: 22pt, weight: "bold")[#upper(title)]
-  v(20pt)
-}}
-
-#let page_footer(ch_idx, num) = {{
-  let t = chapter_themes.at(ch_idx)
-  place(bottom + right, dx: 30pt, dy: 30pt,
-    square(size: 35pt, fill: t.page_bg, align(center + horizon, text(white, weight: "bold", size: 14pt)[#num])))
-}}
-
-#let task_table(rows) = {{
-  table(columns: (1fr, 1fr), inset: 10pt, stroke: 0.5pt + gray.lighten(50%),
-    fill: (x, y) => if y == 0 {{ muted_bg }} else {{ white }}, [*Task*], [*Status*], ..rows)
-}}
+// Weekly report uses all components from the template
+// Page numbering is automatic via the template
+// Note: report_header, section_title, task_table are imported from template
 
 #let stats_box() = {{
   grid(columns: (1fr, 1fr, 1fr), gutter: 15pt,
@@ -220,7 +183,6 @@ def generate_typst_report(
   ]
 ])
 
-#page_footer("1", "1")
 #pagebreak()
 
 // PAGE 2: COMPLETED WORK
@@ -237,7 +199,6 @@ def generate_typst_report(
   #text(size: 9pt, fill: gray)[All completed issues have been reviewed and merged.]
 ])
 
-#page_footer("2", "2")
 #pagebreak()
 
 // PAGE 3: IN PROGRESS
@@ -256,7 +217,6 @@ def generate_typst_report(
   #text(size: 9pt, fill: gray)[No major blockers this week.]
 ])
 
-#page_footer("3", "3")
 #pagebreak()
 
 // PAGE 4: NEXT WEEK PLAN
@@ -301,8 +261,6 @@ def generate_typst_report(
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("4").accent.lighten(90%), radius: 4pt, [
   #text(size: 9pt, fill: gray)[No major risks identified.]
 ])
-
-#page_footer("4", "4")
 '''
 
     if output_path:
