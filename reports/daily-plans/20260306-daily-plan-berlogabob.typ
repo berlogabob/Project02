@@ -4,10 +4,10 @@
 #set page(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
-  numbering: (..args) => {
+  numbering: (..args) => {{
     let num = args.pos().first()
-    page_number_badge(num)
-  },
+    page_number_badge(num, "1")
+  }},
 )
 
 // Generated: 20260306
