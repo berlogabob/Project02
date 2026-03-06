@@ -25,14 +25,18 @@
 )
 
 // Styled page number badge - called manually on each page
-#let page_number_badge(num) = {
-  let theme_idx = calc.min(num, 4)
-  let t = chapter_themes.at(str(theme_idx))
+#let page_number_badge(num, ch_idx: "1") = {
+  let t = chapter_themes.at(ch_idx)
   
-  square(
-    size: 35pt,
-    fill: t.page_bg,
-    align(center + horizon, text(white, weight: "bold", size: 14pt)[#num])
+  place(
+    bottom + right,
+    dx: 30pt,
+    dy: 30pt,
+    square(
+      size: 35pt,
+      fill: t.accent,
+      align(center + horizon, text(white, weight: "bold", size: 14pt)[#num])
+    )
   )
 }
 
