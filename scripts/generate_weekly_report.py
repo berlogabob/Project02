@@ -145,7 +145,7 @@ def generate_typst_report(
     #place(
       bottom + right,
       dx: -45pt,
-      dy: 15pt,
+      dy: 3pt,
       square(
         size: 35pt,
         fill: chapter_themes.at("1").accent,
