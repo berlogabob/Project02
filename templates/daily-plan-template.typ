@@ -10,24 +10,12 @@
 
 #let muted_bg = rgb("#f4f4f4")
 
-// PAGE NUMBERING ON EVERY PAGE - Using Typst's built-in numbering with custom footer
+// PAGE NUMBERING ON EVERY PAGE - Simple approach with numbering parameter
 #set page(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
-  footer: context {
-    let page_num = counter(page).at(here())
-    let theme_idx = calc.min(page_num, 4)
-    let t = chapter_themes.at(str(theme_idx))
-    
-    align(
-      right,
-      square(
-        size: 35pt,
-        fill: t.page_bg,
-        align(center + horizon, text(white, weight: "bold", size: 14pt)[#page_num])
-      )
-    )
-  },
+  numbering: "1",
+  number-align: bottom + right,
 )
 
 #set text(
@@ -35,6 +23,18 @@
   fill: rgb("#333333"),
   lang: "en"
 )
+
+// Styled page number badge - called manually on each page
+#let page_number_badge(num) = {
+  let theme_idx = calc.min(num, 4)
+  let t = chapter_themes.at(str(theme_idx))
+  
+  square(
+    size: 35pt,
+    fill: t.page_bg,
+    align(center + horizon, text(white, weight: "bold", size: 14pt)[#num])
+  )
+}
 
 #let report_header(ch_idx, category: "DAILY PLAN") = {
   let t = chapter_themes.at(ch_idx)
