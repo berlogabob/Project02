@@ -148,7 +148,7 @@ def generate_typst_report(
       dy: -5pt,
       square(
         size: 35pt,
-        fill: chapter_themes.at(str(calc.min(context counter(page).at(), 4))).accent,
+        fill: chapter_themes.at(str(calc.min(context counter(page).get().page, 4))).accent,
         align(center + horizon, text(white, weight: "bold", size: 14pt)[#context counter(page).display()])
       )
     )
