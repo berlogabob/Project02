@@ -8,7 +8,7 @@
     #place(
       bottom + right,
       dx: -45pt,
-      dy: 3pt,
+      dy: -5pt,
       square(
         size: 35pt,
         fill: chapter_themes.at("1").accent,
