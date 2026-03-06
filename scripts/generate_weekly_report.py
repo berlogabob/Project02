@@ -149,7 +149,7 @@ def generate_typst_report(
       square(
         size: 35pt,
         fill: chapter_themes.at("1").accent,
-        align(center + horizon, text(white, weight: "bold", size: 14pt)[#counter(page).display()])
+        align(center + horizon, text(white, weight: "bold", size: 14pt)[#context counter(page).display()])
       )
     )
   ],
