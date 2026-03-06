@@ -35,6 +35,13 @@ cat > "${OUTPUT_FILE}" << EOF
 // Daily Plan - Auto-generated
 #import "../../templates/daily-plan-template.typ": *
 
+#set page(
+  paper: "a4",
+  margin: (x: 50pt, y: 60pt),
+  numbering: "1",
+  number-align: bottom + right,
+)
+
 // Generated: ${DATE_PREFIX}
 
 #report_header("1")

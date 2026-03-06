@@ -72,7 +72,7 @@ def generate_typst_report(
     output_path: str = None,
 ) -> str:
     today = datetime.now()
-    
+
     # Calculate counts
     completed_count = len(completed)
     in_progress_count = len(in_progress)
@@ -81,44 +81,69 @@ def generate_typst_report(
     # Build completed issues section
     completed_section = ""
     if not completed:
-        completed_section = '#text(size: 10pt, fill: gray)[No issues completed this week.]'
+        completed_section = (
+            "#text(size: 10pt, fill: gray)[No issues completed this week.]"
+        )
     else:
         for issue in completed[:10]:
-            num = issue.get('number', '?')
-            title = clean_text(issue.get('title', ''))
-            ms_title = issue.get('milestone', {}).get('title', '') if issue.get('milestone') else ''
-            ms_part = f'#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {ms_title}]' if ms_title else ''
-            completed_section += f'''
+            num = issue.get("number", "?")
+            title = clean_text(issue.get("title", ""))
+            ms_title = (
+                issue.get("milestone", {}).get("title", "")
+                if issue.get("milestone")
+                else ""
+            )
+            ms_part = (
+                f"#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {ms_title}]"
+                if ms_title
+                else ""
+            )
+            completed_section += f"""
 #box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 11pt, weight: "bold")[#{num} - {title}]
   {ms_part}
 ])
 #v(8pt)
-'''
+"""
 
     # Build in-progress issues section
     in_progress_section = ""
     if not in_progress:
-        in_progress_section = '#text(size: 10pt, fill: gray)[No issues in progress.]'
+        in_progress_section = "#text(size: 10pt, fill: gray)[No issues in progress.]"
     else:
         for issue in in_progress[:10]:
-            num = issue.get('number', '?')
-            title = clean_text(issue.get('title', ''))
-            ms_title = issue.get('milestone', {}).get('title', '') if issue.get('milestone') else ''
-            ms_part = f'#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {ms_title}]' if ms_title else ''
-            in_progress_section += f'''
+            num = issue.get("number", "?")
+            title = clean_text(issue.get("title", ""))
+            ms_title = (
+                issue.get("milestone", {}).get("title", "")
+                if issue.get("milestone")
+                else ""
+            )
+            ms_part = (
+                f"#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {ms_title}]"
+                if ms_title
+                else ""
+            )
+            in_progress_section += f"""
 #box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 11pt, weight: "bold")[#{num} - {title}]
   {ms_part}
 ])
 #v(8pt)
-'''
+"""
 
-    typst_content = f'''// Weekly Report - Week {week_num}
+    typst_content = f"""// Weekly Report - Week {week_num}
 // Auto-generated: {today.strftime("%Y-%m-%d")}
 // Project: The Oracle That Wears Us
 
 #import "../templates/daily-plan-template.typ": *
+
+#set page(
+  paper: "a4",
+  margin: (x: 50pt, y: 60pt),
+  numbering: "1",
+  number-align: bottom + right,
+)
 
 // Weekly report uses all components from the template
 // Page numbering is automatic via the template
@@ -261,7 +286,7 @@ def generate_typst_report(
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("4").accent.lighten(90%), radius: 4pt, [
   #text(size: 9pt, fill: gray)[No major risks identified.]
 ])
-'''
+"""
 
     if output_path:
         output = Path(output_path)
