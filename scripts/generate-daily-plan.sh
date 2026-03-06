@@ -38,11 +38,18 @@ cat > "${OUTPUT_FILE}" << EOF
 #set page(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
-  footer-edge: true,
-  numbering: (..args) => {{
-    let num = args.pos().first()
-    page_number_badge(num, "1")
-  }},
+  footer: [
+    #place(
+      bottom + right,
+      dx: -45pt,
+      dy: 15pt,
+      square(
+        size: 35pt,
+        fill: chapter_themes.at("1").accent,
+        align(center + horizon, text(white, weight: "bold", size: 14pt)[#counter(page).display()])
+      )
+    )
+  ],
 )
 
 // Generated: ${DATE_PREFIX}
