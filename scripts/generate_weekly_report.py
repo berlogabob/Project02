@@ -141,8 +141,10 @@ def generate_typst_report(
 #set page(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
-  numbering: "1",
-  number-align: bottom + right,
+  numbering: (..args) => {{
+    let num = args.pos().first()
+    page_number_badge(num)
+  }},
 )
 
 // Weekly report uses all components from the template
