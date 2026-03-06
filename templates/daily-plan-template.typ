@@ -10,9 +10,24 @@
 
 #let muted_bg = rgb("#f4f4f4")
 
+// PAGE NUMBERING ON EVERY PAGE - Using Typst's built-in numbering with custom footer
 #set page(
   paper: "a4",
-  margin: (x: 50pt, y: 60pt)
+  margin: (x: 50pt, y: 60pt),
+  footer: context {
+    let page_num = counter(page).at(here())
+    let theme_idx = calc.min(page_num, 4)
+    let t = chapter_themes.at(str(theme_idx))
+    
+    align(
+      right,
+      square(
+        size: 35pt,
+        fill: t.page_bg,
+        align(center + horizon, text(white, weight: "bold", size: 14pt)[#page_num])
+      )
+    )
+  },
 )
 
 #set text(
