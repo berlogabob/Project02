@@ -12,12 +12,12 @@
 #set page(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
-  // This block handles numbering automatically on every page
+  // AUTOMATIC FOOTER LOGIC
   footer: context {
     let page_num = counter(page).at(here()).first()
-    // Clamp to theme 1-4, or default to "1" if something goes wrong
-    let theme_key = str(calc.min(calc.max(page_num, 1), 4))
-    let t = chapter_themes.at(theme_key)
+    // Select theme 1-4 based on page number (caps at 4)
+    let theme_idx = str(calc.min(page_num, 4))
+    let t = chapter_themes.at(theme_idx)
     
     place(
       right,
