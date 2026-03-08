@@ -46,16 +46,22 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
+      - name: Cache Ollama models
+        uses: actions/cache@v4
+        with:
+          path: ~/.ollama/models
+          key: ollama-qwen3.5-${{ hashFiles('scripts/generate_ai_summary.py') }}
+          restore-keys: |
+            ollama-qwen3.5-
 
       - name: Install Ollama
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
-          ollama serve &
-          sleep 5
-          ollama pull qwen3.5:latest
+          # Start Ollama in background
+          ollama serve > /dev/null 2>&1 &
+          sleep 3
+          # Pull smaller model for faster startup (2.7GB vs 6.6GB)
+          ollama pull qwen3.5:2b
 
       - name: Determine week number
         id: week

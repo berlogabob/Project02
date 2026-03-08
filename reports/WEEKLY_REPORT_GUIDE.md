@@ -15,7 +15,7 @@ python3 scripts/generate_weekly_report.py --week 2
 1. **GitHub CLI** (`gh`) - authenticated with token
 2. **Python 3.11+**
 3. **Typst** v0.14.2+
-4. **Ollama** (optional, for AI summary) - `ollama pull qwen3.5:latest`
+4. **Ollama** (optional, for AI summary) - `ollama pull qwen3.5:2b`
 
 ## AI Summary Setup
 
@@ -27,8 +27,8 @@ The report can generate AI-powered summaries of completed work.
 # Install Ollama: https://ollama.ai/
 curl -fsSL https://ollama.com/install.sh | sh
 
-# Pull qwen3.5:latest model
-ollama pull qwen3.5:latest
+# Pull qwen3.5:2b model (2.7GB, fast, good quality)
+ollama pull qwen3.5:2b
 
 # Start Ollama server (if not running)
 ollama serve
@@ -36,6 +36,11 @@ ollama serve
 # Run report - AI summary will be generated automatically
 ./scripts/run-weekly-report.sh
 ```
+
+**Model comparison:**
+- `qwen3.5:2b` - 2.7GB, ~30s inference, good for summaries ✅ (default)
+- `qwen3.5:latest` - 6.6GB, ~60s inference, better quality
+- `qwen3.5:0.8b` - 1.0GB, ~15s inference, basic quality
 
 ### Option 2: Qwen API (DashScope)
 

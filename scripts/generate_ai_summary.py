@@ -160,9 +160,9 @@ def call_ollama_api(prompt: str) -> str:
     import urllib.request
     import urllib.error
     
-    # Use qwen3.5:latest model
+    # Use qwen3.5:2b model (faster, smaller, good for summaries)
     data = json.dumps({
-        "model": "qwen3.5:latest",
+        "model": "qwen3.5:2b",
         "prompt": prompt,
         "stream": False
     }).encode("utf-8")
@@ -173,6 +173,7 @@ def call_ollama_api(prompt: str) -> str:
             data=data,
             headers={"Content-Type": "application/json"}
         )
+        # Increase timeout for larger models (120s for first load, 60s for cached)
         with urllib.request.urlopen(req, timeout=120) as response:
             result = json.loads(response.read().decode())
             return result.get("response", "").strip()
