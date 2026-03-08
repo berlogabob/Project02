@@ -25,7 +25,7 @@
 #let stats_box() = {
   grid(columns: (1fr, 1fr, 1fr), gutter: 15pt,
     box(fill: chapter_themes.at("3").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[12]
+      text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[15]
       text(size: 8pt)[Completed]
     ])),
     box(fill: chapter_themes.at("2").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
@@ -53,7 +53,7 @@
     [
       *Team:* \
       #grid(columns: (1fr, 1fr, 1fr), gutter: 5pt, [Nadine Allan], [Andrey Dyakov], [Dmitri Kazantsev]) \ \
-      *Total Issues This Week:* \ 21
+      *Total Issues This Week:* \ 24
     ]
   ])
 ])
@@ -64,7 +64,7 @@
 
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
-    Week 1 progress: 12 of 21 tasks completed (57%).
+    Week 1 progress: 15 of 24 tasks completed (62%).
     16 tasks from future weeks already in progress.
   ]
 ])
@@ -76,11 +76,11 @@
 
 == Week Progress
 
-#let week_progress = 57
+#let week_progress = 62
 #box(width: 100%, height: 24pt, fill: gray.lighten(80%), inset: 0pt, radius: 3pt, [
   #box(width: week_progress * 1%, height: 100%, fill: gradient.linear(chapter_themes.at("3").grad_start, chapter_themes.at("3").grad_end), radius: 3pt)
 ])
-#text(size: 8pt, fill: gray)[57% complete]
+#text(size: 8pt, fill: gray)[62% complete]
 
 #pagebreak()
 
@@ -96,6 +96,20 @@
 
 #v(1em)
 
+
+#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#54 - Weekly - report generator]
+  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
+  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+])
+#v(8pt)
+
+#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#53 - Auto Daily-Planning report generator]
+  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
+  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+])
+#v(8pt)
 
 #box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 11pt, weight: "bold")[#52 - STT->TTT->TTS Pure Python workflow]
@@ -176,7 +190,14 @@
 
 #box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 11pt, weight: "bold")[#2 - Make gitHub Kanban]
-  
+  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
+  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+])
+#v(8pt)
+
+#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#1 - How does the plotter connect to the PC?]
+  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
   #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
 ])
 #v(8pt)
