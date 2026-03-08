@@ -1,0 +1,100 @@
+name: Generate Weekly Report
+
+on:
+  schedule:
+    # Run every Sunday at 22:00 UTC (Monday 00:00 Lisbon)
+    - cron: '0 22 * * 0'
+
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      week_number:
+        description: 'Week number (leave empty for auto-detect)'
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  generate-weekly-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Typst
+        uses: typst-community/setup-typst@v3
+        with:
+          typst-version: "latest"
+
+      - name: Install GitHub CLI
+        run: |
+          gh --version || sudo apt-get install -y gh
+
+      - name: Authenticate GitHub CLI
+        run: gh auth setup-git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Install Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve &
+          sleep 5
+          ollama pull qwen3.5:latest
+
+      - name: Determine week number
+        id: week
+        run: |
+          if [ -n "${{ inputs.week_number }}" ]; then
+            echo "week=${{ inputs.week_number }}" >> $GITHUB_OUTPUT
+          else
+            # Calculate current week number from project start (Mar 2, 2026)
+            CURRENT_WEEK=$(python3 -c "from datetime import date; start=date(2026,3,2); today=date.today(); print(((today-start).days//7)+1)")
+            echo "week=$CURRENT_WEEK" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate Typst report with AI summary
+        run: |
+          python3 scripts/generate_weekly_report.py \
+            --week ${{ steps.week.outputs.week }} \
+            --output reports/week-${{ steps.week.outputs.week }}-report.typ
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compile to PDF
+        run: |
+          typst compile --root . reports/week-${{ steps.week.outputs.week }}-report.typ reports/week-${{ steps.week.outputs.week }}-report.pdf
+
+      - name: Commit and push report
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add reports/week-${{ steps.week.outputs.week }}-report.*
+          git commit -m "📊 Auto-generate weekly report: Week ${{ steps.week.outputs.week }}" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-report-week-${{ steps.week.outputs.week }}
+          path: |
+            reports/week-${{ steps.week.outputs.week }}-report.typ
+            reports/week-${{ steps.week.outputs.week }}-report.pdf
+          retention-days: 30
