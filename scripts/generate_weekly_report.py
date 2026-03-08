@@ -129,29 +129,39 @@ def get_priority(issue: dict) -> str:
     return ""
 
 
-def format_issue_box(issue: dict, show_week: bool = False) -> str:
+def format_issue_box(issue: dict, show_week: bool = False, compact: bool = True) -> str:
     """Format a single issue as a Typst box."""
     num = issue.get("number", "?")
     title = clean_text(issue.get("title", ""))
-    
-    # Get milestone
-    ms = issue.get("milestone", {})
-    ms_title = ms.get("title", "") if ms else ""
-    ms_part = f"#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {ms_title}]" if ms_title else ""
-    
-    # Get week label
-    week_num = get_issue_week(issue)
-    week_part = f"#v(4pt) #text(size: 8pt, fill: gray)[Week {week_num}]" if week_num > 0 else ""
     
     # Get priority
     priority = get_priority(issue)
     priority_badge = f" #text(size: 9pt, fill: red, weight: \"bold\")[{priority.upper()}]" if priority else ""
     
-    return f"""
+    # Get week label for future tasks
+    week_num = get_issue_week(issue)
+    week_part = f" #text(size: 8pt, fill: gray)[(Week {week_num})]" if (show_week and week_num > 0) else ""
+    
+    if compact:
+        # Compact format: single line with title and priority
+        return f"""
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#{num} - {title}]{priority_badge}{week_part}
+])
+#v(4pt)
+"""
+    else:
+        # Full format with milestone (not used now)
+        ms = issue.get("milestone", {})
+        ms_title = ms.get("title", "") if ms else ""
+        ms_part = f"#v(4pt) #text(size: 8pt, fill: gray)[Milestone: {ms_title}]" if ms_title else ""
+        week_part_full = f"#v(4pt) #text(size: 8pt, fill: gray)[Week {week_num}]" if week_num > 0 else ""
+        
+        return f"""
 #box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 11pt, weight: "bold")[#{num} - {title}]{priority_badge}
   {ms_part}
-  {week_part}
+  {week_part_full}
 ])
 #v(8pt)
 """
@@ -224,19 +234,21 @@ def generate_typst_report(
 )
 
 #let stats_box() = {{
-  grid(columns: (1fr, 1fr, 1fr), gutter: 15pt,
-    box(fill: chapter_themes.at("3").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[{completed_count}]
-      text(size: 8pt)[Completed]
-    ])),
-    box(fill: chapter_themes.at("2").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[{incomplete_count}]
-      text(size: 8pt)[Incomplete]
-    ])),
-    box(fill: chapter_themes.at("1").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[{future_count}]
-      text(size: 8pt)[Future Weeks]
-    ]))
+  grid(
+    columns: (1fr, 1fr, 1fr),
+    gutter: 10pt,
+    block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("3").accent.lighten(90%), align(center)[
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[{completed_count}] \\
+      #text(size: 7pt)[COMPLETED]
+    ]),
+    block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("2").accent.lighten(90%), align(center)[
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[{incomplete_count}] \\
+      #text(size: 7pt)[INCOMPLETE]
+    ]),
+    block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("1").accent.lighten(90%), align(center)[
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[{future_count}] \\
+      #text(size: 7pt)[FUTURE WEEKS]
+    ])
   )
 }}
 
@@ -244,18 +256,21 @@ def generate_typst_report(
 #report_header("1")
 #section_title("1", "Week {week_num}", "Weekly Progress Report")
 
-#table(columns: (1fr), inset: 12pt, stroke: none, fill: muted_bg, [
-  #grid(columns: (1fr, 1fr), gutter: 15pt, [
-    [
-      *Report Date:* \\ {today.strftime("%B %d, %Y")} \\ \\
-      *Week Period:* \\ {week_start.strftime("%b %d")} - {week_end.strftime("%b %d, %Y")} \\ \\
-      *Project:* \\ The Oracle That Wears Us
-    ],
-    [
-      *Team:* \\
-      #grid(columns: (1fr, 1fr, 1fr), gutter: 5pt, [Nadine Allan], [Andrey Dyakov], [Dmitri Kazantsev]) \\ \\
-      *Total Issues This Week:* \\ {total_this_week}
-    ]
+#box(width: 100%, inset: 12pt, fill: muted_bg, radius: 4pt, [
+  #grid(columns: (1fr,), [
+    #text(size: 9pt)[*Project:* The Oracle That Wears Us]
+  ])
+  #v(6pt)
+  #grid(columns: (1fr,), [
+    #text(size: 9pt)[*Team:* Nadine Allan | Andrey Dyakov | Dmitri Kazantsev]
+  ])
+  #v(8pt)
+  #line(length: 100%, stroke: 0.5pt + gray.lighten(60%))
+  #v(8pt)
+  #grid(columns: (auto, 1fr, auto), gutter: 10pt, [
+    #text(size: 9pt)[*Report Date:* {today.strftime("%B %d, %Y")}]
+    #h(1fr)
+    #text(size: 9pt)[*Week Period:* {week_start.strftime("%b %d")} - {week_end.strftime("%b %d, %Y")}]
   ])
 ])
 
@@ -278,10 +293,13 @@ def generate_typst_report(
 == Week Progress
 
 #let week_progress = {completion_pct}
-#box(width: 100%, height: 24pt, fill: gray.lighten(80%), inset: 0pt, radius: 3pt, [
+#box(width: 100%, height: 28pt, fill: gray.lighten(80%), inset: 0pt, radius: 3pt, [
   #box(width: week_progress * 1%, height: 100%, fill: gradient.linear(chapter_themes.at("3").grad_start, chapter_themes.at("3").grad_end), radius: 3pt)
+  #place(
+    center + horizon,
+    text(size: 10pt, weight: "bold", fill: white)[{completion_pct}% complete]
+  )
 ])
-#text(size: 8pt, fill: gray)[{completion_pct}% complete]
 
 #pagebreak()
 
@@ -360,14 +378,22 @@ def generate_typst_report(
 
 #v(2em)
 
-== Team Workload Overview
+== Team
 
-#table(columns: (1fr, 1fr, 1fr), inset: 10pt, stroke: 0.5pt + gray.lighten(50%),
-  fill: (x, y) => if y == 0 {{ muted_bg }},
-  [*Team Member*], [*Focus Area*], [*Status*],
-  [Nadine Allan], [System Architecture & Integration], [Active],
-  [Andrey Dyakov], [Plotter & Materialization], [Active],
-  [Dmitri Kazantsev], [Generative Concepts & Fabrication], [Active])
+#grid(columns: (1fr, 1fr, 1fr), gutter: 10pt,
+  box(inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, align(center, [
+    text(size: 9pt, weight: "bold")[Nadine Allan]
+    text(size: 8pt, fill: gray)[System Architecture]
+  ])),
+  box(inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, align(center, [
+    text(size: 9pt, weight: "bold")[Andrey Dyakov]
+    text(size: 8pt, fill: gray)[Plotter & Materialization]
+  ])),
+  box(inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, align(center, [
+    text(size: 9pt, weight: "bold")[Dmitri Kazantsev]
+    text(size: 8pt, fill: gray)[Generative Concepts]
+  ]))
+)
 
 #v(2em)
 

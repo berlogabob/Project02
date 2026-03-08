@@ -23,19 +23,21 @@
 )
 
 #let stats_box() = {
-  grid(columns: (1fr, 1fr, 1fr), gutter: 15pt,
-    box(fill: chapter_themes.at("3").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[15]
-      text(size: 8pt)[Completed]
-    ])),
-    box(fill: chapter_themes.at("2").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[9]
-      text(size: 8pt)[Incomplete]
-    ])),
-    box(fill: chapter_themes.at("1").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[16]
-      text(size: 8pt)[Future Weeks]
-    ]))
+  grid(
+    columns: (1fr, 1fr, 1fr),
+    gutter: 10pt,
+    block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("3").accent.lighten(90%), align(center)[
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[17] \
+      #text(size: 7pt)[COMPLETED]
+    ]),
+    block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("2").accent.lighten(90%), align(center)[
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[0] \
+      #text(size: 7pt)[INCOMPLETE]
+    ]),
+    block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("1").accent.lighten(90%), align(center)[
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[16] \
+      #text(size: 7pt)[FUTURE WEEKS]
+    ])
   )
 }
 
@@ -43,18 +45,21 @@
 #report_header("1")
 #section_title("1", "Week 1", "Weekly Progress Report")
 
-#table(columns: (1fr), inset: 12pt, stroke: none, fill: muted_bg, [
-  #grid(columns: (1fr, 1fr), gutter: 15pt, [
-    [
-      *Report Date:* \ March 08, 2026 \ \
-      *Week Period:* \ Mar 02 - Mar 08, 2026 \ \
-      *Project:* \ The Oracle That Wears Us
-    ],
-    [
-      *Team:* \
-      #grid(columns: (1fr, 1fr, 1fr), gutter: 5pt, [Nadine Allan], [Andrey Dyakov], [Dmitri Kazantsev]) \ \
-      *Total Issues This Week:* \ 24
-    ]
+#box(width: 100%, inset: 12pt, fill: muted_bg, radius: 4pt, [
+  #grid(columns: (1fr,), [
+    #text(size: 9pt)[*Project:* The Oracle That Wears Us]
+  ])
+  #v(6pt)
+  #grid(columns: (1fr,), [
+    #text(size: 9pt)[*Team:* Nadine Allan | Andrey Dyakov | Dmitri Kazantsev]
+  ])
+  #v(8pt)
+  #line(length: 100%, stroke: 0.5pt + gray.lighten(60%))
+  #v(8pt)
+  #grid(columns: (auto, 1fr, auto), gutter: 10pt, [
+    #text(size: 9pt)[*Report Date:* March 08, 2026]
+    #h(1fr)
+    #text(size: 9pt)[*Week Period:* Mar 02 - Mar 08, 2026]
   ])
 ])
 
@@ -64,7 +69,7 @@
 
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
-    Week 1 progress: 15 of 24 tasks completed (62%).
+    Week 1 progress: 17 of 17 tasks completed (100%).
     16 tasks from future weeks already in progress.
   ]
 ])
@@ -76,11 +81,14 @@
 
 == Week Progress
 
-#let week_progress = 62
-#box(width: 100%, height: 24pt, fill: gray.lighten(80%), inset: 0pt, radius: 3pt, [
+#let week_progress = 100
+#box(width: 100%, height: 28pt, fill: gray.lighten(80%), inset: 0pt, radius: 3pt, [
   #box(width: week_progress * 1%, height: 100%, fill: gradient.linear(chapter_themes.at("3").grad_start, chapter_themes.at("3").grad_end), radius: 3pt)
+  #place(
+    center + horizon,
+    text(size: 10pt, weight: "bold", fill: white)[100% complete]
+  )
 ])
-#text(size: 8pt, fill: gray)[62% complete]
 
 #pagebreak()
 
@@ -97,110 +105,80 @@
 #v(1em)
 
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#54 - Weekly - report generator]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#54 - Weekly - report generator]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#53 - Auto Daily-Planning report generator]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#53 - Auto Daily-Planning report generator]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#52 - STT->TTT->TTS Pure Python workflow]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#52 - STT->TTT->TTS Pure Python workflow]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#49 - Build STT - LLM - TTS logic inside of Touchdesigner]
-  
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#49 - Build STT - LLM - TTS logic inside of Touchdesigner]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#13 - TTS - Text to Speech KittenTTS]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#26 - #5 - Weekly Activity Plan Creation] #text(size: 9pt, fill: red, weight: "bold")[HIGH]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#12 - STT- Speech to Text LLM]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#20 - Unity: Microphone input test completed]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#11 - plan tasks for next week]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#13 - TTS - Text to Speech KittenTTS]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#10 - add milestone from Brf]
-  
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#12 - STT- Speech to Text LLM]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#9 - Create blanc Project v2]
-  
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#11 - plan tasks for next week]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#8 - Create blanc Repo]
-  
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#10 - add milestone from Brf]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#7 - TD Test: "Can TD push that text out (on-screen now; Unity later if needed)?"]
-  
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#9 - Create blanc Project v2]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#6 - TD Test: "Can TD call a free speech-to-text system and return text back into TD as DAT/CHOP?"]
-  
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#8 - Create blanc Repo]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#5 - TD Test: "Can TD reliably ingest mic audio and turn it into usable control/data?"]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#7 - TD Test: "Can TD push that text out (on-screen now; Unity later if needed)?"]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#2 - Make gitHub Kanban]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#6 - TD Test: "Can TD call a free speech-to-text system and return text back into TD as DAT/CHOP?"]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#1 - How does the plotter connect to the PC?]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#5 - TD Test: "Can TD reliably ingest mic audio and turn it into usable control/data?"]
 ])
-#v(8pt)
+#v(4pt)
 
 
 #v(2em)
@@ -225,70 +203,7 @@
 
 #v(1em)
 
-
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#29 - #8 - Milestone 1 Presentation Preparation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
-])
-#v(8pt)
-
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#28 - #7 - Hardware & Framework Selection] #text(size: 9pt, fill: red, weight: "bold")[HIGH]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
-])
-#v(8pt)
-
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#27 - #6 - Related Projects Research]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
-])
-#v(8pt)
-
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#26 - #5 - Weekly Activity Plan Creation] #text(size: 9pt, fill: red, weight: "bold")[HIGH]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
-])
-#v(8pt)
-
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#25 - #4 - Topic Selection & Theoretical Framework] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
-])
-#v(8pt)
-
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#24 - #3 - User Flow Definition]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
-])
-#v(8pt)
-
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#23 - #2 - Visual & Audio Reference Board]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
-])
-#v(8pt)
-
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#22 - #1 - Research Emergent Technologies] #text(size: 9pt, fill: red, weight: "bold")[HIGH]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
-])
-#v(8pt)
-
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#20 - Unity: Microphone input test completed]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 1]
-])
-#v(8pt)
-
+#text(size: 10pt, fill: green)[All planned tasks completed! 🎉]
 
 #v(2em)
 
@@ -313,75 +228,55 @@
 #v(1em)
 
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#45 - Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 1st milestone: Documentation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#45 - Unity vs TouchDesigner vs Hybrid: Real-Time Microphone Audio Visualization – Evaluation & Final Technology Choice] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#44 - #23 - Milestone 2 Presentation Preparation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 2nd milestone: Prototype]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#44 - #23 - Milestone 2 Presentation Preparation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#43 - #22 - Milestone 2 Documentation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 2nd milestone: Prototype]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#43 - #22 - Milestone 2 Documentation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#42 - #21 - Core Functionality Prototype] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 2nd milestone: Prototype]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#42 - #21 - Core Functionality Prototype] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#41 - #20 - Audio Assets Integration]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 2nd milestone: Prototype]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#41 - #20 - Audio Assets Integration] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#40 - #19 - Graphical Assets Integration]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 2nd milestone: Prototype]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#40 - #19 - Graphical Assets Integration] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#39 - #18 - VR/AR Interaction Design]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 2nd milestone: Prototype]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#39 - #18 - VR/AR Interaction Design] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#38 - #17 - Sensor-Based Interaction Implementation]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 2nd milestone: Prototype]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#38 - #17 - Sensor-Based Interaction Implementation] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#37 - #16 - Latent Space Experiments]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 2nd milestone: Prototype]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#37 - #16 - Latent Space Experiments] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
-#box(width: 100%, inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, [
-  #text(size: 11pt, weight: "bold")[#36 - #15 - Model Training/Fine-tuning]
-  #v(4pt) #text(size: 8pt, fill: gray)[Milestone: 2nd milestone: Prototype]
-  #v(4pt) #text(size: 8pt, fill: gray)[Week 2]
+#box(width: 100%, inset: 8pt, fill: muted_bg.lighten(50%), radius: 4pt, [
+  #text(size: 10pt)[#36 - #15 - Model Training/Fine-tuning] #text(size: 8pt, fill: gray)[(Week 2)]
 ])
-#v(8pt)
+#v(4pt)
 
 
 #v(2em)
@@ -397,14 +292,22 @@
 
 #v(2em)
 
-== Team Workload Overview
+== Team
 
-#table(columns: (1fr, 1fr, 1fr), inset: 10pt, stroke: 0.5pt + gray.lighten(50%),
-  fill: (x, y) => if y == 0 { muted_bg },
-  [*Team Member*], [*Focus Area*], [*Status*],
-  [Nadine Allan], [System Architecture & Integration], [Active],
-  [Andrey Dyakov], [Plotter & Materialization], [Active],
-  [Dmitri Kazantsev], [Generative Concepts & Fabrication], [Active])
+#grid(columns: (1fr, 1fr, 1fr), gutter: 10pt,
+  box(inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, align(center, [
+    text(size: 9pt, weight: "bold")[Nadine Allan]
+    text(size: 8pt, fill: gray)[System Architecture]
+  ])),
+  box(inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, align(center, [
+    text(size: 9pt, weight: "bold")[Andrey Dyakov]
+    text(size: 8pt, fill: gray)[Plotter & Materialization]
+  ])),
+  box(inset: 10pt, fill: muted_bg.lighten(50%), radius: 4pt, align(center, [
+    text(size: 9pt, weight: "bold")[Dmitri Kazantsev]
+    text(size: 8pt, fill: gray)[Generative Concepts]
+  ]))
+)
 
 #v(2em)
 
