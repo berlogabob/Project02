@@ -1,10 +1,10 @@
 #!/bin/bash
 # Weekly Report Generator - Local Usage
-# Generates weekly report with optional AI summary
+# Generates weekly report (AI summary optional - slow locally)
 
 set -e
 
-# Get script directory (handles being called from any location)
+# Get script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 
@@ -20,26 +20,20 @@ WEEK_NUM=$(python3 -c "from datetime import datetime; start=datetime(2026,3,2); 
 echo "📅 Current week: ${WEEK_NUM}"
 echo ""
 
-# Generate AI summary (optional, with 30s timeout using Python)
-echo "🤖 Generating AI summary... (timeout: 30s)"
-python3 -c "
-import subprocess, sys, signal, os
-try:
-    proc = subprocess.Popen(
-        ['python3', '$SCRIPT_DIR/generate_ai_summary.py', '--week', '${WEEK_NUM}', '--api', 'ollama'],
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    try:
-        out, err = proc.communicate(timeout=30)
-        print(out.decode())
-        print(err.decode(), file=sys.stderr)
-    except subprocess.TimeoutExpired:
-        proc.kill()
-        print('⚠️  AI summary timeout (30s)', file=sys.stderr)
-except Exception as e:
-    print(f'⚠️  AI summary error: {e}', file=sys.stderr)
-" 2>&1
+# AI Summary (optional - can be slow locally)
+echo "🤖 AI Summary: (y/n to skip, default: n)"
+read -t 5 -n 1 answer || answer="n"
 echo ""
+
+if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+    echo "⏳ Generating AI summary... (may take 30-60s)"
+    python3 "$SCRIPT_DIR/generate_ai_summary.py" --week ${WEEK_NUM} --api ollama || echo "⚠️  Skipped"
+    echo ""
+else
+    echo "⚠️  AI summary skipped (faster)"
+    echo "   For AI summary, run: python3 scripts/generate_ai_summary.py --week ${WEEK_NUM} --api ollama"
+    echo ""
+fi
 
 # Generate weekly report
 echo "📝 Generating weekly report..."
@@ -52,6 +46,9 @@ typst compile --root . reports/week-${WEEK_NUM}-report.typ reports/week-${WEEK_N
 echo ""
 echo "✅ Done!"
 echo "📁 Report: reports/week-${WEEK_NUM}-report.pdf"
+echo ""
+echo "💡 Note: AI summary works best in GitHub Actions (automatic)."
+echo "   Local Ollama can be slow. For faster local reports, skip AI."
 echo ""
 
 # Open PDF (macOS)

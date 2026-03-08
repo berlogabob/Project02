@@ -158,34 +158,36 @@ def call_qwen_api(prompt: str) -> str:
 
 
 def call_ollama_api(prompt: str) -> str:
-    """Call local Ollama API for summary."""
-    import urllib.request
-    import urllib.error
+    """Call local Ollama API for summary.
     
-    # Use qwen3.5:2b model (faster, smaller, good for summaries)
-    data = json.dumps({
-        "model": "qwen3.5:2b",
-        "prompt": prompt,
-        "stream": False
-    }).encode("utf-8")
+    Note: Ollama can be slow locally. For GitHub Actions, use qwen3.5:2b.
+    For local use, fallback to simple list is faster.
+    """
+    import subprocess
     
+    # Try qwen3.5:0.8b (fastest) with short timeout
     try:
-        req = urllib.request.Request(
-            "http://localhost:11434/api/generate",
-            data=data,
-            headers={"Content-Type": "application/json"}
+        result = subprocess.run(
+            ['curl', '-s', '-m', '15', 'http://localhost:11434/api/generate',
+             '-d', json.dumps({
+                 'model': 'qwen3.5:0.8b',
+                 'prompt': prompt[:500],  # Limit prompt length
+                 'stream': False
+             })],
+            capture_output=True, text=True, timeout=20
         )
-        # Increase timeout for GitHub Actions (180s for first load, 60s for cached)
-        with urllib.request.urlopen(req, timeout=180) as response:
-            result = json.loads(response.read().decode())
-            response_text = result.get("response", "").strip()
-            # Clean up response - remove any intro/outro text
-            lines = [l.strip() for l in response_text.split('\n') if l.strip().startswith('-')]
-            if lines:
-                return '\n'.join(lines)
-            return response_text
+        
+        if result.returncode == 0 and result.stdout:
+            response_data = json.loads(result.stdout)
+            response_text = response_data.get('response', '').strip()
+            if response_text and len(response_text) > 20:
+                # Extract bullet points
+                lines = [l.strip() for l in response_text.split('\n') if l.strip().startswith('-')]
+                if lines:
+                    return '\n'.join(lines)
+                return response_text
+        return None
     except Exception as e:
-        print(f"Ollama error: {e}")
         return None
 
 
