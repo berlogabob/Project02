@@ -59,7 +59,7 @@
     chapter_themes.at("2").accent.lighten(90%),
     chapter_themes.at("3").accent.lighten(90%)
   ),
-  [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[3] #text(size: 8pt)[Total Tasks]])]],
+  [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[4] #text(size: 8pt)[Total Tasks]])]],
   [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[0] #text(size: 8pt)[High Priority]])]],
   [#block(radius: 4pt, inset: 12pt)[#align(center, [#text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[March 08] #text(size: 8pt)[Date]])]]
 )
