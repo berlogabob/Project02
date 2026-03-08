@@ -10,10 +10,37 @@ DATE_PREFIX="$3"
 DATE_READABLE="$4"
 DATE_FULL="$5"
 
+# Calculate current week number (Week 1 starts Mar 2, 2026)
+# DATE_PREFIX is in format YYYYMMDD
+get_week_number() {
+    local date_prefix="$1"  # e.g., 20260309
+    local year=${date_prefix:0:4}
+    local month=${date_prefix:4:2}
+    local day=${date_prefix:6:2}
+    
+    # Remove leading zeros for Python
+    month=$((10#$month))
+    day=$((10#$day))
+    
+    # Calculate days since project start (Mar 2, 2026)
+    # Using Python for reliable date calculation
+    python3 -c "
+from datetime import date
+project_start = date(2026, 3, 2)
+current = date($year, $month, $day)
+diff = (current - project_start).days
+week_num = (diff // 7) + 1
+print(week_num)
+"
+}
+
+WEEK_NUM=$(get_week_number "$DATE_PREFIX")
+
 OUTPUT_FILE="reports/daily-plans/${DATE_PREFIX}-daily-plan-${USERNAME}.typ"
 TEMPLATE_FILE="templates/daily-plan-template.typ"
 
 echo "Generating daily plan for ${FULL_NAME} (@${USERNAME})"
+echo "Week: ${WEEK_NUM}"
 
 # Fetch open issues as JSON array
 ISSUES_JSON=$(gh issue list --state open --assignee "${USERNAME}" --limit 50 \
@@ -56,7 +83,7 @@ cat > "${OUTPUT_FILE}" << EOF
 
 #report_header("1")
 
-#section_title("1", "${DATE_READABLE}", "Daily Plan")
+#section_title("1", "Week ${WEEK_NUM}: ${DATE_READABLE}", "Daily Plan")
 
 #table(
   columns: (1fr),
@@ -69,7 +96,8 @@ cat > "${OUTPUT_FILE}" << EOF
       gutter: 15pt,
       [
         *Team Member:* \\ ${FULL_NAME} \\ #text(size: 8pt)[\@${USERNAME}] \\ \\
-        *Date:* \\ ${DATE_FULL}
+        *Date:* \\ ${DATE_FULL} \\ \\
+        *Week:* \\ Week ${WEEK_NUM} (${DATE_READABLE})
       ],
       [
         *Project:* \\ The Oracle That Wears Us \\ \\
