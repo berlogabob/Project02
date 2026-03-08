@@ -81,6 +81,7 @@ jobs:
             --output reports/week-${{ steps.week.outputs.week }}-report.typ
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        timeout-minutes: 10
 
       - name: Compile to PDF
         run: |

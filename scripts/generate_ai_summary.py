@@ -70,21 +70,23 @@ def generate_ai_summary(issues: list, api_provider: str = "openai") -> str:
         return "No issues completed this week."
     
     issues_text = format_issues_for_prompt(issues)
-    
-    prompt = f"""You are a project reporting assistant. Analyze the completed GitHub issues and write a concise, professional summary of the work done this week.
+
+    # Improved prompt for better summaries
+    prompt = f"""You are a project reporting assistant. Analyze these completed GitHub issues and write a concise professional summary.
 
 **Requirements:**
-- Write 3-5 bullet points maximum
-- Focus on key achievements and progress
-- Be specific about what was accomplished
-- Use professional but clear language
-- Keep it under 150 words
-- Format as bullet points with - prefix
+- Write exactly 3-5 bullet points
+- Each bullet should be 1-2 sentences  
+- Group related tasks together
+- Focus on WHAT was accomplished, not just listing issues
+- Use action verbs: Implemented, Completed, Developed, Created, etc.
+- Keep it under 100 words total
+- Format each bullet with - prefix
 
 **Completed Issues:**
 {issues_text}
 
-**Write the summary:**"""
+**Write the summary (3-5 bullets, no intro/outro):**"""
 
     # Try different API providers
     if api_provider == "openai":
@@ -173,10 +175,15 @@ def call_ollama_api(prompt: str) -> str:
             data=data,
             headers={"Content-Type": "application/json"}
         )
-        # Increase timeout for larger models (120s for first load, 60s for cached)
-        with urllib.request.urlopen(req, timeout=120) as response:
+        # Increase timeout for GitHub Actions (180s for first load, 60s for cached)
+        with urllib.request.urlopen(req, timeout=180) as response:
             result = json.loads(response.read().decode())
-            return result.get("response", "").strip()
+            response_text = result.get("response", "").strip()
+            # Clean up response - remove any intro/outro text
+            lines = [l.strip() for l in response_text.split('\n') if l.strip().startswith('-')]
+            if lines:
+                return '\n'.join(lines)
+            return response_text
     except Exception as e:
         print(f"Ollama error: {e}")
         return None
