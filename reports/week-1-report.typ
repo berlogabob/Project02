@@ -1,8 +1,25 @@
 // Weekly Report - Week 1
-// Auto-generated: 2026-03-06
+// Auto-generated: 2026-03-08
 // Project: The Oracle That Wears Us
 
 #import "../templates/daily-plan-template.typ": *
+
+#set page(
+  paper: "a4",
+  margin: (x: 50pt, y: 60pt),
+  footer: [
+    #place(
+      bottom + right,
+      dx: -45pt,
+      dy: -5pt,
+      square(
+        size: 35pt,
+        fill: chapter_themes.at("1").accent,
+        align(center + horizon, text(white, weight: "bold", size: 14pt)[#context counter(page).display()])
+      )
+    )
+  ],
+)
 
 // Weekly report uses all components from the template
 // Page numbering is automatic via the template
@@ -15,11 +32,11 @@
       text(size: 8pt)[Completed]
     ])),
     box(fill: chapter_themes.at("2").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[14]
+      text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[11]
       text(size: 8pt)[In Progress]
     ])),
     box(fill: chapter_themes.at("3").accent.lighten(90%), inset: 12pt, radius: 4pt, align(center, [
-      text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[14]
+      text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[11]
       text(size: 8pt)[Total]
     ]))
   )
@@ -31,7 +48,7 @@
 
 #table(columns: (1fr), inset: 12pt, stroke: none, fill: muted_bg, [
   #grid(columns: (1fr, 1fr), gutter: 15pt, [
-    *Report Date:* \ March 06, 2026 \ \
+    *Report Date:* \ March 08, 2026 \ \
     *Milestone:* \ 1st milestone: Documentation \ \
     *Week Period:* \ Week 1
   ], [
@@ -48,7 +65,7 @@
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
     This week, the team made progress on GitHub issues.
-    Total: 14 issues | Completed: 0 | In Progress: 14
+    Total: 11 issues | Completed: 0 | In Progress: 11
   ]
 ])
 
