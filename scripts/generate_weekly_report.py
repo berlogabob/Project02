@@ -607,11 +607,51 @@ def generate_typst_report(
         for issue in incomplete[:15]:
             incomplete_section += format_issue_box(issue, show_full=False)
 
-    # Build future issues section
+    # Build future issues section with hierarchy (same as HIGHLIGHTS)
     future_section = ""
     if future:
-        for issue in future[:10]:
+        # Find parent-child relationships among future tasks
+        future_nums = set(i.get("number") for i in future)
+        parent_map = {}
+        
+        for issue in future:
+            issue_num = issue.get("number")
+            body = issue.get("body", "") or ""
+            title = issue.get("title", "") or ""
+            text = body + " " + title
+            
+            # Check if this issue references another future issue
+            for other in future:
+                other_num = other.get("number")
+                if other_num != issue_num:
+                    if f"#{other_num}" in text:
+                        # other is parent of this issue
+                        parent_map[issue_num] = other_num
+        
+        # Find root issues (no parent)
+        root_future = [i for i in future if i.get("number") not in parent_map]
+        root_future.sort(key=lambda x: x.get("number", 0), reverse=True)
+        
+        shown = set()
+        for issue in root_future[:10]:
+            issue_num = issue.get("number")
+            if issue_num in shown:
+                continue
+            shown.add(issue_num)
+            
+            # Show parent
             future_section += format_issue_box(issue, show_week=True, show_full=False)
+            
+            # Find and show children
+            children = [i for i in future if parent_map.get(i.get("number")) == issue_num]
+            children.sort(key=lambda x: x.get("number", 0))
+            
+            for child in children:
+                child_num = child.get("number")
+                if child_num in shown:
+                    continue
+                shown.add(child_num)
+                future_section += format_issue_box(child, show_week=True, show_full=False, indent=1)
 
     # Generate AI summary for completed work
     ai_summary = generate_ai_summary_for_week(completed, week_num)

@@ -35,7 +35,7 @@
       #text(size: 7pt)[INCOMPLETE]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("1").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[19] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[3] \
       #text(size: 7pt)[FUTURE WEEKS]
     ])
   )
@@ -70,7 +70,7 @@
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
     Week 1 progress: 19 of 19 tasks completed (100%).
-    19 tasks from future weeks already in progress.
+    3 tasks from future weeks already in progress.
   ]
 ])
 
@@ -162,9 +162,10 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[- Engineered an LLM-driven text-to-speech and speech-to-text pipeline using Python workflows within TouchDesigner and TTT ecosystems.
-- Validated real-time microphone audio visualization across Unity and hybrid environments, optimizing rendering techniques for visual testing performance.
-- Established project milestones with the "blanc" repository version and backend tracking system integration to support development workflows and milestone management.]
+  #text(size: 9pt)[*   Engineered a pure Python STT-TTS pipeline integrating KittenTTS speech synthesis with Speech-to-Text LLM logic.
+*   Developed visual audio testing frameworks in Unity and TouchDesigner to analyze hybrid microphone performance across systems.
+*   Generated weekly planning reports, milestone updates, daily report generators for the Blanc Repo v2 deployment.
+*   Completed TD text output tests to visualize data processing within the TouchDesigner environment.]
 ])
 
 #pagebreak()
@@ -207,12 +208,6 @@
 
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#57 - Plotter] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Plotter stuff ...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#56 - Oracle output based on user interaction] #text(size: 8pt, fill: gray)[(Week 2)]
   
 ])
@@ -225,44 +220,8 @@
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#44 - #23 - Milestone 2 Presentation Preparation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Prepare slides for April 13 presentation.  \#\# Deliverables - Presentation slides - Live demo preparation - Rehearsal  \#\# Deadline - **Presentation...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#43 - #22 - Milestone 2 Documentation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Update production dossier with implementation reports from all units.  \#\# Deliverables - Updated production dossier - Implementation reports:   - Em...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#42 - #21 - Core Functionality Prototype] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Develop functional prototype demonstrating core features.  \#\# Deliverables - Functional prototype - Core features working - Demo video  \#\# Accepta...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#41 - #20 - Audio Assets Integration] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Integrate original or legally obtained audio assets.  \#\# Deliverables - Audio assets - Asset documentation - License verification  \#\# Acceptance C...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#40 - #19 - Graphical Assets Integration] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Integrate original or legally obtained graphical assets.  \#\# Deliverables - Graphical assets - Asset documentation - License verification  \#\# Acce...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#39 - #18 - VR/AR Interaction Design] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Design and implement VR/AR interactions (hand tracking, eye tracking, haptic feedback).  \#\# Deliverables - VR/AR interaction design - Implementation...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#38 - #17 - Sensor-Based Interaction Implementation] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Implement body tracking, gesture recognition, or AR features.  \#\# Deliverables - Sensor integration - Interaction mapping - Testing documentation  \...]
+  #text(size: 10pt, weight: "bold")[#3 - Define characteristics of AI Oracle] #text(size: 8pt, fill: gray)[(Week 2)]
+  
 ])
 #v(4pt)
 
