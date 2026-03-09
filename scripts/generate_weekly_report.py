@@ -280,8 +280,12 @@ def get_issues_by_week(week_num: int, state: str = "open") -> tuple:
     open_issues = run_gh_command(["issue", "list", "--state", "open", "--limit", "100"])
     incomplete_this_week = [i for i in open_issues if get_issue_week(i) == week_num]
 
-    # Future week issues (started early)
-    future_issues = [i for i in open_issues if get_issue_week(i) > week_num]
+    # Future week issues (started early) - only assigned/in-progress tasks
+    future_issues = [
+        i for i in open_issues 
+        if get_issue_week(i) > week_num 
+        and i.get("assignees", [])  # Only show if someone is assigned (in progress)
+    ]
 
     return closed_this_week, incomplete_this_week, future_issues
 

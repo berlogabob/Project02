@@ -162,10 +162,9 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[- Engineered Text-to-Speech workflows using pure Python and LLM integration within TouchDesigner.
-- Developed automated reporting tools including weekly summaries, daily planners, and milestone tracking from Brf.
-- Built visual representations of speech processing logic for real-time audio in Unity and compared against TD architecture.
-- Created the "blanc" project repository to structure technical tasks and end-to-end audio capture pipelines.]
+  #text(size: 9pt)[- Engineered an LLM-driven text-to-speech and speech-to-text pipeline using Python workflows within TouchDesigner and TTT ecosystems.
+- Validated real-time microphone audio visualization across Unity and hybrid environments, optimizing rendering techniques for visual testing performance.
+- Established project milestones with the "blanc" repository version and backend tracking system integration to support development workflows and milestone management.]
 ])
 
 #pagebreak()
