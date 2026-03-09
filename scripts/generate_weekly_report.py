@@ -369,7 +369,7 @@ def generate_ai_summary_for_week(issues: list, week_num: int) -> str:
     issue_list = "\n".join([f"- #{i.get('number')} {i.get('title', '')[:60]}" for i in issues[:15]])
     prompt = f"""Summarize these completed tasks in 3-4 bullet points:
 {issue_list}
-Use action verbs. Group related work. Max 80 words.
+Use action verbs. Group related work. Max 300 words, write 5-7 detailed bullet points.
 Summary:"""
 
     try:
