@@ -361,45 +361,39 @@ def format_issue_box(issue: dict, show_week: bool = False, show_full: bool = Fal
 
 
 def generate_ai_summary_for_week(issues: list, week_num: int) -> str:
-    """Generate AI summary for completed issues."""
+    """Generate AI summary for completed issues using Ollama API directly."""
     if not issues:
         return "No issues completed this week."
     
-    # Try to use the AI summary script
+    issue_list = "
+".join([f"- #{i.get('number')} {i.get('title', '')[:60]}" for i in issues[:15]])
+    prompt = f"""Analyze these completed GitHub issues and write 3-4 bullet points:
+
+{issue_list}
+
+Requirements: 3-4 bullets, group related tasks, action verbs, under 80 words.
+
+Summary:"""
+
     try:
-        import sys
-        from pathlib import Path
-        script_dir = Path(__file__).parent
-        ai_script = script_dir / "generate_ai_summary.py"
-        
-        if ai_script.exists():
-            # Format issues as JSON for the summary function
-            import subprocess
-            issue_nums = [i.get("number") for i in issues]
-            
-            # Build prompt
-            prompt = "Analyze these completed GitHub issues and write a concise 3-5 bullet point summary:\n\n"
-            for issue in issues[:15]:
-                num = issue.get("number", "?")
-                title = issue.get("title", "")
-                prompt += f"- #{num}: {title}\n"
-            
-            # Try Ollama (qwen3.5:latest) first, then fallback
-            result = subprocess.run(
-                ["python3", str(ai_script), "--week", str(week_num), "--api", "ollama"],
-                capture_output=True, text=True, timeout=60
-            )
-            
-            if result.returncode == 0 and result.stdout:
-                # Extract summary from output
-                for line in result.stdout.split("\n"):
-                    if line.startswith("✅ Summary:"):
-                        return line.replace("✅ Summary:", "").strip()
-    except Exception as e:
+        import subprocess
+        result = subprocess.run(
+            ['curl', '-s', '-m', '90', 'http://localhost:11434/api/generate',
+             '-d', '{"model":"qwen3.5:2b","prompt":' + json.dumps(prompt) + ',"stream":false}'],
+            capture_output=True, text=True, timeout=100
+        )
+        if result.returncode == 0 and result.stdout:
+            response = json.loads(result.stdout).get('response', '').strip()
+            bullets = [l for l in response.split('
+') if l.strip().startswith('-')]
+            if bullets:
+                return '
+'.join(bullets[:5])
+    except:
         pass
     
-    # Fallback: simple list
-    return f"**{len(issues)} issues completed:**\n" + "\n".join([f"- #{i['number']} {i['title'][:50]}" for i in issues[:10]])
+    return "**" + str(len(issues)) + " issues completed:**\n" + "\n".join([f"- #{i['number']} {i['title'][:50]}" for i in issues[:10]])
+
 
 
 def generate_typst_report(
