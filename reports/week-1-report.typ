@@ -162,9 +162,9 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[- Developed pure Python workflows for STT->TTT->TTS logic integration within TouchDesigner and LLM implementations.
-- Conducted real-time microphone tests comparing Unity and Hybrid environments against visual tools.
-- Established project milestones from the Brf plan, creating a new Blanc v2 repository with auto-daily planning reports.]
+  #text(size: 9pt)[- Developed a pure Python STT-to-TTS workflow integrating KittenTTS logic with TouchDesigner audio pipelines.
+- Designed real-time microphone audio testing scenarios to compare Unity and Hybrid architectures for text processing.
+- Implemented automated weekly and daily planning report generators while establishing version-controlled repository structures for the Blanc project v2.]
 ])
 
 #pagebreak()
