@@ -710,7 +710,7 @@ def generate_typst_report(
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #raw(size: 9pt, block: true, inset: 8pt, fill: gray.lighten(95%), radius: 4pt)[{ai_summary}]
+  #text(size: 9pt)[{ai_summary}]
 ])
 
 #pagebreak()

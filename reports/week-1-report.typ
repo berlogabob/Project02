@@ -162,9 +162,10 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[* Engineered a pure Python workflow handling Text-to-Text and Speech synthesis, integrated with TouchDesigner audio systems.
-* Conducted real-time microphone input testing by comparing Speech-to-Text, text-to-speech, and visual output systems across Unity and TouchDesigner environments.
-* Built project repositories under "blanc", established milestone tracking from Brf, and configured automated daily reporting dashboards alongside weekly planning tasks.]
+  #raw(size: 9pt, block: true, inset: 8pt, fill: gray.lighten(95%), radius: 4pt)[- Developed STT and TTT pipelines using pure Python logic (\#52, \#13).
+- Built automated weekly and daily reporting tools within TouchDesigner environments (\#54, \#53).
+- Completed microphone input tests comparing Unity vs. TouchDesigner audio capture while managing a project milestone update (\#45, \#7, \#20).
+- Created Blanc Project v2 repositories and added Brf milestones to schedule (\#9, \#10).]
 ])
 
 #pagebreak()
