@@ -162,10 +162,9 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[*   Engineered a pure Python STT-TTS pipeline integrating KittenTTS speech synthesis with Speech-to-Text LLM logic.
-*   Developed visual audio testing frameworks in Unity and TouchDesigner to analyze hybrid microphone performance across systems.
-*   Generated weekly planning reports, milestone updates, daily report generators for the Blanc Repo v2 deployment.
-*   Completed TD text output tests to visualize data processing within the TouchDesigner environment.]
+  #text(size: 9pt)[- Developed text-to-text workflows in TouchDesigner LLMs using pure Python for speech processing (\#52, \#13).
+- Conducted real-time microphone audio comparisons across hybrid environments like Unity and TouchDesigner including visual testing (\#45, \#51).
+- Launched Project v2 with milestone tracking, report generators, daily planning configurations, and weekly reporting (\#9, \#10, \#11).]
 ])
 
 #pagebreak()
