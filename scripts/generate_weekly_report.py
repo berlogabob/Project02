@@ -361,34 +361,42 @@ def format_issue_box(issue: dict, show_week: bool = False, show_full: bool = Fal
 
 
 def generate_ai_summary_for_week(issues: list, week_num: int) -> str:
-    """Generate AI summary for completed issues using local Ollama."""
+    """Generate AI summary for completed issues using Ollama."""
     if not issues:
         return "No issues completed this week."
     
+    print(f"🤖 Generating AI summary for {len(issues)} issues...")
     issue_list = "\n".join([f"- #{i.get('number')} {i.get('title', '')[:60]}" for i in issues[:15]])
-    prompt = f"""Analyze these completed GitHub issues and write 3-4 bullet points:
-
+    prompt = f"""Summarize these completed tasks in 3-4 bullet points:
 {issue_list}
-
-Requirements: 3-4 bullets, group related tasks, action verbs, under 80 words.
-
+Use action verbs. Group related work. Max 80 words.
 Summary:"""
 
     try:
         import subprocess
+        print("   Calling Ollama API...")
         result = subprocess.run(
-            ['curl', '-s', '-m', '90', 'http://localhost:11434/api/generate',
+            ['curl', '-s', '-m', '180', 'http://localhost:11434/api/generate',
              '-d', json.dumps({'model':'qwen3.5:2b','prompt':prompt,'stream':False})],
-            capture_output=True, text=True, timeout=100
+            capture_output=True, text=True, timeout=200
         )
+        print(f"   Return code: {result.returncode}")
         if result.returncode == 0 and result.stdout:
             response = json.loads(result.stdout).get('response', '').strip()
+            print(f"   Response length: {len(response)}")
             bullets = [l for l in response.split('\n') if l.strip().startswith('-')]
             if bullets:
-                return '\n'.join(bullets[:5])
+                summary = '\n'.join(bullets[:5])
+                print(f"   ✅ AI Summary generated ({len(bullets)} bullets)")
+                return summary
+            elif response and len(response) > 20:
+                print(f"   ✅ Using raw response")
+                return response
+        print("   ⚠️  No valid response, using fallback")
     except Exception as e:
-        print(f"AI summary error: {e}")
+        print(f"   ⚠️  AI error: {e}, using fallback")
     
+    # Fallback: simple list
     return "**" + str(len(issues)) + " issues completed:**\\n" + "\\n".join([f"- #{i['number']} {i['title'][:50]}" for i in issues[:10]])
 
 
