@@ -35,7 +35,7 @@
       #text(size: 7pt)[INCOMPLETE]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("1").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[3] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[5] \
       #text(size: 7pt)[FUTURE WEEKS]
     ])
   )
@@ -70,7 +70,7 @@
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
     Week 1 progress: 19 of 19 tasks completed (100%).
-    3 tasks from future weeks already in progress.
+    5 tasks from future weeks already in progress.
   ]
 ])
 
@@ -162,10 +162,10 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[    Engineered a pure Python STT-to-TTS pipeline with LLM integration (\#52).
-    Built visual audio comparisons for real-time microphone testing across Unity, TouchDesigner, and Hybrid architectures (\#49, \#51).
-    Configured daily planning reports and milestones within the blanc workspace project structure (\#9, \#8, \#10).
-    Completed final text output debugging and TTT integration testing (\#7, \#20, \#13).]
+  #text(size: 9pt)[- Engineered a pure Python STT and TTT workflow with integrated LLM capabilities for automated processing.
+- Conducted real-time microphone audio testing across Unity, TouchDesigner, and Hybrid environments to verify performance.
+- Built project v2 structures for Blanc development, including repository configuration and milestone tracking in Brf systems.
+- Designed weekly report generators and auto daily planning tools to streamline administrative workflows.]
 ])
 
 #pagebreak()
@@ -208,6 +208,18 @@
 
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#149 - Future Hardware / IoT Integration Strategy] #text(size: 8pt, fill: gray)[(Week 2)]
+  #v(2pt) #text(size: 8pt, fill: gray)[- how Unity could connect to hardware - possible communication methods - microphone trigger via button - plotter control approach...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#148 - System Architecture & Data Flow Definition] #text(size: 8pt, fill: gray)[(Week 2)]
+  #v(2pt) #text(size: 8pt, fill: gray)[- high-level diagram - STT → LLM → Projection → Plotter - I/O boundaries...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#58 - Environmental Projection Prototype (Unity)] #text(size: 8pt, fill: gray)[(Week 2)]
   #v(2pt) #text(size: 8pt, fill: gray)[Focus: - real-time projection -  - placeholder data -  -  - responsiveness -  - frame stability...]
 ])
@@ -240,6 +252,18 @@
 
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#149 - Future Hardware / IoT Integration Strategy]
+  #v(2pt) #text(size: 8pt, fill: gray)[- how Unity could connect to hardware - possible communication methods - microphone trigger via button - plotter control approach...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#148 - System Architecture & Data Flow Definition]
+  #v(2pt) #text(size: 8pt, fill: gray)[- high-level diagram - STT → LLM → Projection → Plotter - I/O boundaries...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#58 - Environmental Projection Prototype (Unity)]
   #v(2pt) #text(size: 8pt, fill: gray)[Focus: - real-time projection -  - placeholder data -  -  - responsiveness -  - frame stability...]
 ])
@@ -247,7 +271,7 @@
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#57 - Plotter]
-  #v(2pt) #text(size: 8pt, fill: gray)[Plotter stuff ...]
+  #v(2pt) #text(size: 8pt, fill: gray)[Start of conversion laser engraver into 2d graphical plotter....]
 ])
 #v(4pt)
 
