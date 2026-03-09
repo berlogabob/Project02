@@ -897,11 +897,37 @@ def main():
 
     print()
     print("=" * 60)
-    print("✅ Report generated successfully!")
+    print("✅ Typst file generated successfully!")
     print("=" * 60)
     print()
-    print("📄 To compile to PDF:")
-    print(f"   typst compile {args.output} reports/week-{week_num}-report.pdf")
+    
+    # Try to compile to PDF
+    print("📄 Compiling to PDF...")
+    import subprocess
+    pdf_path = args.output.replace(".typ", ".pdf")
+    result = subprocess.run(
+        ["typst", "compile", "--root", ".", args.output, pdf_path],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode == 0:
+        # Check if PDF was actually created
+        import os
+        if os.path.exists(pdf_path):
+            pdf_size = os.path.getsize(pdf_path)
+            print(f"✅ PDF compiled successfully! ({pdf_size:,} bytes)")
+            print(f"📁 File: {pdf_path}")
+        else:
+            print("❌ PDF file not found after compilation")
+            exit(1)
+    else:
+        print("❌ PDF compilation failed!")
+        print()
+        print("Errors:")
+        print(result.stdout)
+        print(result.stderr)
+        exit(1)
 
 
 if __name__ == "__main__":

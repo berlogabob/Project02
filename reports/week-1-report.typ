@@ -35,7 +35,7 @@
       #text(size: 7pt)[INCOMPLETE]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("1").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[15] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[19] \
       #text(size: 7pt)[FUTURE WEEKS]
     ])
   )
@@ -70,7 +70,7 @@
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
     Week 1 progress: 19 of 19 tasks completed (100%).
-    15 tasks from future weeks already in progress.
+    19 tasks from future weeks already in progress.
   ]
 ])
 
@@ -162,9 +162,10 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[- Developed a pure Python STT-to-TTS workflow integrating KittenTTS logic with TouchDesigner audio pipelines.
-- Designed real-time microphone audio testing scenarios to compare Unity and Hybrid architectures for text processing.
-- Implemented automated weekly and daily planning report generators while establishing version-controlled repository structures for the Blanc project v2.]
+  #text(size: 9pt)[- Engineered Text-to-Speech workflows using pure Python and LLM integration within TouchDesigner.
+- Developed automated reporting tools including weekly summaries, daily planners, and milestone tracking from Brf.
+- Built visual representations of speech processing logic for real-time audio in Unity and compared against TD architecture.
+- Created the "blanc" project repository to structure technical tasks and end-to-end audio capture pipelines.]
 ])
 
 #pagebreak()
@@ -205,6 +206,24 @@
 
 #v(1em)
 
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#57 - Plotter] #text(size: 8pt, fill: gray)[(Week 2)]
+  #v(2pt) #text(size: 8pt, fill: gray)[Plotter stuff ...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#56 - Oracle output based on user interaction] #text(size: 8pt, fill: gray)[(Week 2)]
+  
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#48 - Test and compare speech to text models inside of TD] #text(size: 8pt, fill: gray)[(Week 2)]
+  #v(2pt) #text(size: 8pt, fill: gray)[test  ...]
+])
+#v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#44 - #23 - Milestone 2 Presentation Preparation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL] #text(size: 8pt, fill: gray)[(Week 2)]
@@ -248,24 +267,6 @@
 ])
 #v(4pt)
 
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#37 - #16 - Latent Space Experiments] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Experiment with latent space manipulation for creative outputs.  \#\# Deliverables - Latent space exploration - Creative output samples - Experiment d...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#36 - #15 - Model Training/Fine-tuning] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Train or fine-tune selected model; document parameters and process.  \#\# Deliverables - Trained/fine-tuned model - Training logs - Parameter document...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#35 - #14 - Deep Learning Model Selection & Dataset Prep] #text(size: 9pt, fill: red, weight: "bold")[HIGH] #text(size: 8pt, fill: gray)[(Week 2)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Choose model architecture and prepare training dataset.  \#\# Deliverables - Model selection document - Dataset collected and prepared - Training conf...]
-])
-#v(4pt)
-
 
 #v(2em)
 
@@ -273,10 +274,37 @@
 
 #box(width: 100%, inset: 15pt, fill: muted_bg, radius: 4pt, [
   #text(size: 9pt)[
-    *Week 2:* Mar 09 - Mar 15, 2026 \
-    Focus on completing remaining Week 1 tasks and starting Week 2 planned work.
+    *Week 2:* Mar 09 - Mar 15, 2026
   ]
 ])
+
+#v(1em)
+
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#57 - Plotter]
+  #v(2pt) #text(size: 8pt, fill: gray)[Plotter stuff ...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#56 - Oracle output based on user interaction]
+  
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#48 - Test and compare speech to text models inside of TD]
+  #v(2pt) #text(size: 8pt, fill: gray)[test  ...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#3 - Define characteristics of AI Oracle]
+  
+])
+#v(4pt)
+
 
 #v(2em)
 
