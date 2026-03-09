@@ -361,12 +361,11 @@ def format_issue_box(issue: dict, show_week: bool = False, show_full: bool = Fal
 
 
 def generate_ai_summary_for_week(issues: list, week_num: int) -> str:
-    """Generate AI summary for completed issues using Ollama API directly."""
+    """Generate AI summary for completed issues using local Ollama."""
     if not issues:
         return "No issues completed this week."
     
-    issue_list = "
-".join([f"- #{i.get('number')} {i.get('title', '')[:60]}" for i in issues[:15]])
+    issue_list = "\n".join([f"- #{i.get('number')} {i.get('title', '')[:60]}" for i in issues[:15]])
     prompt = f"""Analyze these completed GitHub issues and write 3-4 bullet points:
 
 {issue_list}
@@ -379,21 +378,18 @@ Summary:"""
         import subprocess
         result = subprocess.run(
             ['curl', '-s', '-m', '90', 'http://localhost:11434/api/generate',
-             '-d', '{"model":"qwen3.5:2b","prompt":' + json.dumps(prompt) + ',"stream":false}'],
+             '-d', json.dumps({'model':'qwen3.5:2b','prompt':prompt,'stream':False})],
             capture_output=True, text=True, timeout=100
         )
         if result.returncode == 0 and result.stdout:
             response = json.loads(result.stdout).get('response', '').strip()
-            bullets = [l for l in response.split('
-') if l.strip().startswith('-')]
+            bullets = [l for l in response.split('\n') if l.strip().startswith('-')]
             if bullets:
-                return '
-'.join(bullets[:5])
-    except:
-        pass
+                return '\n'.join(bullets[:5])
+    except Exception as e:
+        print(f"AI summary error: {e}")
     
-    return "**" + str(len(issues)) + " issues completed:**\n" + "\n".join([f"- #{i['number']} {i['title'][:50]}" for i in issues[:10]])
-
+    return "**" + str(len(issues)) + " issues completed:**\\n" + "\\n".join([f"- #{i['number']} {i['title'][:50]}" for i in issues[:10]])
 
 
 def generate_typst_report(
