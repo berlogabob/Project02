@@ -162,9 +162,9 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[*   Engineered pure Python workflows converting speech-to-text data through STT→TTT logic in TouchDesigner environments.
-*   Performed real-time audio visual testing comparing microphone input capabilities across Unity, TouchDesigner, and hybrid systems.
-    Integrated KittenTTS for text-to-speech generation, established project milestones, and generated automated weekly reports.]
+  #text(size: 9pt)[  - Developed Text-to-Text processing pipelines alongside weekly and daily reporting generators using pure Python integration.
+  - Implemented Speech-to-Text, LLM logic within TouchDesigner while performing visual audio representation tests for microphones and hybrid systems.
+  - Configured 'blanc' project version 2 with milestone tracking from Brf, ensuring on-screen text output verification of TD results in Unity environments.]
 ])
 
 #pagebreak()
