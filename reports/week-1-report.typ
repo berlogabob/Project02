@@ -162,7 +162,7 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[]
+  #text(size: 9pt)[**19 issues completed:**\n- #55 TTT - Text to Text\n- #54 Weekly - report generator\n- #53 Auto Daily-Planning report generator\n- #52 STT->TTT->TTS Pure Python workflow\n- #51 TD Visual test- create a visual representation of \n- #49 Build STT - LLM - TTS logic inside of Touchdesigne\n- #45 Unity vs TouchDesigner vs Hybrid: Real-Time Microp\n- #20 Unity: Microphone input test completed\n- #13 TTS - Text to Speech KittenTTS\n- #12 STT- Speech to Text LLM]
 ])
 
 #pagebreak()

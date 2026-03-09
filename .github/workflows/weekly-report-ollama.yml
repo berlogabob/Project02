@@ -93,6 +93,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add reports/week-${{ steps.week.outputs.week }}-report.*
           git commit -m "📊 Auto-generate weekly report: Week ${{ steps.week.outputs.week }}" || echo "No changes to commit"
+          git pull --rebase origin main || true
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
