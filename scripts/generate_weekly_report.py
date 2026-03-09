@@ -387,9 +387,13 @@ Summary:"""
             bullets = [l for l in response.split('\n') if l.strip().startswith('-')]
             if bullets:
                 summary = '\n'.join(bullets[:5])
+                # Escape special Typst characters
+                summary = summary.replace('#', '\\#').replace('[', '(').replace(']', ')')
                 print(f"   ✅ AI Summary generated ({len(bullets)} bullets)")
                 return summary
             elif response and len(response) > 20:
+                # Escape special Typst characters
+                response = response.replace('#', '\\#').replace('[', '(').replace(']', ')')
                 print(f"   ✅ Using raw response")
                 return response
         print("   ⚠️  No valid response, using fallback")
