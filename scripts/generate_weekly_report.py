@@ -23,14 +23,14 @@ PROJECT_START_DATE = datetime(2026, 3, 2)  # Week 1 starts Monday, Mar 2, 2026
 TEAM_ROLES = {
     "naydino": "System Architecture & Integration",
     "berlogabob": "Plotter & Materialization",
-    "electricianv001": "Generative Concepts & Fabrication"
+    "electricianv001": "Generative Concepts & Fabrication",
 }
 
 # Team member full names (username -> full name mapping)
 TEAM_NAMES = {
     "naydino": "Nadine Allan",
     "berlogabob": "Andrey Dyakov",
-    "electricianv001": "Dmitri Kazantsev"
+    "electricianv001": "Dmitri Kazantsev",
 }
 
 
@@ -100,6 +100,7 @@ def get_assignees(issue: dict) -> str:
 # Global cache for parent mappings from Projects API
 _parent_cache = {}
 
+
 def get_parent_issue(issue_num: int, all_issues: list) -> int:
     """Get parent issue using multiple strategies:
     1. Check cache first (from Projects API)
@@ -109,41 +110,46 @@ def get_parent_issue(issue_num: int, all_issues: list) -> int:
     # Check cache first (loaded from Projects API)
     if issue_num in _parent_cache:
         return _parent_cache[issue_num]
-    
+
     result = subprocess.run(
         ["gh", "issue", "view", str(issue_num), "--json", "body,title,number"],
-        capture_output=True, text=True
+        capture_output=True,
+        text=True,
     )
     try:
         data = json.loads(result.stdout) if result.stdout else {}
         title = data.get("title", "") or ""
         body = data.get("body", "") or ""
         issue_num = data.get("number", issue_num)
-        
+
         import re
-        
+
         # Strategy 1: Title pattern "#XX - #YY - Title" where YY is parent
-        match = re.match(r'#\d+\s*-\s*#(\d+)', title)
+        match = re.match(r"#\d+\s*-\s*#(\d+)", title)
         if match:
             parent = int(match.group(1))
             _parent_cache[issue_num] = parent
             return parent
-        
+
         # Strategy 2: Body has "**Parent:** #XX" or "Parent: #XX" or "Sub-task of #XX"
         # Match patterns like:
         # **Parent:** #45
         # Parent: #45
         # Sub-task of #45
         # Child of #45
-        match = re.search(r'(?:\*\*Parent:\*\*|Parent:|Sub-task of|Child of)\s*#(\d+)', body, re.IGNORECASE)
+        match = re.search(
+            r"(?:\*\*Parent:\*\*|Parent:|Sub-task of|Child of)\s*#(\d+)",
+            body,
+            re.IGNORECASE,
+        )
         if match:
             parent = int(match.group(1))
             _parent_cache[issue_num] = parent
             return parent
-            
+
     except Exception as e:
         pass
-    
+
     _parent_cache[issue_num] = 0
     return 0  # No parent found
 
@@ -151,7 +157,7 @@ def get_parent_issue(issue_num: int, all_issues: list) -> int:
 def load_projects_parent_map(project_owner: str, project_number: int):
     """Load parent-child mappings from GitHub Projects v2 API."""
     global _parent_cache
-    
+
     try:
         # Query Projects v2 for items with their field values
         query = f'''query {{
@@ -181,32 +187,39 @@ def load_projects_parent_map(project_owner: str, project_number: int):
                 }}
             }}
         }}'''
-        
+
         result = subprocess.run(
             ["gh", "api", "graphql", "-f", f"query={query}"],
-            capture_output=True, text=True
+            capture_output=True,
+            text=True,
         )
-        
+
         if result.returncode == 0 and result.stdout:
             data = json.loads(result.stdout)
-            items = data.get('data', {}).get('user', {}).get('projectV2', {}).get('items', {}).get('nodes', [])
-            
+            items = (
+                data.get("data", {})
+                .get("user", {})
+                .get("projectV2", {})
+                .get("items", {})
+                .get("nodes", [])
+            )
+
             for item in items:
-                content = item.get('content', {})
-                issue_num = content.get('number')
+                content = item.get("content", {})
+                issue_num = content.get("number")
                 if not issue_num:
                     continue
-                
+
                 # Look for parent field in fieldValues
-                field_values = item.get('fieldValues', {}).get('nodes', [])
+                field_values = item.get("fieldValues", {}).get("nodes", [])
                 for fv in field_values:
-                    typename = fv.get('__typename', '')
+                    typename = fv.get("__typename", "")
                     # ProjectV2ItemFieldIssueValue is used for "Parent issue" field
-                    if typename == 'ProjectV2ItemFieldIssueValue':
-                        parent_num = fv.get('number')
+                    if typename == "ProjectV2ItemFieldIssueValue":
+                        parent_num = fv.get("number")
                         if parent_num:
                             _parent_cache[issue_num] = int(parent_num)
-                            
+
     except Exception as e:
         # Projects API not available, will fall back to title/body patterns
         pass
@@ -219,12 +232,12 @@ def get_sub_issues(parent_number: int, all_issues: list) -> list:
         # Skip duplicates
         if any(lbl.get("name") == "duplicate" for lbl in issue.get("labels", [])):
             continue
-        
+
         # Check if this issue's parent is the given parent_number
         parent = get_parent_issue(issue.get("number"))
         if parent == parent_number:
             sub_issues.append(issue)
-    
+
     return sub_issues
 
 
@@ -234,9 +247,7 @@ def get_issues_by_week(week_num: int, state: str = "open") -> tuple:
     Returns: (completed_this_week, incomplete_this_week, future_week_issues)
     """
     # Get all issues with the week label
-    all_issues = run_gh_command(
-        ["issue", "list", "--state", "all", "--limit", "100"]
-    )
+    all_issues = run_gh_command(["issue", "list", "--state", "all", "--limit", "100"])
 
     # Filter by week label
     week_issues = [i for i in all_issues if get_issue_week(i) == week_num]
@@ -247,14 +258,21 @@ def get_issues_by_week(week_num: int, state: str = "open") -> tuple:
     week_end_str = (week_end + timedelta(days=1)).strftime("%Y-%m-%d")
 
     # Closed issues that were closed during this week
-    closed_issues = run_gh_command([
-        "issue", "list", "--state", "closed",
-        "--search", f"closed:>{week_start_str} closed:<{week_end_str}"
-    ])
+    closed_issues = run_gh_command(
+        [
+            "issue",
+            "list",
+            "--state",
+            "closed",
+            "--search",
+            f"closed:>{week_start_str} closed:<{week_end_str}",
+        ]
+    )
     # Include issues with week label OR show-in-report label (exclude duplicates)
     closed_this_week = [
-        i for i in closed_issues 
-        if (get_issue_week(i) == week_num or is_show_in_report(i)) 
+        i
+        for i in closed_issues
+        if (get_issue_week(i) == week_num or is_show_in_report(i))
         and not any(lbl.get("name") == "duplicate" for lbl in i.get("labels", []))
     ]
 
@@ -301,24 +319,34 @@ def get_priority(issue: dict) -> str:
     return ""
 
 
-def format_issue_box(issue: dict, show_week: bool = False, show_full: bool = False, indent: int = 0) -> str:
+def format_issue_box(
+    issue: dict, show_week: bool = False, show_full: bool = False, indent: int = 0
+) -> str:
     """Format a single issue as a Typst box with hierarchy indicators."""
     num = issue.get("number", "?")
     title = clean_text(issue.get("title", ""))
     body = clean_text(issue.get("body", ""))
     assignees = get_assignees(issue)
-    
+
     # Escape # in body text for Typst
     body = body.replace("#", "\\#")
-    
+
     # Get priority
     priority = get_priority(issue)
-    priority_badge = f" #text(size: 9pt, fill: red, weight: \"bold\")[{priority.upper()}]" if priority else ""
-    
+    priority_badge = (
+        f' #text(size: 9pt, fill: red, weight: "bold")[{priority.upper()}]'
+        if priority
+        else ""
+    )
+
     # Get week label for future tasks
     week_num = get_issue_week(issue)
-    week_part = f" #text(size: 8pt, fill: gray)[(Week {week_num})]" if (show_week and week_num > 0) else ""
-    
+    week_part = (
+        f" #text(size: 8pt, fill: gray)[(Week {week_num})]"
+        if (show_week and week_num > 0)
+        else ""
+    )
+
     # Hierarchy visual indicators with nested list style indents
     if indent == 0:
         # Root level - no indent, standard box
@@ -327,19 +355,21 @@ def format_issue_box(issue: dict, show_week: bool = False, show_full: bool = Fal
     elif indent == 1:
         # First level child - indent with left border
         indent_code = "#h(30pt) "
-        box_style = f"fill: chapter_themes.at(\"1\").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at(\"1\").accent)"
+        box_style = f'fill: chapter_themes.at("1").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("1").accent)'
     elif indent == 2:
         # Second level - more indent
         indent_code = "#h(60pt) "
-        box_style = f"fill: chapter_themes.at(\"2\").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at(\"2\").accent)"
+        box_style = f'fill: chapter_themes.at("2").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("2").accent)'
     else:
         # Deeper levels - even more indent
         indent_code = f"#h({60 + (indent - 2) * 25}pt) "
         box_style = f"fill: muted_bg.lighten(70%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + gray)"
-    
+
     if show_full:
         # Full format with complete description and assignee
-        assignee_part = f" #text(size: 8pt, fill: gray)[by {assignees}]" if assignees else ""
+        assignee_part = (
+            f" #text(size: 8pt, fill: gray)[by {assignees}]" if assignees else ""
+        )
         body_part = f"#v(4pt) #text(size: 9pt)[{body}]" if body else ""
         return f"""
 {indent_code}#box(width: 100%, {box_style}, [
@@ -350,7 +380,9 @@ def format_issue_box(issue: dict, show_week: bool = False, show_full: bool = Fal
 """
     else:
         # Compact format with short description
-        desc_part = f"#v(2pt) #text(size: 8pt, fill: gray)[{body[:150]}...]" if body else ""
+        desc_part = (
+            f"#v(2pt) #text(size: 8pt, fill: gray)[{body[:150]}...]" if body else ""
+        )
         return f"""
 {indent_code}#box(width: 100%, {box_style}, [
   #text(size: 10pt, weight: "bold")[#{num} - {title}]{priority_badge}{week_part}
@@ -364,44 +396,65 @@ def generate_ai_summary_for_week(issues: list, week_num: int) -> str:
     """Generate AI summary for completed issues using Ollama."""
     if not issues:
         return "No issues completed this week."
-    
+
     print(f"🤖 Generating AI summary for {len(issues)} issues...")
-    issue_list = "\n".join([f"- #{i.get('number')} {i.get('title', '')[:60]}" for i in issues[:15]])
+    issue_list = "\n".join(
+        [f"- #{i.get('number')} {i.get('title', '')[:60]}" for i in issues[:15]]
+    )
     prompt = f"""Summarize these completed tasks in 3-4 bullet points:
 {issue_list}
-Use action verbs. Group related work. Max 80 words.
+Use action verbs. Group related work. Max 100 words.
 Summary:"""
 
     try:
         import subprocess
+
         print("   Calling Ollama API...")
         result = subprocess.run(
-            ['curl', '-s', '-m', '180', 'http://localhost:11434/api/generate',
-             '-d', json.dumps({'model':'qwen3.5:2b','prompt':prompt,'stream':False})],
-            capture_output=True, text=True, timeout=200
+            [
+                "curl",
+                "-s",
+                "-m",
+                "180",
+                "http://localhost:11434/api/generate",
+                "-d",
+                json.dumps({"model": "qwen3.5:2b", "prompt": prompt, "stream": False}),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=200,
         )
         print(f"   Return code: {result.returncode}")
         if result.returncode == 0 and result.stdout:
-            response = json.loads(result.stdout).get('response', '').strip()
+            response = json.loads(result.stdout).get("response", "").strip()
             print(f"   Response length: {len(response)}")
-            bullets = [l for l in response.split('\n') if l.strip().startswith('-')]
+            bullets = [l for l in response.split("\n") if l.strip().startswith("-")]
             if bullets:
-                summary = '\n'.join(bullets[:5])
+                summary = "\n".join(bullets[:5])
                 # Escape special Typst characters
-                summary = summary.replace('#', '\\#').replace('[', '(').replace(']', ')')
+                summary = (
+                    summary.replace("#", "\\#").replace("[", "(").replace("]", ")")
+                )
                 print(f"   ✅ AI Summary generated ({len(bullets)} bullets)")
                 return summary
             elif response and len(response) > 20:
                 # Escape special Typst characters
-                response = response.replace('#', '\\#').replace('[', '(').replace(']', ')')
+                response = (
+                    response.replace("#", "\\#").replace("[", "(").replace("]", ")")
+                )
                 print(f"   ✅ Using raw response")
                 return response
         print("   ⚠️  No valid response, using fallback")
     except Exception as e:
         print(f"   ⚠️  AI error: {e}, using fallback")
-    
+
     # Fallback: simple list
-    return "**" + str(len(issues)) + " issues completed:**\\n" + "\\n".join([f"- #{i['number']} {i['title'][:50]}" for i in issues[:10]])
+    return (
+        "**"
+        + str(len(issues))
+        + " issues completed:**\\n"
+        + "\\n".join([f"- #{i['number']} {i['title'][:50]}" for i in issues[:10]])
+    )
 
 
 def generate_typst_report(
@@ -414,7 +467,7 @@ def generate_typst_report(
 ) -> str:
     today = datetime.now()
     week_start, week_end = get_week_date_range(week_num)
-    
+
     # Load parent-child mappings from GitHub Projects
     load_projects_parent_map("berlogabob", 7)
 
@@ -427,89 +480,103 @@ def generate_typst_report(
     # Separate highlighted tasks (show-in-report AND week label) from regular
     highlighted_completed = []
     regular_completed = []
-    
+
     for issue in completed:
         issue_week = get_issue_week(issue)
         has_show_tag = is_show_in_report(issue)
-        
+
         # Highlight only if has BOTH week label (>0) AND show-in-report label
         # Issue must have explicit week-N label
         if issue_week > 0 and has_show_tag:
             highlighted_completed.append(issue)
         else:
             regular_completed.append(issue)
-    
+
     # Also filter regular_completed to only include issues from this week
-    regular_completed = [i for i in regular_completed if get_issue_week(i) == week_num or not is_show_in_report(i)]
+    regular_completed = [
+        i
+        for i in regular_completed
+        if get_issue_week(i) == week_num or not is_show_in_report(i)
+    ]
 
     # Build completed issues section with highlights
     completed_section = ""
     if highlighted_completed:
         # Show highlighted tasks with full details and sub-issues
-        completed_section += "#text(size: 10pt, weight: \"bold\", fill: chapter_themes.at(\"3\").accent)[✨ HIGHLIGHTS]\n#v(8pt)"
-        
+        completed_section += '#text(size: 10pt, weight: "bold", fill: chapter_themes.at("3").accent)[✨ HIGHLIGHTS]\n#v(8pt)'
+
         # Get all highlighted issue numbers for quick lookup
         highlighted_nums = set(i.get("number") for i in highlighted_completed)
-        
+
         # Find root issues (those without a parent in highlighted set)
         root_issues = []
-        
+
         for issue in highlighted_completed:
             parent = get_parent_issue(issue.get("number"), highlighted_completed)
             if parent not in highlighted_nums:
                 root_issues.append(issue)
-        
+
         # Sort root issues by number for consistent ordering
         root_issues.sort(key=lambda x: x.get("number", 0), reverse=True)
-        
+
         # Track which issues we've already shown
         shown_issues = set()
-        
+
         for issue in root_issues[:10]:
             issue_num = issue.get("number")
             if issue_num in shown_issues:
                 continue
             shown_issues.add(issue_num)
-            
+
             # Show parent issue
             completed_section += format_issue_box(issue, show_full=True)
-            
+
             # Find direct sub-issues (children)
             children = []
             for child in highlighted_completed:
-                child_parent = get_parent_issue(child.get("number"), highlighted_completed)
+                child_parent = get_parent_issue(
+                    child.get("number"), highlighted_completed
+                )
                 if child_parent == issue_num:
                     children.append(child)
             children.sort(key=lambda x: x.get("number", 0))
-            
+
             for child in children:
                 child_num = child.get("number")
                 if child_num in shown_issues:
                     continue
                 shown_issues.add(child_num)
                 completed_section += format_issue_box(child, show_full=True, indent=1)
-                
+
                 # Find grandchildren
                 grandchildren = []
                 for gc in highlighted_completed:
-                    gc_parent = get_parent_issue(gc.get("number"), highlighted_completed)
+                    gc_parent = get_parent_issue(
+                        gc.get("number"), highlighted_completed
+                    )
                     if gc_parent == child_num:
                         grandchildren.append(gc)
-                
+
                 for grandchild in grandchildren:
                     gc_num = grandchild.get("number")
                     if gc_num in shown_issues:
                         continue
                     shown_issues.add(gc_num)
-                    completed_section += format_issue_box(grandchild, show_full=True, indent=2)
-    
+                    completed_section += format_issue_box(
+                        grandchild, show_full=True, indent=2
+                    )
+
     if not completed_section:
-        completed_section = "#text(size: 10pt, fill: gray)[No highlighted issues completed this week.]"
+        completed_section = (
+            "#text(size: 10pt, fill: gray)[No highlighted issues completed this week.]"
+        )
 
     # Build incomplete issues section
     incomplete_section = ""
     if not incomplete:
-        incomplete_section = "#text(size: 10pt, fill: green)[All planned tasks completed! 🎉]"
+        incomplete_section = (
+            "#text(size: 10pt, fill: green)[All planned tasks completed! 🎉]"
+        )
     else:
         for issue in incomplete[:15]:
             incomplete_section += format_issue_box(issue, show_full=False)
@@ -524,7 +591,9 @@ def generate_typst_report(
     ai_summary = generate_ai_summary_for_week(completed, week_num)
 
     # Calculate completion percentage
-    completion_pct = round((completed_count / total_this_week * 100)) if total_this_week > 0 else 0
+    completion_pct = (
+        round((completed_count / total_this_week * 100)) if total_this_week > 0 else 0
+    )
 
     typst_content = f"""// Weekly Report - Week {week_num}
 // Auto-generated: {today.strftime("%Y-%m-%d")}
@@ -641,7 +710,7 @@ def generate_typst_report(
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[{ai_summary}]
+  #raw(size: 9pt, block: true, inset: 8pt, fill: gray.lighten(95%), radius: 4pt)[{ai_summary}]
 ])
 
 #pagebreak()
@@ -749,36 +818,36 @@ def main():
         description="Generate weekly Typst report from GitHub issues"
     )
     parser.add_argument(
-        "--week", "-w",
+        "--week",
+        "-w",
         type=int,
         default=None,
-        help="Week number (auto-calculated if not provided)"
+        help="Week number (auto-calculated if not provided)",
     )
     parser.add_argument(
-        "--output", "-o",
-        type=str,
-        default=None,
-        help="Output file path"
+        "--output", "-o", type=str, default=None, help="Output file path"
     )
 
     args = parser.parse_args()
-    
+
     # Auto-detect week if not specified
     week_num = args.week if args.week else get_current_week()
-    
+
     # Set default output path if not provided
     if not args.output:
         args.output = f"reports/week-{week_num}-report.typ"
 
     print(f"📊 Generating Weekly Report for Week {week_num}...")
     week_start, week_end = get_week_date_range(week_num)
-    print(f"📅 Week Period: {week_start.strftime('%b %d')} - {week_end.strftime('%b %d, %Y')}")
+    print(
+        f"📅 Week Period: {week_start.strftime('%b %d')} - {week_end.strftime('%b %d, %Y')}"
+    )
     print()
 
     print("📥 Fetching issues for Week {week_num}...")
     completed, incomplete, future = get_issues_by_week(week_num)
     all_open = get_all_open_issues()
-    
+
     print(f"   ✅ Completed this week: {len(completed)}")
     print(f"   ⏳ Incomplete this week: {len(incomplete)}")
     print(f"   🔮 Future weeks (started early): {len(future)}")

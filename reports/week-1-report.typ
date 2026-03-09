@@ -162,9 +162,9 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[  - Developed Text-to-Text processing pipelines alongside weekly and daily reporting generators using pure Python integration.
-  - Implemented Speech-to-Text, LLM logic within TouchDesigner while performing visual audio representation tests for microphones and hybrid systems.
-  - Configured 'blanc' project version 2 with milestone tracking from Brf, ensuring on-screen text output verification of TD results in Unity environments.]
+  #text(size: 9pt)[* Engineered a pure Python workflow handling Text-to-Text and Speech synthesis, integrated with TouchDesigner audio systems.
+* Conducted real-time microphone input testing by comparing Speech-to-Text, text-to-speech, and visual output systems across Unity and TouchDesigner environments.
+* Built project repositories under "blanc", established milestone tracking from Brf, and configured automated daily reporting dashboards alongside weekly planning tasks.]
 ])
 
 #pagebreak()
