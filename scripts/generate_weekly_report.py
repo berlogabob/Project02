@@ -286,6 +286,26 @@ def get_issues_by_week(week_num: int, state: str = "open") -> tuple:
     return closed_this_week, incomplete_this_week, future_issues
 
 
+def get_next_week_preview_tasks(week_num: int) -> list:
+    """Get tasks for next week preview (week-N + Next-Week-Preview labels)."""
+    next_week = week_num + 1
+    
+    # Get all open issues
+    all_issues = run_gh_command(["issue", "list", "--state", "open", "--limit", "100"])
+    
+    # Filter by: has week-{next_week} label AND has Next-Week-Preview label
+    preview_tasks = []
+    for issue in all_issues:
+        labels = [l.get("name", "") for l in issue.get("labels", [])]
+        has_week_label = f"week-{next_week}" in labels
+        has_preview_label = "Next-Week-Preview" in labels
+        
+        if has_week_label and has_preview_label:
+            preview_tasks.append(issue)
+    
+    return preview_tasks
+
+
 def get_all_open_issues() -> list:
     """Get all open issues."""
     return run_gh_command(["issue", "list", "--state", "open", "--limit", "100"])
@@ -465,6 +485,8 @@ def generate_typst_report(
     all_open: list,
     output_path: str = None,
 ) -> str:
+    # Get next week preview tasks
+    next_week_tasks = get_next_week_preview_tasks(week_num)
     today = datetime.now()
     week_start, week_end = get_week_date_range(week_num)
 
@@ -589,6 +611,14 @@ def generate_typst_report(
 
     # Generate AI summary for completed work
     ai_summary = generate_ai_summary_for_week(completed, week_num)
+    
+    # Build next week preview section
+    if next_week_tasks:
+        next_week_preview_section = ""
+        for task in next_week_tasks[:10]:
+            next_week_preview_section += format_issue_box(task, show_full=False)
+    else:
+        next_week_preview_section = "#text(size: 10pt, fill: gray)[No tasks marked for next week preview.]\n"
 
     # Calculate completion percentage
     completion_pct = (
@@ -759,10 +789,13 @@ def generate_typst_report(
 
 #box(width: 100%, inset: 15pt, fill: muted_bg, radius: 4pt, [
   #text(size: 9pt)[
-    *Week {week_num + 1}:* {get_week_date_range(week_num + 1)[0].strftime("%b %d")} - {get_week_date_range(week_num + 1)[1].strftime("%b %d, %Y")} \\
-    Focus on completing remaining Week {week_num} tasks and starting Week {week_num + 1} planned work.
+    *Week {week_num + 1}:* {get_week_date_range(week_num + 1)[0].strftime("%b %d")} - {get_week_date_range(week_num + 1)[1].strftime("%b %d, %Y")}
   ]
 ])
+
+#v(1em)
+
+{next_week_preview_section}
 
 #v(2em)
 
