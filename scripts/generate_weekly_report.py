@@ -457,14 +457,14 @@ Summary:"""
                 summary = "\n".join(bullets[:5])
                 # Escape special Typst characters
                 summary = (
-                    summary.replace("#", "\\#").replace("[", "(").replace("]", ")")
+                    summary.replace("#", "\\#").replace("*", " ").replace("[", "(").replace("]", ")")
                 )
                 print(f"   ✅ AI Summary generated ({len(bullets)} bullets)")
                 return summary
             elif response and len(response) > 20:
                 # Escape special Typst characters
                 response = (
-                    response.replace("#", "\\#").replace("[", "(").replace("]", ")")
+                    response.replace("#", "\\#").replace("*", " ").replace("[", "(").replace("]", ")")
                 )
                 print(f"   ✅ Using raw response")
                 return response

@@ -162,9 +162,10 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[- Developed text-to-text workflows in TouchDesigner LLMs using pure Python for speech processing (\#52, \#13).
-- Conducted real-time microphone audio comparisons across hybrid environments like Unity and TouchDesigner including visual testing (\#45, \#51).
-- Launched Project v2 with milestone tracking, report generators, daily planning configurations, and weekly reporting (\#9, \#10, \#11).]
+  #text(size: 9pt)[    Engineered a pure Python STT-to-TTS pipeline with LLM integration (\#52).
+    Built visual audio comparisons for real-time microphone testing across Unity, TouchDesigner, and Hybrid architectures (\#49, \#51).
+    Configured daily planning reports and milestones within the blanc workspace project structure (\#9, \#8, \#10).
+    Completed final text output debugging and TTT integration testing (\#7, \#20, \#13).]
 ])
 
 #pagebreak()
@@ -207,6 +208,12 @@
 
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#58 - Environmental Projection Prototype (Unity)] #text(size: 8pt, fill: gray)[(Week 2)]
+  #v(2pt) #text(size: 8pt, fill: gray)[Focus: - real-time projection -  - placeholder data -  -  - responsiveness -  - frame stability...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#56 - Oracle output based on user interaction] #text(size: 8pt, fill: gray)[(Week 2)]
   
 ])
@@ -215,12 +222,6 @@
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#48 - Test and compare speech to text models inside of TD] #text(size: 8pt, fill: gray)[(Week 2)]
   #v(2pt) #text(size: 8pt, fill: gray)[test  ...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#3 - Define characteristics of AI Oracle] #text(size: 8pt, fill: gray)[(Week 2)]
-  
 ])
 #v(4pt)
 
@@ -239,6 +240,12 @@
 
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#58 - Environmental Projection Prototype (Unity)]
+  #v(2pt) #text(size: 8pt, fill: gray)[Focus: - real-time projection -  - placeholder data -  -  - responsiveness -  - frame stability...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#57 - Plotter]
   #v(2pt) #text(size: 8pt, fill: gray)[Plotter stuff ...]
 ])
@@ -253,12 +260,6 @@
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#48 - Test and compare speech to text models inside of TD]
   #v(2pt) #text(size: 8pt, fill: gray)[test  ...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#3 - Define characteristics of AI Oracle]
-  
 ])
 #v(4pt)
 
