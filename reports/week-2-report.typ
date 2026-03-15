@@ -1,5 +1,5 @@
 // Weekly Report - Week 2
-// Auto-generated: 2026-03-09
+// Auto-generated: 2026-03-15
 // Project: The Oracle That Wears Us
 // Week Period: Mar 09 - Mar 15, 2026
 
@@ -27,15 +27,15 @@
     columns: (1fr, 1fr, 1fr),
     gutter: 10pt,
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("3").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[0] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[3] \
       #text(size: 7pt)[COMPLETED]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("2").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[15] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[61] \
       #text(size: 7pt)[INCOMPLETE]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("1").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[0] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[1] \
       #text(size: 7pt)[FUTURE WEEKS]
     ])
   )
@@ -57,7 +57,7 @@
   #line(length: 100%, stroke: 0.5pt + gray.lighten(60%))
   #v(8pt)
   #grid(columns: (auto, 1fr, auto), gutter: 10pt, [
-    #text(size: 9pt)[*Report Date:* March 09, 2026]
+    #text(size: 9pt)[*Report Date:* March 15, 2026]
     #h(1fr)
     #text(size: 9pt)[*Week Period:* Mar 09 - Mar 15, 2026]
   ])
@@ -69,8 +69,8 @@
 
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
-    Week 2 progress: 0 of 15 tasks completed (0%).
-    0 tasks from future weeks already in progress.
+    Week 2 progress: 3 of 64 tasks completed (5%).
+    1 tasks from future weeks already in progress.
   ]
 ])
 
@@ -81,12 +81,12 @@
 
 == Week Progress
 
-#let week_progress = 0
+#let week_progress = 5
 #box(width: 100%, height: 28pt, fill: gray.lighten(80%), inset: 0pt, radius: 3pt, [
   #box(width: week_progress * 1%, height: 100%, fill: gradient.linear(chapter_themes.at("3").grad_start, chapter_themes.at("3").grad_end), radius: 3pt)
   #place(
     center + horizon,
-    text(size: 10pt, weight: "bold", fill: white)[0% complete]
+    text(size: 10pt, weight: "bold", fill: white)[5% complete]
   )
 ])
 
@@ -104,7 +104,26 @@
 
 #v(1em)
 
-#text(size: 10pt, fill: gray)[No highlighted issues completed this week.]
+#text(size: 10pt, weight: "bold", fill: chapter_themes.at("3").accent)[✨ HIGHLIGHTS]
+#v(8pt)
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#154 - add visual feed-back effects] #text(size: 8pt, fill: gray)[by naydino]
+  
+])
+#v(6pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#153 - add subtitle text] #text(size: 8pt, fill: gray)[by naydino]
+  
+])
+#v(6pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#151 - test animation] #text(size: 8pt, fill: gray)[by naydino]
+  #v(4pt) #text(size: 9pt)[implement Filipe's suggestions on create the talking animation frames based on amplitude of voice]
+])
+#v(6pt)
+
 
 #v(2em)
 
@@ -113,7 +132,7 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[No issues completed this week.]
+  #text(size: 9pt)[**3 issues completed:**\n- #154 add visual feed-back effects\n- #153 add subtitle text\n- #151 test animation]
 ])
 
 #pagebreak()
@@ -132,92 +151,92 @@
 
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#44 - #23 - Milestone 2 Presentation Preparation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(2pt) #text(size: 8pt, fill: gray)[Prepare slides for April 13 presentation.  \#\# Deliverables - Presentation slides - Live demo preparation - Rehearsal  \#\# Deadline - **Presentation...]
+  #text(size: 10pt, weight: "bold")[#149 - Future Hardware / IoT Integration Strategy]
+  #v(2pt) #text(size: 8pt, fill: gray)[- how Unity could connect to hardware - possible communication methods - microphone trigger via button - plotter control approach...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#43 - #22 - Milestone 2 Documentation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(2pt) #text(size: 8pt, fill: gray)[Update production dossier with implementation reports from all units.  \#\# Deliverables - Updated production dossier - Implementation reports:   - Em...]
+  #text(size: 10pt, weight: "bold")[#148 - System Architecture & Data Flow Definition]
+  #v(2pt) #text(size: 8pt, fill: gray)[- high-level diagram - STT → LLM → Projection → Plotter - I/O boundaries...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#42 - #21 - Core Functionality Prototype] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(2pt) #text(size: 8pt, fill: gray)[Develop functional prototype demonstrating core features.  \#\# Deliverables - Functional prototype - Core features working - Demo video  \#\# Accepta...]
+  #text(size: 10pt, weight: "bold")[#116 - Review - Verify config.yaml syntax]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 19 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#41 - #20 - Audio Assets Integration]
-  #v(2pt) #text(size: 8pt, fill: gray)[Integrate original or legally obtained audio assets.  \#\# Deliverables - Audio assets - Asset documentation - License verification  \#\# Acceptance C...]
+  #text(size: 10pt, weight: "bold")[#115 - Config - Add parking/safe retract]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 19 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#40 - #19 - Graphical Assets Integration]
-  #v(2pt) #text(size: 8pt, fill: gray)[Integrate original or legally obtained graphical assets.  \#\# Deliverables - Graphical assets - Asset documentation - License verification  \#\# Acce...]
+  #text(size: 10pt, weight: "bold")[#114 - Config - Configure homing section]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 19 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#39 - #18 - VR/AR Interaction Design]
-  #v(2pt) #text(size: 8pt, fill: gray)[Design and implement VR/AR interactions (hand tracking, eye tracking, haptic feedback).  \#\# Deliverables - VR/AR interaction design - Implementation...]
+  #text(size: 10pt, weight: "bold")[#113 - Config - Set max_rate and acceleration]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 19 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#38 - #17 - Sensor-Based Interaction Implementation]
-  #v(2pt) #text(size: 8pt, fill: gray)[Implement body tracking, gesture recognition, or AR features.  \#\# Deliverables - Sensor integration - Interaction mapping - Testing documentation  \...]
+  #text(size: 10pt, weight: "bold")[#112 - Config - Add motor currents]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 18 PM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#37 - #16 - Latent Space Experiments]
-  #v(2pt) #text(size: 8pt, fill: gray)[Experiment with latent space manipulation for creative outputs.  \#\# Deliverables - Latent space exploration - Creative output samples - Experiment d...]
+  #text(size: 10pt, weight: "bold")[#111 - Config - Add pin definitions]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 18 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#36 - #15 - Model Training/Fine-tuning]
-  #v(2pt) #text(size: 8pt, fill: gray)[Train or fine-tune selected model; document parameters and process.  \#\# Deliverables - Trained/fine-tuned model - Training logs - Parameter document...]
+  #text(size: 10pt, weight: "bold")[#110 - Config - Add stepper motor section]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 18 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#35 - #14 - Deep Learning Model Selection & Dataset Prep] #text(size: 9pt, fill: red, weight: "bold")[HIGH]
-  #v(2pt) #text(size: 8pt, fill: gray)[Choose model architecture and prepare training dataset.  \#\# Deliverables - Model selection document - Dataset collected and prepared - Training conf...]
+  #text(size: 10pt, weight: "bold")[#109 - Config - Create base config.yaml structure]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 18 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#34 - #13 - Agentic AI Loop Implementation]
-  #v(2pt) #text(size: 8pt, fill: gray)[Develop initial agentic workflow for autonomous task execution.  \#\# Deliverables - Agentic loop architecture - Autonomous task execution - Safety co...]
+  #text(size: 10pt, weight: "bold")[#108 - Research - Find example config #2]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 17 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#33 - #12 - Generative AI Pipeline Development]
-  #v(2pt) #text(size: 8pt, fill: gray)[Build prompt engineering pipelines for content generation and task execution.  \#\# Deliverables - Prompt templates - Content generation pipeline - Ta...]
+  #text(size: 10pt, weight: "bold")[#107 - Research - Find example config #1]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 17 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#32 - #11 - TouchDesigner Integration Setup] #text(size: 9pt, fill: red, weight: "bold")[HIGH]
-  #v(2pt) #text(size: 8pt, fill: gray)[Configure TouchDesigner as core tool for real-time generative behaviours.  \#\# Deliverables - TouchDesigner project structure - Unity-TouchDesigner c...]
+  #text(size: 10pt, weight: "bold")[#106 - Research - Read pinout documentation]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 17 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#31 - #10 - Unity Project Setup]
-  #v(2pt) #text(size: 8pt, fill: gray)[Initialize Unity project with proper structure and version control.  \#\# Deliverables - Unity project initialized - Folder structure created - Git co...]
+  #text(size: 10pt, weight: "bold")[#105 - Research - Download MKS TinyBee docs]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 17 AM...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#30 - #9 - Task Breakdown & Problem Identification] #text(size: 9pt, fill: red, weight: "bold")[HIGH]
-  #v(2pt) #text(size: 8pt, fill: gray)[List all tasks required to complete a functional project; identify potential problems and necessities.  \#\# Deliverables - Complete task list - Risk ...]
+  #text(size: 10pt, weight: "bold")[#104 - Document - Create measurement sketch]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 14 PM...]
 ])
 #v(4pt)
 
@@ -244,7 +263,13 @@
 
 #v(1em)
 
-#text(size: 10pt, fill: gray)[No future week tasks started early.]
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#152 - Visual Effects Exploration in TouchDesigner] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[Objective  Explore real-time visual effects in TouchDesigner through procedural experimentation.  Process  This week was focused on experimenting with...]
+])
+#v(4pt)
+
 
 #v(2em)
 
@@ -252,10 +277,19 @@
 
 #box(width: 100%, inset: 15pt, fill: muted_bg, radius: 4pt, [
   #text(size: 9pt)[
-    *Week 3:* Mar 16 - Mar 22, 2026 \
-    Focus on completing remaining Week 2 tasks and starting Week 3 planned work.
+    *Week 3:* Mar 16 - Mar 22, 2026
   ]
 ])
+
+#v(1em)
+
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#152 - Visual Effects Exploration in TouchDesigner]
+  #v(2pt) #text(size: 8pt, fill: gray)[Objective  Explore real-time visual effects in TouchDesigner through procedural experimentation.  Process  This week was focused on experimenting with...]
+])
+#v(4pt)
+
 
 #v(2em)
 
