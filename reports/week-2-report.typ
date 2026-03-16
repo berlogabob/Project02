@@ -35,7 +35,7 @@
       #text(size: 7pt)[INCOMPLETE]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("1").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[3] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[12] \
       #text(size: 7pt)[FUTURE WEEKS]
     ])
   )
@@ -70,7 +70,7 @@
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
     Week 2 progress: 3 of 26 tasks completed (12%).
-    3 tasks from future weeks already in progress.
+    12 tasks from future weeks already in progress.
   ]
 ])
 
@@ -271,14 +271,56 @@
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#56 - Oracle output based on user interaction] #text(size: 8pt, fill: gray)[(Week 3)]
-  
+  #text(size: 10pt, weight: "bold")[#71 - 📊 Stabilization Phase] #text(size: 8pt, fill: gray)[(Week 4)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 4...]
 ])
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#48 - Test and compare speech to text models inside of TD] #text(size: 8pt, fill: gray)[(Week 3)]
-  #v(2pt) #text(size: 8pt, fill: gray)[test  ...]
+  #text(size: 10pt, weight: "bold")[#70 - 🎯 Fine Tuning Phase] #text(size: 8pt, fill: gray)[(Week 4)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 4...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#69 - 📐 Calibration Phase] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 3...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#68 - 🧪 Initial Testing Phase] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 3...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#67 - 🔌 Board Installation Phase] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 3...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#66 - ⚙️ FluidNC Configuration Phase] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 2...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#65 - 📚 FluidNC Research Phase] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 2...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#64 - 📏 Measurement Phase] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 2...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#63 - ✅ System Verification Phase] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 2...]
 ])
 #v(4pt)
 
@@ -299,6 +341,12 @@
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#155 - UX phase 1 research]
   
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#64 - 📏 Measurement Phase]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 2...]
 ])
 #v(4pt)
 
