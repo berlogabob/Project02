@@ -1,5 +1,5 @@
 // Weekly Report - Week 2
-// Auto-generated: 2026-03-15
+// Auto-generated: 2026-03-16
 // Project: The Oracle That Wears Us
 // Week Period: Mar 09 - Mar 15, 2026
 
@@ -31,11 +31,11 @@
       #text(size: 7pt)[COMPLETED]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("2").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[61] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[23] \
       #text(size: 7pt)[INCOMPLETE]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("1").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[1] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[3] \
       #text(size: 7pt)[FUTURE WEEKS]
     ])
   )
@@ -57,7 +57,7 @@
   #line(length: 100%, stroke: 0.5pt + gray.lighten(60%))
   #v(8pt)
   #grid(columns: (auto, 1fr, auto), gutter: 10pt, [
-    #text(size: 9pt)[*Report Date:* March 15, 2026]
+    #text(size: 9pt)[*Report Date:* March 16, 2026]
     #h(1fr)
     #text(size: 9pt)[*Week Period:* Mar 09 - Mar 15, 2026]
   ])
@@ -69,8 +69,8 @@
 
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
-    Week 2 progress: 3 of 64 tasks completed (5%).
-    1 tasks from future weeks already in progress.
+    Week 2 progress: 3 of 26 tasks completed (12%).
+    3 tasks from future weeks already in progress.
   ]
 ])
 
@@ -81,12 +81,12 @@
 
 == Week Progress
 
-#let week_progress = 5
+#let week_progress = 12
 #box(width: 100%, height: 28pt, fill: gray.lighten(80%), inset: 0pt, radius: 3pt, [
   #box(width: week_progress * 1%, height: 100%, fill: gradient.linear(chapter_themes.at("3").grad_start, chapter_themes.at("3").grad_end), radius: 3pt)
   #place(
     center + horizon,
-    text(size: 10pt, weight: "bold", fill: white)[5% complete]
+    text(size: 10pt, weight: "bold", fill: white)[12% complete]
   )
 ])
 
@@ -163,80 +163,80 @@
 #v(4pt)
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#116 - Review - Verify config.yaml syntax]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 19 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#115 - Config - Add parking/safe retract]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 19 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#114 - Config - Configure homing section]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 19 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#113 - Config - Set max_rate and acceleration]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 19 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#112 - Config - Add motor currents]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 18 PM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#111 - Config - Add pin definitions]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 18 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#110 - Config - Add stepper motor section]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 18 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#109 - Config - Create base config.yaml structure]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 18 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#108 - Research - Find example config #2]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 17 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#107 - Research - Find example config #1]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 17 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#106 - Research - Read pinout documentation]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 17 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#105 - Research - Download MKS TinyBee docs]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 17 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#104 - Document - Create measurement sketch]
   #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 14 PM...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#103 - Measure - Motor and endstop positions]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 14 AM...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#102 - Measure - X/Y travel distance]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 14 AM...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#62 - 🔧 Hardware Disassembly Phase]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 2...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#58 - Environmental Projection Prototype (Unity)]
+  #v(2pt) #text(size: 8pt, fill: gray)[Focus: - real-time projection -  - placeholder data -  -  - responsiveness -  - frame stability...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#57 - Plotter]
+  #v(2pt) #text(size: 8pt, fill: gray)[Start of conversion laser engraver into 2d graphical plotter....]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#44 - #23 - Milestone 2 Presentation Preparation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
+  #v(2pt) #text(size: 8pt, fill: gray)[Prepare slides for April 13 presentation.  \#\# Deliverables - Presentation slides - Live demo preparation - Rehearsal  \#\# Deadline - **Presentation...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#43 - #22 - Milestone 2 Documentation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
+  #v(2pt) #text(size: 8pt, fill: gray)[Update production dossier with implementation reports from all units.  \#\# Deliverables - Updated production dossier - Implementation reports:   - Em...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#42 - #21 - Core Functionality Prototype] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
+  #v(2pt) #text(size: 8pt, fill: gray)[Develop functional prototype demonstrating core features.  \#\# Deliverables - Functional prototype - Core features working - Demo video  \#\# Accepta...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#41 - #20 - Audio Assets Integration]
+  #v(2pt) #text(size: 8pt, fill: gray)[Integrate original or legally obtained audio assets.  \#\# Deliverables - Audio assets - Asset documentation - License verification  \#\# Acceptance C...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#40 - #19 - Graphical Assets Integration]
+  #v(2pt) #text(size: 8pt, fill: gray)[Integrate original or legally obtained graphical assets.  \#\# Deliverables - Graphical assets - Asset documentation - License verification  \#\# Acce...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#39 - #18 - VR/AR Interaction Design]
+  #v(2pt) #text(size: 8pt, fill: gray)[Design and implement VR/AR interactions (hand tracking, eye tracking, haptic feedback).  \#\# Deliverables - VR/AR interaction design - Implementation...]
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#38 - #17 - Sensor-Based Interaction Implementation]
+  #v(2pt) #text(size: 8pt, fill: gray)[Implement body tracking, gesture recognition, or AR features.  \#\# Deliverables - Sensor integration - Interaction mapping - Testing documentation  \...]
 ])
 #v(4pt)
 
@@ -265,8 +265,20 @@
 
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#152 - Visual Effects Exploration in TouchDesigner] #text(size: 8pt, fill: gray)[(Week 3)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Objective  Explore real-time visual effects in TouchDesigner through procedural experimentation.  Process  This week was focused on experimenting with...]
+  #text(size: 10pt, weight: "bold")[#155 - UX phase 1 research] #text(size: 8pt, fill: gray)[(Week 3)]
+  
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#56 - Oracle output based on user interaction] #text(size: 8pt, fill: gray)[(Week 3)]
+  
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#48 - Test and compare speech to text models inside of TD] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[test  ...]
 ])
 #v(4pt)
 
@@ -285,8 +297,20 @@
 
 
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#152 - Visual Effects Exploration in TouchDesigner]
-  #v(2pt) #text(size: 8pt, fill: gray)[Objective  Explore real-time visual effects in TouchDesigner through procedural experimentation.  Process  This week was focused on experimenting with...]
+  #text(size: 10pt, weight: "bold")[#155 - UX phase 1 research]
+  
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#56 - Oracle output based on user interaction]
+  
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#48 - Test and compare speech to text models inside of TD]
+  #v(2pt) #text(size: 8pt, fill: gray)[test  ...]
 ])
 #v(4pt)
 
