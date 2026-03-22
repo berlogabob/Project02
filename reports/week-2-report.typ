@@ -27,15 +27,15 @@
     columns: (1fr, 1fr, 1fr),
     gutter: 10pt,
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("3").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[3] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("3").accent)[26] \
       #text(size: 7pt)[COMPLETED]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("2").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[23] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("2").accent)[0] \
       #text(size: 7pt)[INCOMPLETE]
     ]),
     block(width: 100%, inset: 15pt, radius: 8pt, fill: chapter_themes.at("1").accent.lighten(90%), align(center)[
-      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[12] \
+      #text(size: 20pt, weight: "bold", fill: chapter_themes.at("1").accent)[10] \
       #text(size: 7pt)[FUTURE WEEKS]
     ])
   )
@@ -69,8 +69,8 @@
 
 #box(width: 100%, inset: 15pt, fill: muted_bg.lighten(50%), radius: 4pt, [
   #text(size: 9pt)[
-    Week 2 progress: 3 of 26 tasks completed (12%).
-    12 tasks from future weeks already in progress.
+    Week 2 progress: 26 of 26 tasks completed (100%).
+    10 tasks from future weeks already in progress.
   ]
 ])
 
@@ -81,12 +81,12 @@
 
 == Week Progress
 
-#let week_progress = 12
+#let week_progress = 100
 #box(width: 100%, height: 28pt, fill: gray.lighten(80%), inset: 0pt, radius: 3pt, [
   #box(width: week_progress * 1%, height: 100%, fill: gradient.linear(chapter_themes.at("3").grad_start, chapter_themes.at("3").grad_end), radius: 3pt)
   #place(
     center + horizon,
-    text(size: 10pt, weight: "bold", fill: white)[12% complete]
+    text(size: 10pt, weight: "bold", fill: white)[100% complete]
   )
 ])
 
@@ -124,6 +124,54 @@
 ])
 #v(6pt)
 
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#61 - 📸 Machine Documentation Phase] #text(size: 8pt, fill: gray)[by berlogabob]
+  #v(4pt) #text(size: 9pt)[ | Week 2]
+])
+#v(6pt)
+
+#h(30pt) #box(width: 100%, fill: chapter_themes.at("1").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("1").accent), [
+  #text(size: 11pt, weight: "bold")[#72 - Photo - Machine front view] #text(size: 8pt, fill: gray)[by berlogabob]
+  #v(4pt) #text(size: 9pt)[ Time: 30 min (1 Pomodoro) Date: March 10 AM  **Task:** Photograph machine from front angle with good lighting  **Checklist:** - ( ) Take photo from front - ( ) Upload to documentation folder]
+])
+#v(6pt)
+
+#h(30pt) #box(width: 100%, fill: chapter_themes.at("1").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("1").accent), [
+  #text(size: 11pt, weight: "bold")[#73 - Photo - Machine back view] #text(size: 8pt, fill: gray)[by berlogabob]
+  #v(4pt) #text(size: 9pt)[ Time: 30 min Date: March 10 AM  **Task:** Photograph machine from back angle showing cable connections  **Checklist:** - ( ) Take photo from back - ( ) Upload to documentation folder]
+])
+#v(6pt)
+
+#h(30pt) #box(width: 100%, fill: chapter_themes.at("1").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("1").accent), [
+  #text(size: 11pt, weight: "bold")[#74 - Photo - Machine side views] #text(size: 8pt, fill: gray)[by berlogabob]
+  #v(4pt) #text(size: 9pt)[ Time: 30 min Date: March 10 AM  **Task:** Photograph both side angles (left and right)  **Checklist:** - ( ) Take left side photo - ( ) Take right side photo - ( ) Upload to documentation folder]
+])
+#v(6pt)
+
+#h(30pt) #box(width: 100%, fill: chapter_themes.at("1").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("1").accent), [
+  #text(size: 11pt, weight: "bold")[#75 - Photo - Machine top/bottom views] #text(size: 8pt, fill: gray)[by berlogabob]
+  #v(4pt) #text(size: 9pt)[ Time: 30 min Date: March 10 AM  **Task:** Photograph from top and bottom angles  **Checklist:** - ( ) Take top photo - ( ) Take bottom photo - ( ) Upload to documentation folder]
+])
+#v(6pt)
+
+#h(30pt) #box(width: 100%, fill: chapter_themes.at("1").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("1").accent), [
+  #text(size: 11pt, weight: "bold")[#76 - Photo - Old board overview] #text(size: 8pt, fill: gray)[by berlogabob]
+  #v(4pt) #text(size: 9pt)[ Time: 30 min Date: March 10 PM  **Task:** Close-up photo of entire old board  **Checklist:** - ( ) Take overview photo - ( ) Ensure all components visible]
+])
+#v(6pt)
+
+#h(30pt) #box(width: 100%, fill: chapter_themes.at("1").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("1").accent), [
+  #text(size: 11pt, weight: "bold")[#77 - Photo - Board connectors detail] #text(size: 8pt, fill: gray)[by berlogabob]
+  #v(4pt) #text(size: 9pt)[ Time: 30 min Date: March 10 PM  **Task:** Close-up photos of all connector ports  **Checklist:** - ( ) Photo each connector - ( ) Label connectors in photo]
+])
+#v(6pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 11pt, weight: "bold")[#3 - Define characteristics of AI Oracle] #text(size: 8pt, fill: gray)[by naydino]
+  
+])
+#v(6pt)
+
 
 #v(2em)
 
@@ -132,7 +180,7 @@
 #box(width: 100%, inset: 15pt, fill: chapter_themes.at("3").accent.lighten(95%), radius: 4pt, [
   #text(size: 9pt, weight: "bold")[✨ Week Summary:]
   #v(4pt)
-  #text(size: 9pt)[**3 issues completed:**\n- #154 add visual feed-back effects\n- #153 add subtitle text\n- #151 test animation]
+  #text(size: 9pt)[**26 issues completed:**\n- #154 add visual feed-back effects\n- #153 add subtitle text\n- #151 test animation\n- #149 Future Hardware / IoT Integration Strategy\n- #148 System Architecture & Data Flow Definition\n- #96 Test - Launch original firmware\n- #86 Disconnect - Y stepper\n- #85 Label - Y stepper wires\n- #84 Photo - Y stepper connections\n- #83 Disconnect - X stepper]
 ])
 
 #pagebreak()
@@ -149,97 +197,7 @@
 
 #v(1em)
 
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#149 - Future Hardware / IoT Integration Strategy]
-  #v(2pt) #text(size: 8pt, fill: gray)[- how Unity could connect to hardware - possible communication methods - microphone trigger via button - plotter control approach...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#148 - System Architecture & Data Flow Definition]
-  #v(2pt) #text(size: 8pt, fill: gray)[- high-level diagram - STT → LLM → Projection → Plotter - I/O boundaries...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#104 - Document - Create measurement sketch]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 14 PM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#103 - Measure - Motor and endstop positions]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 14 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#102 - Measure - X/Y travel distance]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 14 AM...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#62 - 🔧 Hardware Disassembly Phase]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 2...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#58 - Environmental Projection Prototype (Unity)]
-  #v(2pt) #text(size: 8pt, fill: gray)[Focus: - real-time projection -  - placeholder data -  -  - responsiveness -  - frame stability...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#57 - Plotter]
-  #v(2pt) #text(size: 8pt, fill: gray)[Start of conversion laser engraver into 2d graphical plotter....]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#44 - #23 - Milestone 2 Presentation Preparation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(2pt) #text(size: 8pt, fill: gray)[Prepare slides for April 13 presentation.  \#\# Deliverables - Presentation slides - Live demo preparation - Rehearsal  \#\# Deadline - **Presentation...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#43 - #22 - Milestone 2 Documentation] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(2pt) #text(size: 8pt, fill: gray)[Update production dossier with implementation reports from all units.  \#\# Deliverables - Updated production dossier - Implementation reports:   - Em...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#42 - #21 - Core Functionality Prototype] #text(size: 9pt, fill: red, weight: "bold")[CRITICAL]
-  #v(2pt) #text(size: 8pt, fill: gray)[Develop functional prototype demonstrating core features.  \#\# Deliverables - Functional prototype - Core features working - Demo video  \#\# Accepta...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#41 - #20 - Audio Assets Integration]
-  #v(2pt) #text(size: 8pt, fill: gray)[Integrate original or legally obtained audio assets.  \#\# Deliverables - Audio assets - Asset documentation - License verification  \#\# Acceptance C...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#40 - #19 - Graphical Assets Integration]
-  #v(2pt) #text(size: 8pt, fill: gray)[Integrate original or legally obtained graphical assets.  \#\# Deliverables - Graphical assets - Asset documentation - License verification  \#\# Acce...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#39 - #18 - VR/AR Interaction Design]
-  #v(2pt) #text(size: 8pt, fill: gray)[Design and implement VR/AR interactions (hand tracking, eye tracking, haptic feedback).  \#\# Deliverables - VR/AR interaction design - Implementation...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#38 - #17 - Sensor-Based Interaction Implementation]
-  #v(2pt) #text(size: 8pt, fill: gray)[Implement body tracking, gesture recognition, or AR features.  \#\# Deliverables - Sensor integration - Interaction mapping - Testing documentation  \...]
-])
-#v(4pt)
-
+#text(size: 10pt, fill: green)[All planned tasks completed! 🎉]
 
 #v(2em)
 
@@ -267,24 +225,6 @@
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
   #text(size: 10pt, weight: "bold")[#155 - UX phase 1 research] #text(size: 8pt, fill: gray)[(Week 3)]
   
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#71 - 📊 Stabilization Phase] #text(size: 8pt, fill: gray)[(Week 4)]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 4...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#70 - 🎯 Fine Tuning Phase] #text(size: 8pt, fill: gray)[(Week 4)]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 4...]
-])
-#v(4pt)
-
-#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#69 - 📐 Calibration Phase] #text(size: 8pt, fill: gray)[(Week 3)]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 3...]
 ])
 #v(4pt)
 
@@ -318,9 +258,27 @@
 ])
 #v(4pt)
 
+#h(30pt) #box(width: 100%, fill: chapter_themes.at("1").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("1").accent), [
+  #text(size: 10pt, weight: "bold")[#102 - Measure - X/Y travel distance] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 14 AM...]
+])
+#v(4pt)
+
+#h(30pt) #box(width: 100%, fill: chapter_themes.at("1").accent.lighten(95%), inset: 10pt, radius: 4pt, stroke: (left: 4pt + chapter_themes.at("1").accent), [
+  #text(size: 10pt, weight: "bold")[#104 - Document - Create measurement sketch] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[ | Time: 30 min | Date: March 14 PM...]
+])
+#v(4pt)
+
 #box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
-  #text(size: 10pt, weight: "bold")[#63 - ✅ System Verification Phase] #text(size: 8pt, fill: gray)[(Week 3)]
-  #v(2pt) #text(size: 8pt, fill: gray)[ | Week 2...]
+  #text(size: 10pt, weight: "bold")[#56 - Oracle output based on user interaction] #text(size: 8pt, fill: gray)[(Week 3)]
+  
+])
+#v(4pt)
+
+#box(width: 100%, fill: muted_bg.lighten(50%), inset: 10pt, radius: 4pt, [
+  #text(size: 10pt, weight: "bold")[#48 - Test and compare speech to text models inside of TD] #text(size: 8pt, fill: gray)[(Week 3)]
+  #v(2pt) #text(size: 8pt, fill: gray)[test  ...]
 ])
 #v(4pt)
 

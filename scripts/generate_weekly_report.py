@@ -257,67 +257,84 @@ def get_issues_by_week(week_num: int, state: str = "open") -> tuple:
     Get issues for a specific week, categorized by completion status.
     Returns: (completed_this_week, incomplete_this_week, future_week_issues)
     """
-    # Get all issues with the week label
-    all_issues = run_gh_command(["issue", "list", "--state", "all", "--limit", "100"])
-
-    # Filter by week label
-    week_issues = [i for i in all_issues if get_issue_week(i) == week_num]
-
-    # Get closed issues from this week
-    week_start, week_end = get_week_date_range(week_num)
-    week_start_str = week_start.strftime("%Y-%m-%d")
-    week_end_str = (week_end + timedelta(days=1)).strftime("%Y-%m-%d")
-
-    # Closed issues that were closed during this week
+    # Get ALL closed issues with the week label (not limited to 100)
     closed_issues = run_gh_command(
         [
             "issue",
             "list",
             "--state",
             "closed",
+            "--limit",
+            "1000",
             "--search",
-            f"closed:>{week_start_str} closed:<{week_end_str}",
+            f"label:week-{week_num}",
         ]
     )
-    # Include issues with week label OR show-in-report label (exclude duplicates)
+    # Filter out duplicates
     closed_this_week = [
         i
         for i in closed_issues
-        if (get_issue_week(i) == week_num or is_show_in_report(i))
-        and not any(lbl.get("name") == "duplicate" for lbl in i.get("labels", []))
+        if not any(lbl.get("name") == "duplicate" for lbl in i.get("labels", []))
     ]
 
-    # Open issues for this week (incomplete)
-    open_issues = run_gh_command(["issue", "list", "--state", "open", "--limit", "100"])
-    incomplete_this_week = [i for i in open_issues if get_issue_week(i) == week_num]
-
-    # Future week issues (started early) - only assigned/in-progress tasks
-    future_issues = [
-        i for i in open_issues 
-        if get_issue_week(i) > week_num 
-        and i.get("assignees", [])  # Only show if someone is assigned (in progress)
+    # Get ALL open issues with the week label
+    open_issues = run_gh_command(
+        [
+            "issue",
+            "list",
+            "--state",
+            "open",
+            "--limit",
+            "1000",
+            "--search",
+            f"label:week-{week_num}",
+        ]
+    )
+    incomplete_this_week = [
+        i
+        for i in open_issues
+        if not any(lbl.get("name") == "duplicate" for lbl in i.get("labels", []))
     ]
 
-    return closed_this_week, incomplete_this_week, future_issues
+    # Future week issues (started early) - search for issues with future week labels
+    future_issues = run_gh_command(
+        [
+            "issue",
+            "list",
+            "--state",
+            "open",
+            "--limit",
+            "1000",
+        ]
+    )
+    # Filter: has future week label AND is assigned (in progress)
+    future_filtered = []
+    for i in future_issues:
+        issue_week = get_issue_week(i)
+        if issue_week > week_num and i.get("assignees", []):
+            if not any(lbl.get("name") == "duplicate" for lbl in i.get("labels", [])):
+                future_filtered.append(i)
+
+    return closed_this_week, incomplete_this_week, future_filtered
 
 
 def get_next_week_preview_tasks(week_num: int) -> list:
     """Get tasks for next week preview (week-N + Next-Week-Preview labels)."""
     next_week = week_num + 1
-    
+
     # Get all open issues
     all_issues = run_gh_command(["issue", "list", "--state", "open", "--limit", "100"])
-    
+
     # Filter by: has week-{next_week} label AND has Next-Week-Preview label
     preview_tasks = []
     for issue in all_issues:
         labels = [l.get("name", "") for l in issue.get("labels", [])]
         has_week_label = f"week-{next_week}" in labels
         has_preview_label = "Next-Week-Preview" in labels
-        
+
         if has_week_label and has_preview_label:
             preview_tasks.append(issue)
-    
+
     return preview_tasks
 
 
@@ -625,13 +642,13 @@ def generate_typst_report(
         # Find parent-child relationships among future tasks
         future_nums = set(i.get("number") for i in future)
         parent_map = {}
-        
+
         for issue in future:
             issue_num = issue.get("number")
             body = issue.get("body", "") or ""
             title = issue.get("title", "") or ""
             text = body + " " + title
-            
+
             # Check if this issue references another future issue
             for other in future:
                 other_num = other.get("number")
@@ -639,31 +656,35 @@ def generate_typst_report(
                     if f"#{other_num}" in text:
                         # other is parent of this issue
                         parent_map[issue_num] = other_num
-        
+
         # Find root issues (no parent)
         root_future = [i for i in future if i.get("number") not in parent_map]
         root_future.sort(key=lambda x: x.get("number", 0), reverse=True)
-        
+
         shown = set()
         for issue in root_future[:10]:
             issue_num = issue.get("number")
             if issue_num in shown:
                 continue
             shown.add(issue_num)
-            
+
             # Show parent
             future_section += format_issue_box(issue, show_week=True, show_full=False)
-            
+
             # Find and show children
-            children = [i for i in future if parent_map.get(i.get("number")) == issue_num]
+            children = [
+                i for i in future if parent_map.get(i.get("number")) == issue_num
+            ]
             children.sort(key=lambda x: x.get("number", 0))
-            
+
             for child in children:
                 child_num = child.get("number")
                 if child_num in shown:
                     continue
                 shown.add(child_num)
-                future_section += format_issue_box(child, show_week=True, show_full=False, indent=1)
+                future_section += format_issue_box(
+                    child, show_week=True, show_full=False, indent=1
+                )
 
     # Generate AI summary for completed work
     ai_summary = generate_ai_summary_for_week(completed, week_num)
@@ -686,7 +707,9 @@ def generate_typst_report(
         for task in next_week_tasks[:10]:
             next_week_preview_section += format_issue_box(task, show_full=False)
     else:
-        next_week_preview_section = "#text(size: 10pt, fill: gray)[No tasks marked for next week preview.]\n"
+        next_week_preview_section = (
+            "#text(size: 10pt, fill: gray)[No tasks marked for next week preview.]\n"
+        )
 
     # Calculate completion percentage
     completion_pct = (
@@ -954,7 +977,7 @@ def main():
     )
     print()
 
-    print("📥 Fetching issues for Week {week_num}...")
+    print(f"📥 Fetching issues for Week {week_num}...")
     completed, incomplete, future = get_issues_by_week(week_num)
     all_open = get_all_open_issues()
 
@@ -977,20 +1000,22 @@ def main():
     print("✅ Typst file generated successfully!")
     print("=" * 60)
     print()
-    
+
     # Try to compile to PDF
     print("📄 Compiling to PDF...")
     import subprocess
+
     pdf_path = args.output.replace(".typ", ".pdf")
     result = subprocess.run(
         ["typst", "compile", "--root", ".", args.output, pdf_path],
         capture_output=True,
-        text=True
+        text=True,
     )
-    
+
     if result.returncode == 0:
         # Check if PDF was actually created
         import os
+
         if os.path.exists(pdf_path):
             pdf_size = os.path.getsize(pdf_path)
             print(f"✅ PDF compiled successfully! ({pdf_size:,} bytes)")

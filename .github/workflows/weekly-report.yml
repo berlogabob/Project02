@@ -3,15 +3,15 @@ name: Generate Weekly Report
 on:
   schedule:
     # Run every Sunday at 22:00 UTC (Monday 00:00 Lisbon)
-    - cron: '0 22 * * 0'
+    - cron: "0 22 * * 0"
 
   # Allow manual trigger
   workflow_dispatch:
     inputs:
       week_number:
-        description: 'Week number (leave empty for auto-detect)'
+        description: "Week number (leave empty for auto-detect)"
         required: false
-        default: ''
+        default: ""
         type: string
 
 permissions:
@@ -44,24 +44,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-
-      - name: Cache Ollama models
-        uses: actions/cache@v4
-        with:
-          path: ~/.ollama/models
-          key: ollama-qwen3.5-${{ hashFiles('scripts/generate_ai_summary.py') }}
-          restore-keys: |
-            ollama-qwen3.5-
-
-      - name: Install Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh | sh
-          # Start Ollama in background
-          ollama serve > /dev/null 2>&1 &
-          sleep 3
-          # Pull smaller model for faster startup (2.7GB vs 6.6GB)
-          ollama pull qwen3.5:2b
+          python-version: "3.11"
 
       - name: Determine week number
         id: week
@@ -81,7 +64,7 @@ jobs:
             --output reports/week-${{ steps.week.outputs.week }}-report.typ
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        timeout-minutes: 10
+        timeout-minutes: 5
 
       - name: Compile to PDF
         run: |

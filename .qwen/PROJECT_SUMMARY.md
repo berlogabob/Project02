@@ -1,164 +1,169 @@
-The user wants me to create a comprehensive project summary based on our entire conversation. Let me analyze what we accomplished:
+The user wants me to create a comprehensive project summary based on the entire conversation history. Let me analyze what we've accomplished:
 
-1. **Main Goal**: Set up automated weekly/daily reports with AI summaries for their GitHub project "The Oracle That Wears Us"
+1. **Weekly Report System** - Created automated weekly report generation with:
+   - GitHub Issues integration
+   - AI-powered summaries using Ollama qwen3.5:2b
+   - Typst PDF generation
+   - GitHub Actions automation
 
-2. **Key accomplishments**:
-   - Created GitHub Actions workflow for weekly reports
-   - Integrated Ollama with qwen3.5:2b for AI summaries
-   - Fixed multiple Typst compilation issues
-   - Set up week-based issue tracking with labels
-   - Created parent-child issue hierarchy support
+2. **Issue Hierarchy** - Set up proper parent-child relationships using gh sub-issue extension:
+   - #57 Plotter project (72 sub-issues across 11 phases)
+   - #58 Environmental Projection Unity/TD project (19 sub-issues)
 
-3. **Technical decisions**:
-   - Uses Typst for PDF generation
-   - Ollama qwen3.5:2b for AI (80 words, 3-4 bullets)
-   - Week labels (week-1, week-2, etc.)
-   - show-in-report label for highlights
-   - Parent-child via issue body "**Parent:** #XX"
+3. **Fixed various issues**:
+   - PDF compilation errors (escaping asterisks in AI summary)
+   - Duplicate issues closed (#3, #59, #60)
+   - Week system (weeks start Monday Mar 2, 2026)
 
-4. **Files created/modified**:
-   - `.github/workflows/weekly-report-ollama.yml`
-   - `scripts/generate_weekly_report.py`
-   - `scripts/generate_ai_summary.py`
-   - `scripts/run-weekly-report.sh`
-   - `templates/daily-plan-template.typ`
+4. **Documentation created**:
+   - ISSUE_HIERARCHY.md
+   - Various workflow documentation
 
-5. **Issues resolved**:
-   - PDF compilation with special characters
-   - Git push conflicts in Actions
-   - AI timeout issues
-   - Typst escaping (#, *, [, ])
-
-Let me create a comprehensive summary.# Project Summary
+Let me create a comprehensive summary following the specified format.# Project02 - Automated Weekly Reporting & Issue Management System
 
 ## Overall Goal
-Automate GitHub Actions to generate weekly progress reports with AI-powered summaries using Ollama (qwen3.5:2b) and Typst for PDF generation, matching the Project02-Plan.typ visual style.
+Create an automated weekly report system with AI-powered summaries using GitHub Issues, Typst PDF generation, and Ollama qwen3.5:2b for local and GitHub Actions usage, with proper issue hierarchy management.
 
 ## Key Knowledge
 
-### Project Information
-- **Project:** "The Oracle That Wears Us" - MCCIA Master's Program Project II
-- **Team:** Nadine Allan (System Architecture), Andrey Dyakov (Plotter & Materialization), Dmitri Kazantsev (Generative Concepts)
-- **Repository:** https://github.com/berlogabob/Project02
-- **Week System:** Week 1 started Mar 2, 2026; weeks run Monday-Sunday
+### Week System
+- **Project weeks start Monday Mar 2, 2026**
+- **Week N formula:** `(today - Mar 2, 2026) // 7 + 1`
+- **Labels:** `week-N` for week assignment, `show-in-report` for HIGHLIGHTS, `duplicate` to exclude
+- **Parent-Child:** Add `**Parent:** #XX` in issue body for hierarchy (legacy) or use `gh sub-issue`
 
 ### Technology Stack
-- **Typst v0.14.2** - PDF generation (must use `--root .` for compilation)
-- **Ollama** - Local AI with qwen3.5:2b model (2.7GB, GPU-accelerated)
-- **GitHub Actions** - Automated weekly reports (Sundays 22:00 UTC)
-- **GitHub CLI (gh)** - Issue fetching and management
-- **Python 3.11+** - Report generation scripts
+- **AI Summary:** Ollama qwen3.5:2b (local) or GitHub Actions with auto-install
+- **PDF Generation:** Typst v0.14.2+
+- **Issue Management:** GitHub CLI (`gh`) + `gh sub-issue` extension (agbiotech/gh-sub-issue)
+- **Python:** 3.11+
 
-### Critical Technical Decisions
-1. **AI Summary:** 80 words, 3-4 bullet points (increased from default for better detail)
-2. **Issue Labels:**
-   - `week-N` - Assign issue to week N (e.g., `week-1`, `week-2`)
-   - `show-in-report` - Include in HIGHLIGHTS section
-   - `**Parent:** #XX` in issue body - Creates parent-child hierarchy
-3. **Typst Escaping:** Must escape `#` → `\#`, `*` → space, `[` → `(`, `]` → `)`
-4. **PDF Compilation:** Always use `typst compile --root . file.typ file.pdf`
-5. **Workflow Git:** Must `git pull --rebase` before `git push` in Actions
+### Team Configuration
+- TEAM_ROLES and TEAM_NAMES dictionaries in generate_weekly_report.py
+- Assignee tracking via GitHub issue assignees
 
-### Build & Test Commands
+### Build Commands
 ```bash
-# Local weekly report generation
-./scripts/run-weekly-report.sh          # Interactive (asks about AI)
-python3 scripts/generate_weekly_report.py --week 1  # Direct
+# Local (with AI summary)
+./scripts/run-weekly-report.sh
 
-# Compile Typst to PDF
-typst compile --root . reports/week-1-report.typ reports/week-1-report.pdf
+# Manual week generation
+python3 scripts/generate_weekly_report.py --week 2
 
-# Test AI summary only
-python3 scripts/generate_ai_summary.py --week 1 --api ollama
+# AI summary only
+python3 scripts/generate_ai_summary.py --week 2 --api ollama
 
-# GitHub Actions (manual trigger)
-# Go to: https://github.com/berlogabob/Project02/actions
-# Select "Generate Weekly Report (Ollama)" → Run workflow
+# GitHub Actions
+# Runs Sundays 22:00 UTC automatically
+# Or trigger manually: Actions → "Generate Weekly Report (Ollama)"
 ```
 
-### File Structure
+### Issue Hierarchy Structure
 ```
-Project02/
-├── .github/workflows/
-│   └── weekly-report-ollama.yml      # Weekly PDF generation (Ollama AI)
-├── templates/
-│   └── daily-plan-template.typ       # Reusable Typst components
-├── reports/
-│   ├── week-1-report.typ            # Generated Typst source
-│   ├── week-1-report.pdf            # Generated PDF
-│   └── WEEKLY_REPORT_GUIDE.md       # Usage documentation
-├── scripts/
-│   ├── generate_weekly_report.py    # Main report generator
-│   ├── generate_ai_summary.py       # AI summary with Ollama
-│   └── run-weekly-report.sh         # Local runner script
-└── Project02-Plan.typ               # Original style reference
+#57 Plotter (ROOT)
+├── 11 Phase tasks (Level 2)
+│   └── 72 individual tasks (Level 3, 30 min each)
+
+#58 Environmental Projection (Unity/TD)
+└── 19 sub-issues (Milestone 2)
 ```
+
+### Important Conventions
+- **Task granularity:** Each task = 30 minutes (1 Pomodoro)
+- **Weekends:** Free (not included in planning)
+- **Future Week Preview:** Shows tasks with BOTH `week-N` + `Next-Week-Preview` labels
+- **AI Summary escaping:** `*` → space, `#` → `\#`, `[` → `(`, `]` → `)`
 
 ## Recent Actions
 
-### Accomplishments
-1. ✅ **Weekly Report Workflow** - Automated PDF generation with AI summaries every Sunday
-2. ✅ **Ollama Integration** - Local qwen3.5:2b model for AI summaries (80 words, 3-4 bullets)
-3. ✅ **Issue Hierarchy** - Parent-child relationships via `**Parent:** #XX` in issue body
-4. ✅ **Week Labels** - `week-1`, `week-2`, etc. for calendar-based tracking
-5. ✅ **HIGHLIGHTS Section** - Shows only issues with both `week-N` + `show-in-report` labels
-6. ✅ **Typst Compilation** - Fixed escaping for `#`, `*`, `[`, `]` characters
-7. ✅ **Git Actions Fix** - Added `git pull --rebase` before push to prevent conflicts
-8. ✅ **Documentation** - Created WEEKLY_REPORT_GUIDE.md with full usage instructions
+### ✅ Weekly Report System (COMPLETED)
+- Created `scripts/generate_weekly_report.py` with AI integration
+- Created `scripts/generate_ai_summary.py` with Ollama/Qwen/OpenAI support
+- Created `scripts/run-weekly-report.sh` local runner
+- Created `.github/workflows/weekly-report-ollama.yml` GitHub Actions workflow
+- Fixed PDF compilation errors (escaping asterisks in AI summary)
+- Added PDF compilation verification with error handling
+- Increased AI summary to 300 words (5-7 bullet points)
 
-### Issues Resolved
-1. **PDF Compilation Errors** - Asterisks `*` in AI output broke Typst; fixed with escaping
-2. **Git Push Rejected** - Actions workflow now pulls before pushing
-3. **AI Timeout** - Increased timeout to 180s for Ollama model loading
-4. **Duplicate Workflows** - Removed old `weekly-report.yml`, kept `weekly-report-ollama.yml`
-5. **Multi-line AI Text** - AI summaries with newlines broke Typst; kept as `#text()` not `#raw()`
-6. **Label Filtering** - HIGHLIGHTS now shows only issues with BOTH week-N AND show-in-report labels
+### ✅ Issue Hierarchy Setup (COMPLETED)
+- Installed `gh sub-issue` extension (agbiotech/gh-sub-issue)
+- Linked 72 Plotter tasks under #57 (11 Phase → 72 individual)
+- Linked 19 Unity/TD tasks under #58 (Environmental Projection)
+- Created ISSUE_HIERARCHY.md documentation
 
-### Documentation Created
-- `reports/WEEKLY_REPORT_GUIDE.md` - Complete usage guide
-- `.github/workflows/README_WEEKLY_REPORT.md` - Actions workflow documentation
+### ✅ Duplicate Cleanup (COMPLETED)
+- Found and closed 3 duplicate issues: #3, #59, #60
+- Verified no other duplicates exist
+- Removed duplicates from sub-issue hierarchy
+
+### ✅ Documentation Created
+- `ISSUE_HIERARCHY.md` - Complete issue structure
+- `.github/workflows/README_WEEKLY_REPORT.md` - Workflow documentation
+- `reports/WEEKLY_REPORT_GUIDE.md` - Local usage guide
 - `scripts/README.md` - Quick start guide
+
+### Key Fixes Applied
+1. **AI Summary Typst Compatibility:** Escape `*`, `#`, `[`, `]` characters
+2. **GitHub Actions Git Push:** Added `git pull --rebase` before push
+3. **Local Script Paths:** Fixed SCRIPT_DIR/PROJECT_DIR handling
+4. **Ollama Timeout:** Increased to 180s for GitHub Actions
+5. **Future Week Tasks:** Filter by assigned users only (in-progress)
+6. **Future Week Hierarchy:** Added parent-child grouping (consistent with HIGHLIGHTS)
 
 ## Current Plan
 
-### [DONE]
-1. ✅ Weekly report GitHub Action workflow with Ollama AI
-2. ✅ Local script for manual report generation
-3. ✅ AI summary integration (80 words, 3-4 bullets)
-4. ✅ Week-based issue tracking with labels
-5. ✅ Parent-child issue hierarchy support
-6. ✅ Typst PDF compilation (all escaping fixed)
-7. ✅ Git workflow fixes for Actions
-8. ✅ Documentation created
+1. [DONE] Create weekly report generator with GitHub Issues integration
+2. [DONE] Implement week-based filtering and show-in-report highlights
+3. [DONE] Add parent-child hierarchy support via gh sub-issue
+4. [DONE] Integrate AI summary with Ollama qwen3.5:2b
+5. [DONE] Create GitHub Actions workflow with auto Ollama installation
+6. [DONE] Make team roles configurable
+7. [DONE] Create comprehensive documentation (4 markdown files)
+8. [DONE] Fix PDF compilation errors (Typst escaping)
+9. [DONE] Link all active issues to proper hierarchy (#57, #58)
+10. [DONE] Close duplicate issues (#3, #59, #60)
+11. [TODO] Test GitHub Actions workflow in production (next Sunday 22:00 UTC)
+12. [TODO] Add email/Slack notifications (optional)
+13. [TODO] Create Project Board view for hierarchy visualization
 
-### [IN PROGRESS]
-1. ⏳ Monitoring GitHub Actions runs for AI timeout issues
-2. ⏳ Testing parent-child hierarchy visualization in PDF
+## Project Statistics
 
-### [TODO]
-1. 📋 Add email/Slack notifications when reports are generated
-2. 📋 Create team onboarding guide for using week labels
-3. 📋 Add progress comparison (planned vs completed tasks)
-4. 📋 Consider caching Ollama models in Actions for faster startup
-5. 📋 Add milestone progress tracking in weekly reports
+| Metric | Value |
+|--------|-------|
+| **Total Issues** | 148 |
+| **Active Open Issues** | 119 |
+| **Closed Issues** | 29 |
+| **Plotter Project (#57)** | 83 issues (11 Phase + 72 tasks) |
+| **Unity/TD Project (#58)** | 19 issues |
+| **Week 1 Completed** | 19 issues |
+| **Week 2 Planned** | 75 issues |
+| **Week 3 Planned** | 22 issues |
+| **Week 4 Planned** | 14 issues |
 
-### Known Issues to Monitor
-- **Ollama in Actions:** First run takes ~5 minutes (model download), subsequent runs ~2 minutes with cache
-- **AI Summary Timeout:** 180s timeout set; may need adjustment for larger issue counts
-- **Typst Warnings:** `**` markdown stars show warnings but don't break compilation (cosmetic only)
-- **Local Ollama:** Can be slow without GPU; script offers 5s timeout to skip AI for faster generation
+## File Structure
 
-### Workflow URLs
-- **Weekly Report:** https://github.com/berlogabob/Project02/actions/workflows/weekly-report-ollama.yml
-- **Full Documentation:** https://github.com/berlogabob/Project02/blob/main/reports/WEEKLY_REPORT_GUIDE.md
+```
+Project02/
+├── scripts/
+│   ├── generate_weekly_report.py    # Main report generator
+│   ├── generate_ai_summary.py       # AI summary via Ollama
+│   └── run-weekly-report.sh         # Local runner
+├── .github/workflows/
+│   └── weekly-report-ollama.yml     # GitHub Actions workflow
+├── reports/
+│   ├── WEEKLY_REPORT_GUIDE.md       # Usage documentation
+│   └── week-N-report.{typ,pdf}      # Generated reports
+├── templates/
+│   └── daily-plan-template.typ      # Reusable Typst components
+├── ISSUE_HIERARCHY.md               # Issue structure documentation
+└── TEAM.md                          # Team configuration
+```
+
+## Next Scheduled Run
+- **GitHub Actions:** Sunday 22:00 UTC (automatic)
+- **Week Detection:** Auto-calculated based on current date
 
 ---
 
 ## Summary Metadata
-**Update time:** 2026-03-09T01:15:00.000Z  
-**Last Commit:** `3b557b8` - "Add generated week-1-report.pdf (AI summary works!)"
-
----
-
-## Summary Metadata
-**Update time**: 2026-03-09T09:30:46.416Z 
+**Update time**: 2026-03-09T22:53:22.385Z 
