@@ -118,3 +118,18 @@
     )
   )
 }
+
+// VERSION / METADATA FOOTER LINE
+// Usage: #report_meta_footer(generated_at: "2026-03-22", sha: "abc1234", model: "qwen3.5:2b")
+#let report_meta_footer(generated_at: "", sha: "", model: "") = {
+  place(
+    bottom + left,
+    dx: 0pt,
+    dy: 5pt,
+    text(size: 7pt, fill: gray.lighten(30%))[
+      Generated: #generated_at
+      #if sha != "" [ · SHA: #sha ]
+      #if model != "" [ · model: #model ]
+    ]
+  )
+}

@@ -1,0 +1,178 @@
+name: Generate Weekly Report (v2)
+
+on:
+  schedule:
+    # Run every Sunday at 22:00 UTC (Monday 00:00 Lisbon WET / 23:00 during WEST DST)
+    - cron: '0 22 * * 0'
+
+  # Allow manual trigger with optional week override
+  workflow_dispatch:
+    inputs:
+      week_number:
+        description: 'Week number (leave empty for auto-detect)'
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+jobs:
+  generate-weekly-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Diagnostics ──────────────────────────────────────────────────────
+      - name: Print environment diagnostics
+        run: |
+          echo "Runner OS:    $RUNNER_OS"
+          echo "GitHub SHA:   $GITHUB_SHA"
+          echo "Ref:          $GITHUB_REF"
+          echo "Actor:        $GITHUB_ACTOR"
+          python3 --version
+          locale
+          echo "LANG=$LANG LANGUAGE=$LANGUAGE LC_ALL=$LC_ALL"
+
+      # ── Checkout ─────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── Typst ────────────────────────────────────────────────────────────
+      - name: Install Typst
+        uses: typst-community/setup-typst@v3
+        with:
+          typst-version: "latest"
+
+      - name: Log Typst version
+        run: typst --version
+
+      # ── GitHub CLI ───────────────────────────────────────────────────────
+      - name: Install GitHub CLI
+        run: gh --version || sudo apt-get install -y gh
+
+      - name: Authenticate GitHub CLI
+        run: gh auth setup-git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Python ───────────────────────────────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # ── Ollama model cache ────────────────────────────────────────────────
+      - name: Cache Ollama models
+        uses: actions/cache@v4
+        id: ollama-cache
+        with:
+          path: ~/.ollama/models
+          key: ollama-qwen3.5-2b-${{ runner.os }}-${{ hashFiles('scripts/generate_ai_summary.py') }}
+          restore-keys: |
+            ollama-qwen3.5-2b-${{ runner.os }}-
+            ollama-qwen3.5-
+
+      # ── Ollama install & start ────────────────────────────────────────────
+      - name: Install Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama --version
+
+      - name: Start Ollama and pull model
+        run: |
+          # Start server in background
+          ollama serve > /tmp/ollama.log 2>&1 &
+          sleep 5
+
+          # Pull model only if not cached
+          if [ "${{ steps.ollama-cache.outputs.cache-hit }}" != "true" ]; then
+            echo "Cache miss — pulling qwen3.5:2b …"
+            ollama pull qwen3.5:2b
+          else
+            echo "Cache hit — loading cached model …"
+            ollama list || true
+          fi
+
+      # ── Week number ───────────────────────────────────────────────────────
+      - name: Determine week number
+        id: week
+        run: |
+          if [ -n "${{ inputs.week_number }}" ]; then
+            echo "week=${{ inputs.week_number }}" >> $GITHUB_OUTPUT
+          else
+            CURRENT_WEEK=$(python3 -c "
+          from datetime import date
+          start = date(2026, 3, 2)
+          today = date.today()
+          print(((today - start).days // 7) + 1)
+          ")
+            echo "week=$CURRENT_WEEK" >> $GITHUB_OUTPUT
+          fi
+          echo "Detected week: $(cat $GITHUB_OUTPUT | grep week= | cut -d= -f2)"
+
+      # ── Generate Typst report ─────────────────────────────────────────────
+      - name: Generate Typst report with AI summary
+        run: |
+          python3 scripts/generate_weekly_report.py \
+            --week ${{ steps.week.outputs.week }} \
+            --output reports/week-${{ steps.week.outputs.week }}-report.typ
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_SHA: ${{ github.sha }}
+          LANG: en_US.UTF-8
+          LC_ALL: en_US.UTF-8
+          PYTHONIOENCODING: utf-8
+        timeout-minutes: 10
+
+      # ── Compile to PDF ────────────────────────────────────────────────────
+      - name: Compile to PDF
+        run: |
+          typst compile \
+            --root . \
+            reports/week-${{ steps.week.outputs.week }}-report.typ \
+            reports/week-${{ steps.week.outputs.week }}-report.pdf
+        env:
+          LANG: en_US.UTF-8
+          LC_ALL: en_US.UTF-8
+
+      # ── Validate generated report ─────────────────────────────────────────
+      - name: Validate intermediate JSON
+        run: |
+          JSON_PATH="reports/week-${{ steps.week.outputs.week }}-data.json"
+          if [ -f "$JSON_PATH" ]; then
+            echo "✅ Intermediate JSON found: $JSON_PATH"
+            python3 scripts/validate_report_data.py "$JSON_PATH"
+          else
+            echo "⚠️  Intermediate JSON not found (non-fatal)"
+          fi
+
+      # ── Commit and push ───────────────────────────────────────────────────
+      - name: Commit and push report
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          # Stage report files (exclude intermediate JSON — covered by .gitignore)
+          git add \
+            reports/week-${{ steps.week.outputs.week }}-report.typ \
+            reports/week-${{ steps.week.outputs.week }}-report.pdf \
+            || true
+          git diff --cached --quiet && echo "No changes to commit" || \
+            git commit -m "📊 Auto-generate weekly report: Week ${{ steps.week.outputs.week }} [sha:${GITHUB_SHA:0:7}]"
+          git pull --rebase origin main || true
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Upload artifact ───────────────────────────────────────────────────
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-report-week-${{ steps.week.outputs.week }}
+          path: |
+            reports/week-${{ steps.week.outputs.week }}-report.typ
+            reports/week-${{ steps.week.outputs.week }}-report.pdf
+          retention-days: 30
