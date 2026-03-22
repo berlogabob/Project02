@@ -15,9 +15,20 @@ import json
 import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
+import sys
 
 REPO = "berlogabob/Project02"
 PROJECT_START_DATE = datetime(2026, 3, 2)  # Week 1 starts Monday, Mar 2, 2026
+
+# Import the sanitisation / validation helpers
+sys.path.insert(0, str(Path(__file__).parent))
+from validate_report_data import (
+    sanitize_for_typst,
+    build_report_json,
+    save_report_json,
+    validate_ai_summary,
+    sanitize_summary,
+)
 
 # Team member roles (username -> role mapping)
 TEAM_ROLES = {
@@ -316,6 +327,7 @@ def get_all_open_issues() -> list:
 
 
 def clean_text(text: str) -> str:
+    """Clean raw issue text and sanitize for safe use in Typst."""
     if not text:
         return ""
     import re
@@ -326,9 +338,8 @@ def clean_text(text: str) -> str:
     # Remove Parent: #XX pattern (service information)
     text = re.sub(r"\*\*Parent:\*\*\s*#\d+", "", text, flags=re.IGNORECASE)
     text = re.sub(r"Parent:\s*#\d+", "", text, flags=re.IGNORECASE)
-    return (
-        text.replace("@", "at ").replace("[", "(").replace("]", ")").replace("\n", " ")
-    )
+    text = text.replace("\n", " ")
+    return sanitize_for_typst(text)
 
 
 def get_priority(issue: dict) -> str:
@@ -417,22 +428,29 @@ def format_issue_box(
 
 
 def generate_ai_summary_for_week(issues: list, week_num: int) -> str:
-    """Generate AI summary for completed issues using Ollama."""
+    """Generate AI summary for completed issues using Ollama with fallback chain.
+
+    Tries Ollama → falls back to a simple sanitized issue list if unavailable.
+    All output is sanitized for safe embedding in Typst.
+    """
     if not issues:
-        return "No issues completed this week."
+        return "- No issues completed this week."
 
     print(f"🤖 Generating AI summary for {len(issues)} issues...")
     issue_list = "\n".join(
         [f"- #{i.get('number')} {i.get('title', '')[:60]}" for i in issues[:15]]
     )
-    prompt = f"""Summarize these completed tasks in 3-4 bullet points:
-{issue_list}
-Use action verbs. Group related work. Max 100 words.
-Summary:"""
+    prompt = (
+        "Summarize these completed tasks in exactly 3-5 bullet points.\n"
+        "Use action verbs. Group related work. Max 100 words total.\n"
+        "Do NOT use hashtags, asterisks, brackets, or dollar signs in the text.\n"
+        "Format each bullet with a leading hyphen (-).\n\n"
+        f"{issue_list}\n\nSummary:"
+    )
+
+    raw_summary = None
 
     try:
-        import subprocess
-
         print("   Calling Ollama API...")
         result = subprocess.run(
             [
@@ -452,33 +470,27 @@ Summary:"""
         if result.returncode == 0 and result.stdout:
             response = json.loads(result.stdout).get("response", "").strip()
             print(f"   Response length: {len(response)}")
-            bullets = [l for l in response.split("\n") if l.strip().startswith("-")]
-            if bullets:
-                summary = "\n".join(bullets[:5])
-                # Escape special Typst characters
-                summary = (
-                    summary.replace("#", "\\#").replace("*", " ").replace("[", "(").replace("]", ")")
-                )
-                print(f"   ✅ AI Summary generated ({len(bullets)} bullets)")
-                return summary
-            elif response and len(response) > 20:
-                # Escape special Typst characters
-                response = (
-                    response.replace("#", "\\#").replace("*", " ").replace("[", "(").replace("]", ")")
-                )
-                print(f"   ✅ Using raw response")
-                return response
-        print("   ⚠️  No valid response, using fallback")
+            if response and len(response) > 20:
+                raw_summary = response
+                print("   ✅ Ollama response received")
+        if not raw_summary:
+            print("   ⚠️  No valid response from Ollama, using fallback")
     except Exception as e:
-        print(f"   ⚠️  AI error: {e}, using fallback")
+        print(f"   ⚠️  Ollama error: {e}, using fallback")
 
-    # Fallback: simple list
-    return (
-        "**"
-        + str(len(issues))
-        + " issues completed:**\\n"
-        + "\\n".join([f"- #{i['number']} {i['title'][:50]}" for i in issues[:10]])
-    )
+    if not raw_summary:
+        # Fallback: plain sanitized issue list
+        raw_summary = "\n".join(
+            [f"- #{i['number']} {i['title'][:60]}" for i in issues[:5]]
+        )
+
+    # Sanitize and validate
+    sanitized = sanitize_summary(raw_summary)
+    is_valid, errors = validate_ai_summary(sanitized)
+    if not is_valid:
+        print(f"   ⚠️  Summary validation warnings: {errors}")
+
+    return sanitized
 
 
 def generate_typst_report(
@@ -655,7 +667,19 @@ def generate_typst_report(
 
     # Generate AI summary for completed work
     ai_summary = generate_ai_summary_for_week(completed, week_num)
-    
+
+    # Build and persist the intermediate JSON for debugging / traceability
+    report_json = build_report_json(
+        week_num=week_num,
+        completed=completed,
+        incomplete=incomplete,
+        future=future,
+        ai_summary=ai_summary,
+        qwen_model="qwen3.5:2b",
+    )
+    json_path = save_report_json(report_json, output_dir="reports")
+    print(f"📦 Intermediate JSON saved: {json_path}")
+
     # Build next week preview section
     if next_week_tasks:
         next_week_preview_section = ""
@@ -669,10 +693,13 @@ def generate_typst_report(
         round((completed_count / total_this_week * 100)) if total_this_week > 0 else 0
     )
 
+    github_sha = (report_json["metadata"].get("github_sha") or "local")[:7]
+
     typst_content = f"""// Weekly Report - Week {week_num}
 // Auto-generated: {today.strftime("%Y-%m-%d")}
 // Project: The Oracle That Wears Us
 // Week Period: {week_start.strftime("%b %d")} - {week_end.strftime("%b %d, %Y")}
+// SHA: {github_sha}
 
 #import "../templates/daily-plan-template.typ": *
 
@@ -680,6 +707,12 @@ def generate_typst_report(
   paper: "a4",
   margin: (x: 50pt, y: 60pt),
   footer: [
+    #place(
+      bottom + left,
+      dx: 5pt,
+      dy: -8pt,
+      text(size: 7pt, fill: gray)[Generated {today.strftime("%Y-%m-%d")} · SHA: {github_sha} · model: qwen3.5:2b]
+    )
     #place(
       bottom + right,
       dx: -45pt,
@@ -883,7 +916,7 @@ def generate_typst_report(
     if output_path:
         output = Path(output_path)
         output.parent.mkdir(parents=True, exist_ok=True)
-        with open(output, "w") as f:
+        with open(output, "w", encoding="utf-8") as f:
             f.write(typst_content)
         print(f"✅ Generated: {output}")
 

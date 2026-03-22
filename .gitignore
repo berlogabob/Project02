@@ -4,3 +4,11 @@
 .qwen/
 gha-creds-*.json
 fonts/
+
+# Intermediate report data files (generated during report pipeline)
+reports/week-*-data.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo

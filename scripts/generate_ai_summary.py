@@ -7,7 +7,21 @@ Fetches completed issues and generates a concise summary using LLM API
 import subprocess
 import json
 import os
+import sys
 from datetime import datetime, timedelta
+from pathlib import Path
+
+# Allow importing from the same scripts/ directory when run directly
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from validate_report_data import validate_ai_summary, sanitize_summary
+except ImportError:
+    # Graceful fallback if the module is not yet present
+    def validate_ai_summary(summary):
+        return True, []
+
+    def sanitize_summary(summary):
+        return summary
 
 REPO = "berlogabob/Project02"
 
@@ -65,10 +79,15 @@ def format_issues_for_prompt(issues: list) -> str:
 
 
 def generate_ai_summary(issues: list, api_provider: str = "openai") -> str:
-    """Generate AI summary of completed work."""
+    """Generate AI summary of completed work.
+
+    Tries the requested provider first, then falls back through the chain:
+    ollama → qwen → openai → simple list.
+    The returned string is always sanitized and validated before being returned.
+    """
     if not issues:
-        return "No issues completed this week."
-    
+        return "- No issues completed this week."
+
     issues_text = format_issues_for_prompt(issues)
 
     # Improved prompt for better summaries
@@ -82,21 +101,46 @@ def generate_ai_summary(issues: list, api_provider: str = "openai") -> str:
 - Use action verbs: Implemented, Completed, Developed, Created, etc.
 - Keep it under 100 words total
 - Format each bullet with - prefix
+- Do NOT use hashtags, asterisks, brackets, or dollar signs in the text
 
 **Completed Issues:**
 {issues_text}
 
 **Write the summary (3-5 bullets, no intro/outro):**"""
 
-    # Try different API providers
-    if api_provider == "openai":
-        return call_openai_api(prompt)
-    elif api_provider == "qwen":
-        return call_qwen_api(prompt)
-    elif api_provider == "ollama":
-        return call_ollama_api(prompt)
-    else:
-        return f"[AI summary not available - {len(issues)} issues completed]"
+    # Build fallback chain based on requested provider
+    _providers = {
+        "openai": call_openai_api,
+        "qwen": call_qwen_api,
+        "ollama": call_ollama_api,
+    }
+    chain = [api_provider] + [p for p in ("ollama", "qwen", "openai") if p != api_provider]
+
+    raw_summary = None
+    for provider in chain:
+        func = _providers.get(provider)
+        if func is None:
+            continue
+        result = func(prompt)
+        if result:
+            raw_summary = result
+            print(f"   ✅ Summary from provider: {provider}")
+            break
+
+    if not raw_summary:
+        # Final fallback: plain list of issue titles
+        raw_summary = "\n".join(
+            [f"- #{i['number']} {i['title'][:60]}" for i in issues[:5]]
+        )
+        print("   ⚠️  Using simple fallback summary")
+
+    # Sanitize and validate before returning
+    sanitized = sanitize_summary(raw_summary)
+    is_valid, errors = validate_ai_summary(sanitized)
+    if not is_valid:
+        print(f"   ⚠️  Summary validation warnings: {errors}")
+
+    return sanitized
 
 
 def call_openai_api(prompt: str) -> str:
@@ -213,18 +257,18 @@ def main():
     print(f"   Found {len(issues)} completed issues")
     
     if not issues:
-        summary = "No issues completed this week."
+        summary = "- No issues completed this week."
     else:
         print(f"🤖 Generating AI summary using {args.api}...")
         summary = generate_ai_summary(issues, args.api)
         if not summary:
             # Fallback to simple list
-            summary = f"**{len(issues)} issues completed:**\n" + "\n".join([f"- #{i['number']} {i['title']}" for i in issues[:10]])
-    
+            summary = "\n".join([f"- #{i['number']} {i['title'][:60]}" for i in issues[:5]])
+
     print(f"\n✅ Summary:\n{summary}")
-    
+
     if args.output:
-        with open(args.output, "w") as f:
+        with open(args.output, "w", encoding="utf-8") as f:
             f.write(summary)
         print(f"\n💾 Saved to: {args.output}")
     
