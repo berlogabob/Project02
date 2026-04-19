@@ -2,7 +2,7 @@
 // Auto-generated: 2026-04-19
 // Project: The Oracle That Wears Us
 // Week Period: Apr 13 - Apr 19, 2026
-// SHA: cbcba73
+// SHA: e0bf0c6
 
 #import "../templates/daily-plan-template.typ": *
 
@@ -14,7 +14,7 @@
       bottom + left,
       dx: 5pt,
       dy: -8pt,
-      text(size: 7pt, fill: gray)[Generated 2026-04-19 · SHA: cbcba73 · model: qwen3.5:2b]
+      text(size: 7pt, fill: gray)[Generated 2026-04-19 · SHA: e0bf0c6 · model: qwen3.5:2b]
     )
     #place(
       bottom + right,
