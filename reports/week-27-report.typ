@@ -1,8 +1,8 @@
 // Weekly Report - Week 27
-// Auto-generated: 2026-08-31
+// Auto-generated: 2026-09-06
 // Project: The Oracle That Wears Us
 // Week Period: Aug 31 - Sep 06, 2026
-// SHA: 5b3542f
+// SHA: ff63baa
 
 #import "../templates/daily-plan-template.typ": *
 
@@ -14,7 +14,7 @@
       bottom + left,
       dx: 5pt,
       dy: -8pt,
-      text(size: 7pt, fill: gray)[Generated 2026-08-31 · SHA: 5b3542f · model: qwen3.5:2b]
+      text(size: 7pt, fill: gray)[Generated 2026-09-06 · SHA: ff63baa · model: qwen3.5:2b]
     )
     #place(
       bottom + right,
@@ -64,7 +64,7 @@
   #line(length: 100%, stroke: 0.5pt + gray.lighten(60%))
   #v(8pt)
   #grid(columns: (auto, 1fr, auto), gutter: 10pt, [
-    #text(size: 9pt)[*Report Date:* August 31, 2026]
+    #text(size: 9pt)[*Report Date:* September 06, 2026]
     #h(1fr)
     #text(size: 9pt)[*Week Period:* Aug 31 - Sep 06, 2026]
   ])
