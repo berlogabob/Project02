@@ -1,8 +1,8 @@
 // Weekly Report - Week 33
-// Auto-generated: 2026-10-12
+// Auto-generated: 2026-10-18
 // Project: The Oracle That Wears Us
 // Week Period: Oct 12 - Oct 18, 2026
-// SHA: 5e759e4
+// SHA: f732270
 
 #import "../templates/daily-plan-template.typ": *
 
@@ -14,7 +14,7 @@
       bottom + left,
       dx: 5pt,
       dy: -8pt,
-      text(size: 7pt, fill: gray)[Generated 2026-10-12 · SHA: 5e759e4 · model: qwen3.5:2b]
+      text(size: 7pt, fill: gray)[Generated 2026-10-18 · SHA: f732270 · model: qwen3.5:2b]
     )
     #place(
       bottom + right,
@@ -64,7 +64,7 @@
   #line(length: 100%, stroke: 0.5pt + gray.lighten(60%))
   #v(8pt)
   #grid(columns: (auto, 1fr, auto), gutter: 10pt, [
-    #text(size: 9pt)[*Report Date:* October 12, 2026]
+    #text(size: 9pt)[*Report Date:* October 18, 2026]
     #h(1fr)
     #text(size: 9pt)[*Week Period:* Oct 12 - Oct 18, 2026]
   ])
